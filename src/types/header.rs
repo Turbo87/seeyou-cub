@@ -1,6 +1,9 @@
 use crate::types::ByteOrder;
 
 /// CUB file header (first 210 bytes)
+///
+/// Contains metadata about the airspace file including bounding box,
+/// item counts, and structural information needed for parsing.
 #[derive(Debug, Clone)]
 pub struct Header {
     // Raw fields (public)

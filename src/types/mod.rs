@@ -9,6 +9,10 @@ pub use item::*;
 pub use point::*;
 
 /// Parsed CUB file with header, items, and reader for lazy point parsing
+///
+/// Contains the parsed header and all airspace items from a CUB file,
+/// while keeping the reader for on-demand parsing of geometric points.
+/// This design minimizes memory usage by only loading geometry when needed.
 pub struct CubFile<R> {
     header: Header,
     items: Vec<Item>,

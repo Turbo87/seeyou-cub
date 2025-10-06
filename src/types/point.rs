@@ -1,6 +1,9 @@
 use crate::types::CubDataId;
 
 /// A parsed geometric point with optional attributes
+///
+/// Represents a single point in an airspace boundary, with coordinates
+/// in radians and optional metadata like name and frequency information.
 #[derive(Debug, Clone)]
 pub struct ParsedPoint {
     /// Longitude in radians
@@ -18,6 +21,9 @@ pub struct ParsedPoint {
 }
 
 /// Optional data records found in point sequences
+///
+/// Additional metadata that can be attached to airspace points,
+/// such as ICAO codes, NOTAM information, and exception rules.
 #[derive(Debug, Clone)]
 pub enum OptionalData {
     IcaoCode(String),

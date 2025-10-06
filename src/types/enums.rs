@@ -18,6 +18,9 @@ impl ByteOrder {
 }
 
 /// Airspace style/type (extracted from Item.Type field)
+///
+/// Indicates the specific type of airspace such as controlled zones,
+/// restricted areas, danger areas, etc.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CubStyle {
     Unknown,
@@ -95,6 +98,9 @@ impl CubStyle {
 }
 
 /// Airspace class (extracted from Item.Type field, bits 5-7)
+///
+/// ICAO airspace classification (A through G) indicating
+/// the level of air traffic control services provided.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CubClass {
     Unknown,
@@ -126,6 +132,9 @@ impl CubClass {
 }
 
 /// Altitude reference style
+///
+/// Indicates how altitude values should be interpreted:
+/// relative to ground level, mean sea level, or as flight levels.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum AltStyle {
     Unknown,

@@ -6,6 +6,10 @@ use crate::types::{
 use jiff::civil::DateTime;
 
 /// Airspace item (42 bytes minimum, may be larger per Header.size_of_item)
+///
+/// Represents a single airspace with its bounding box, altitude limits,
+/// classification, and metadata. Contains bit-packed fields that are
+/// decoded through accessor methods.
 #[derive(Debug, Clone)]
 pub struct Item {
     // Bounding box
