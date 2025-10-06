@@ -8,6 +8,15 @@ edition = "2024"
 exclude = [".github/*", "benches/*", "docs/*", "examples/*", "tests/*", ".gitignore"]
 
 [dependencies]
+encoding_rs = "0.8"
+jiff = { version = "0.1", optional = true }
+thiserror = "2"
+
+[features]
+default = []
+datetime = ["jiff"]
+
+[dev-dependencies]
 
 [package.metadata.release]
 pre-release-commit-message = "Release v{{version}}"
