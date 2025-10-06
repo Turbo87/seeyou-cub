@@ -7,7 +7,6 @@ use crate::read::io::*;
 pub struct PointIterator<'a, R> {
     reader: &'a mut R,
     header: &'a Header,
-    item: Item,
     origin_x: f32,
     origin_y: f32,
     done: bool,
@@ -37,7 +36,6 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
         Ok(Self {
             reader,
             header,
-            item: item.clone(),
             origin_x,
             origin_y,
             done: false,
