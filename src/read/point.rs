@@ -63,7 +63,15 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
         let byte_order = self.header.byte_order();
 
         loop {
-            let flag = read_u8(self.reader)?;
+            let flag = match read_u8(self.reader) {
+                Ok(flag) => flag,
+                Err(crate::error::Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+                    // Hit EOF while trying to read next flag - treat as end of points
+                    self.done = true;
+                    return Ok(None);
+                },
+                Err(e) => return Err(e),
+            };
 
             match flag {
                 0x81 => {
