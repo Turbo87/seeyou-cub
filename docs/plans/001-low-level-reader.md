@@ -2788,14 +2788,16 @@ For the entire project:
 
 **Status:** All 13 tests passing, code compiles successfully.
 
-### Phase 2: Data Structures - NEXT
+### Phase 2: Data Structures ✅ COMPLETED
 
-- [ ] Task 2.1: Header struct
-- [ ] Task 2.2: Item struct with bit-packed accessors
-- [ ] Task 2.3: Point types (stub)
-- [ ] Task 2.4: CubFile struct
+- [x] Task 2.1: Header struct - DONE
+- [x] Task 2.2: Item struct with bit-packed accessors - DONE
+- [x] Task 2.3: Point types (stub) - DONE
+- [x] Task 2.4: CubFile struct - DONE
 
-### Phase 3: Parsing
+**Status:** All 16 tests passing with and without datetime feature.
+
+### Phase 3: Parsing - NEXT
 
 - [ ] Task 3.1: Parse header
 - [ ] Task 3.2: Parse items
