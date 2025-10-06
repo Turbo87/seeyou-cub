@@ -1,7 +1,7 @@
-use std::io::{Read, Seek, SeekFrom};
 use crate::error::{Result, Warning};
-use crate::types::{Header, Item, ParsedPoint, OptionalData, CubDataId};
 use crate::read::io::*;
+use crate::types::{CubDataId, Header, Item, OptionalData, ParsedPoint};
+use std::io::{Read, Seek, SeekFrom};
 
 /// Iterator that lazily parses CubPoint sequences for an item
 pub struct PointIterator<'a, R> {
@@ -20,11 +20,7 @@ pub struct PointIterator<'a, R> {
 
 impl<'a, R: Read + Seek> PointIterator<'a, R> {
     /// Create new point iterator for an item
-    pub(crate) fn new(
-        reader: &'a mut R,
-        header: &'a Header,
-        item: &Item,
-    ) -> Result<Self> {
+    pub(crate) fn new(reader: &'a mut R, header: &'a Header, item: &Item) -> Result<Self> {
         // Seek to first point for this item
         let offset = header.data_offset as u64 + item.points_offset as u64;
         reader.seek(SeekFrom::Start(offset))?;
@@ -63,19 +59,23 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
         loop {
             let flag = match read_u8(self.reader) {
                 Ok(flag) => flag,
-                Err(crate::error::Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+                Err(crate::error::Error::IoError(ref e))
+                    if e.kind() == std::io::ErrorKind::UnexpectedEof =>
+                {
                     // Hit EOF while trying to read next flag - treat as end of points
                     self.done = true;
                     return Ok(None);
-                },
+                }
                 Err(e) => return Err(e),
             };
 
             match flag {
                 0x81 => {
                     // Set origin offset
-                    let delta_x = read_i16(self.reader, byte_order)? as f32 * self.header.lo_la_scale;
-                    let delta_y = read_i16(self.reader, byte_order)? as f32 * self.header.lo_la_scale;
+                    let delta_x =
+                        read_i16(self.reader, byte_order)? as f32 * self.header.lo_la_scale;
+                    let delta_y =
+                        read_i16(self.reader, byte_order)? as f32 * self.header.lo_la_scale;
                     self.origin_x += delta_x;
                     self.origin_y += delta_y;
 
@@ -207,19 +207,22 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
 
             Some(CubDataId::SecondaryFrequency) => {
                 let value = ((b1 as u32) << 16) | ((b2 as u32) << 8) | (b3 as u32);
-                self.current_optional.push(OptionalData::SecondaryFrequency(value));
+                self.current_optional
+                    .push(OptionalData::SecondaryFrequency(value));
             }
 
             Some(CubDataId::ExceptionRules) => {
                 let len = (((b2 as u16) << 8) | (b3 as u16)) as usize;
                 let rules = read_string(self.reader, len)?;
-                self.current_optional.push(OptionalData::ExceptionRules(rules));
+                self.current_optional
+                    .push(OptionalData::ExceptionRules(rules));
             }
 
             Some(CubDataId::NotamRemarks) => {
                 let len = (((b2 as u16) << 8) | (b3 as u16)) as usize;
                 let remarks = read_string(self.reader, len)?;
-                self.current_optional.push(OptionalData::NotamRemarks(remarks));
+                self.current_optional
+                    .push(OptionalData::NotamRemarks(remarks));
             }
 
             Some(CubDataId::NotamId) => {
@@ -232,7 +235,8 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
                 let b4 = read_u8(self.reader)?;
                 let value = ((b1 as u32) << 16) | ((b2 as u32) << 8) | (b3 as u32);
                 let time = (value << 8) | (b4 as u32);
-                self.current_optional.push(OptionalData::NotamInsertTime(time));
+                self.current_optional
+                    .push(OptionalData::NotamInsertTime(time));
             }
 
             None => {
@@ -277,7 +281,7 @@ mod tests {
             max_height: 1.0,
             lo_la_scale: 0.0001,
             header_offset: 0,
-            data_offset: 0,  // Points start at beginning for this test
+            data_offset: 0, // Points start at beginning for this test
             alignment: 0,
         }
     }
@@ -306,8 +310,8 @@ mod tests {
 
         // Point: 0x01 flag + coords
         bytes.push(0x01);
-        bytes.extend_from_slice(&100i16.to_le_bytes());  // x offset
-        bytes.extend_from_slice(&200i16.to_le_bytes());  // y offset
+        bytes.extend_from_slice(&100i16.to_le_bytes()); // x offset
+        bytes.extend_from_slice(&200i16.to_le_bytes()); // y offset
 
         // End marker
         bytes.push(0x00);

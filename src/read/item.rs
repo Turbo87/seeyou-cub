@@ -1,7 +1,7 @@
-use std::io::{Read, Seek, SeekFrom};
 use crate::error::{Result, Warning};
-use crate::types::{Header, Item};
 use crate::read::io::*;
+use crate::types::{Header, Item};
+use std::io::{Read, Seek, SeekFrom};
 
 /// Parse all items from CUB file
 pub fn parse_items<R: Read + Seek>(
@@ -22,15 +22,15 @@ pub fn parse_items<R: Read + Seek>(
         let mut item_buffer = [0u8; 43];
         let bytes_to_read = std::cmp::min(header.size_of_item as usize, 43);
         reader.read_exact(&mut item_buffer[..bytes_to_read])?;
-        
+
         // If SizeOfItem > 43, skip the extra bytes
         if header.size_of_item > 43 {
             skip_bytes(reader, (header.size_of_item - 43) as usize)?;
         }
-        
+
         // Parse from the buffer using a cursor (full 43-byte buffer, zero-padded if needed)
         let mut cursor = std::io::Cursor::new(&item_buffer);
-        
+
         let left = read_f32_le(&mut cursor)?;
         let top = read_f32_le(&mut cursor)?;
         let right = read_f32_le(&mut cursor)?;
@@ -69,8 +69,8 @@ pub fn parse_items<R: Read + Seek>(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::io::Cursor;
     use crate::types::ByteOrder;
+    use std::io::Cursor;
 
     fn minimal_header() -> Header {
         Header {
@@ -92,7 +92,7 @@ mod tests {
             max_height: 1.0,
             lo_la_scale: 1.0,
             header_offset: 0,
-            data_offset: 84,  // 2 items × 42 bytes
+            data_offset: 84, // 2 items × 42 bytes
             alignment: 0,
         }
     }
@@ -101,13 +101,13 @@ mod tests {
         let mut bytes = Vec::new();
 
         // Item 1
-        bytes.extend_from_slice(&0.1f32.to_le_bytes());  // left
-        bytes.extend_from_slice(&0.5f32.to_le_bytes());  // top
-        bytes.extend_from_slice(&0.4f32.to_le_bytes());  // right
-        bytes.extend_from_slice(&0.2f32.to_le_bytes());  // bottom
+        bytes.extend_from_slice(&0.1f32.to_le_bytes()); // left
+        bytes.extend_from_slice(&0.5f32.to_le_bytes()); // top
+        bytes.extend_from_slice(&0.4f32.to_le_bytes()); // right
+        bytes.extend_from_slice(&0.2f32.to_le_bytes()); // bottom
 
-        bytes.push(0x04);  // type (DA)
-        bytes.push(0x23);  // alt_style (max=FL, min=MSL)
+        bytes.push(0x04); // type (DA)
+        bytes.push(0x23); // alt_style (max=FL, min=MSL)
 
         let write_i16 = |bytes: &mut Vec<u8>, val: i16| {
             bytes.extend_from_slice(&match byte_order {
@@ -134,13 +134,13 @@ mod tests {
             });
         };
 
-        write_i16(&mut bytes, 100);   // min_alt
-        write_i16(&mut bytes, 5000);  // max_alt
-        write_i32(&mut bytes, 0);     // points_offset
-        write_i32(&mut bytes, 0);     // time_out
-        write_u32(&mut bytes, 0);     // extra_data
-        write_u64(&mut bytes, 0x3FFFFFF);  // active_time (default)
-        bytes.push(0);  // extended_type
+        write_i16(&mut bytes, 100); // min_alt
+        write_i16(&mut bytes, 5000); // max_alt
+        write_i32(&mut bytes, 0); // points_offset
+        write_i32(&mut bytes, 0); // time_out
+        write_u32(&mut bytes, 0); // extra_data
+        write_u64(&mut bytes, 0x3FFFFFF); // active_time (default)
+        bytes.push(0); // extended_type
 
         // Item 2 (copy of item 1 for simplicity)
         let item1 = bytes.clone();

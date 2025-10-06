@@ -3,8 +3,8 @@ use std::fs::File;
 
 #[test]
 fn parse_france_fixture() {
-    let file = File::open("tests/fixtures/france_2024.07.02.cub")
-        .expect("Failed to open fixture file");
+    let file =
+        File::open("tests/fixtures/france_2024.07.02.cub").expect("Failed to open fixture file");
 
     let (cub, warnings) = parse(file).expect("Failed to parse CUB file");
 
@@ -22,7 +22,7 @@ fn parse_france_fixture() {
     assert_eq!(warnings.len(), 1);
 
     // Check first few items have expected properties
-    use seeyou_cub::{CubStyle, CubClass};
+    use seeyou_cub::{CubClass, CubStyle};
     assert_eq!(cub.items()[0].style(), CubStyle::RestrictedArea);
     assert_eq!(cub.items()[0].class(), CubClass::Unknown);
     assert_eq!(cub.items()[0].min_alt, 0);
@@ -36,13 +36,17 @@ fn parse_france_fixture() {
 
 #[test]
 fn parse_and_read_points() {
-    let file = File::open("tests/fixtures/france_2024.07.02.cub")
-        .expect("Failed to open fixture file");
+    let file =
+        File::open("tests/fixtures/france_2024.07.02.cub").expect("Failed to open fixture file");
 
     let (mut cub, _warnings) = parse(file).expect("Failed to parse CUB file");
 
     // Parse points for first item
-    let first_item = cub.items().first().cloned().expect("Should have at least one item");
+    let first_item = cub
+        .items()
+        .first()
+        .cloned()
+        .expect("Should have at least one item");
     let mut points = cub.read_points(&first_item).expect("Failed to read points");
 
     let mut point_count = 0;
@@ -67,8 +71,8 @@ fn parse_and_read_points() {
 
 #[test]
 fn iterate_all_airspaces() {
-    let file = File::open("tests/fixtures/france_2024.07.02.cub")
-        .expect("Failed to open fixture file");
+    let file =
+        File::open("tests/fixtures/france_2024.07.02.cub").expect("Failed to open fixture file");
 
     let (mut cub, _warnings) = parse(file).expect("Failed to parse CUB file");
 

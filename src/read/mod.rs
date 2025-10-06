@@ -1,5 +1,5 @@
-mod io;
 mod header;
+mod io;
 mod item;
 mod point;
 
@@ -7,9 +7,9 @@ pub use header::parse_header;
 pub use item::parse_items;
 pub use point::PointIterator;
 
-use std::io::{Read, Seek};
 use crate::error::{Result, Warning};
 use crate::types::CubFile;
+use std::io::{Read, Seek};
 
 /// Parse a CUB file from a reader
 pub fn parse<R: Read + Seek>(mut reader: R) -> Result<(CubFile<R>, Vec<Warning>)> {

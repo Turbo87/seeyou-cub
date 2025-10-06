@@ -43,10 +43,6 @@ impl<R: Read + Seek> CubFile<R> {
     /// Parse points for a specific item
     /// Returns iterator that lazily parses CubPoint sequences
     pub fn read_points(&mut self, item: &Item) -> Result<crate::read::PointIterator<'_, R>> {
-        crate::read::PointIterator::new(
-            &mut self.reader,
-            &self.header,
-            item,
-        )
+        crate::read::PointIterator::new(&mut self.reader, &self.header, item)
     }
 }
