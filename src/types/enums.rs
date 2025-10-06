@@ -184,6 +184,161 @@ impl ExtendedType {
     }
 }
 
+/// NOTAM type (from ExtraData bits 28-29)
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum NotamType {
+    None,
+    Cancel,
+    New,
+    Replace,
+}
+
+impl NotamType {
+    pub fn from_bits(bits: u32) -> Self {
+        match (bits >> 28) & 0x03 {
+            0 => NotamType::None,
+            1 => NotamType::Cancel,
+            2 => NotamType::New,
+            3 => NotamType::Replace,
+            _ => NotamType::None,
+        }
+    }
+}
+
+/// NOTAM traffic type (from ExtraData bits 4-6)
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum NotamTraffic {
+    Miscellaneous,
+    Ifr,
+    Vfr,
+    IfrAndVfr,
+    Checklist,
+}
+
+impl NotamTraffic {
+    pub fn from_bits(bits: u32) -> Self {
+        match (bits >> 4) & 0x07 {
+            0 => NotamTraffic::Miscellaneous,
+            1 => NotamTraffic::Ifr,
+            2 => NotamTraffic::Vfr,
+            3 => NotamTraffic::IfrAndVfr,
+            4 => NotamTraffic::Checklist,
+            _ => NotamTraffic::Miscellaneous,
+        }
+    }
+}
+
+/// NOTAM scope (from ExtraData bits 0-3)
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum NotamScope {
+    Unknown,
+    Aerodrome,
+    EnRoute,
+    AerodromeAndEnRoute,
+    NavWarning,
+    AerodromeAndNavWarning,
+    Checklist,
+}
+
+impl NotamScope {
+    pub fn from_bits(bits: u32) -> Self {
+        match bits & 0x0F {
+            0 => NotamScope::Unknown,
+            1 => NotamScope::Aerodrome,
+            2 => NotamScope::EnRoute,
+            3 => NotamScope::AerodromeAndEnRoute,
+            4 => NotamScope::NavWarning,
+            5 => NotamScope::AerodromeAndNavWarning,
+            8 => NotamScope::Checklist,
+            _ => NotamScope::Unknown,
+        }
+    }
+}
+
+/// Days active flags (bits 52-63 of ActiveTime)
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct DaysActive {
+    bits: u16,
+}
+
+impl DaysActive {
+    pub fn from_bits(bits: u16) -> Self {
+        Self { bits }
+    }
+
+    pub fn sunday(&self) -> bool { self.bits & 0x001 != 0 }
+    pub fn monday(&self) -> bool { self.bits & 0x002 != 0 }
+    pub fn tuesday(&self) -> bool { self.bits & 0x004 != 0 }
+    pub fn wednesday(&self) -> bool { self.bits & 0x008 != 0 }
+    pub fn thursday(&self) -> bool { self.bits & 0x010 != 0 }
+    pub fn friday(&self) -> bool { self.bits & 0x020 != 0 }
+    pub fn saturday(&self) -> bool { self.bits & 0x040 != 0 }
+    pub fn holidays(&self) -> bool { self.bits & 0x080 != 0 }
+    pub fn aup(&self) -> bool { self.bits & 0x100 != 0 }
+    pub fn irregular(&self) -> bool { self.bits & 0x200 != 0 }
+    pub fn by_notam(&self) -> bool { self.bits & 0x400 != 0 }
+    pub fn is_unknown(&self) -> bool { self.bits == 0 }
+}
+
+/// Optional data type identifier in CubPoint sequences
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CubDataId {
+    IcaoCode,
+    SecondaryFrequency,
+    ExceptionRules,
+    NotamRemarks,
+    NotamId,
+    NotamInsertTime,
+}
+
+impl CubDataId {
+    pub fn from_byte(byte: u8) -> Option<Self> {
+        match byte {
+            0 => Some(CubDataId::IcaoCode),
+            1 => Some(CubDataId::SecondaryFrequency),
+            2 => Some(CubDataId::ExceptionRules),
+            3 => Some(CubDataId::NotamRemarks),
+            4 => Some(CubDataId::NotamId),
+            5 => Some(CubDataId::NotamInsertTime),
+            _ => None,
+        }
+    }
+}
+
+/// NOTAM subject and action codes (decoded from ExtraData)
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct NotamCodes {
+    pub subject: (char, char),  // First and last letter
+    pub action: (char, char),   // First and last letter
+}
+
+impl NotamCodes {
+    /// Decode from ExtraData field (bits 8-27 encode letters as 1-26)
+    pub fn from_extra_data(extra_data: u32) -> Option<Self> {
+        // Check if this is NOTAM data (bits 30-31 == 0)
+        if (extra_data >> 30) != 0 {
+            return None;
+        }
+
+        let decode_letter = |bits: u32| -> Option<char> {
+            match bits {
+                1..=26 => Some((b'A' + (bits - 1) as u8) as char),
+                _ => None,
+            }
+        };
+
+        let subject_first = decode_letter((extra_data >> 23) & 0x1F)?;
+        let subject_last = decode_letter((extra_data >> 18) & 0x1F)?;
+        let action_first = decode_letter((extra_data >> 13) & 0x1F)?;
+        let action_last = decode_letter((extra_data >> 8) & 0x1F)?;
+
+        Some(NotamCodes {
+            subject: (subject_first, subject_last),
+            action: (action_first, action_last),
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -218,5 +373,37 @@ mod tests {
         assert_eq!(AltStyle::from_nibble(1), AltStyle::AboveGroundLevel);
         assert_eq!(AltStyle::from_nibble(3), AltStyle::FlightLevel);
         assert_eq!(AltStyle::from_nibble(15), AltStyle::Unknown);
+    }
+
+    #[test]
+    fn notam_type_from_bits() {
+        assert_eq!(NotamType::from_bits(0b00 << 28), NotamType::None);
+        assert_eq!(NotamType::from_bits(0b01 << 28), NotamType::Cancel);
+        assert_eq!(NotamType::from_bits(0b10 << 28), NotamType::New);
+        assert_eq!(NotamType::from_bits(0b11 << 28), NotamType::Replace);
+    }
+
+    #[test]
+    fn days_active() {
+        let days = DaysActive::from_bits(0x001 | 0x004 | 0x040);
+        assert!(days.sunday());
+        assert!(!days.monday());
+        assert!(days.tuesday());
+        assert!(days.saturday());
+        assert!(!days.holidays());
+    }
+
+    #[test]
+    fn notam_codes_decode() {
+        // Example: subject "AA", action "BB"
+        let extra_data =
+            (1 << 23) |  // subject first: A
+            (1 << 18) |  // subject last: A
+            (2 << 13) |  // action first: B
+            (2 << 8);    // action last: B
+
+        let codes = NotamCodes::from_extra_data(extra_data).unwrap();
+        assert_eq!(codes.subject, ('A', 'A'));
+        assert_eq!(codes.action, ('B', 'B'));
     }
 }
