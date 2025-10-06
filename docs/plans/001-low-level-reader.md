@@ -2806,14 +2806,16 @@ For the entire project:
 
 **Status:** All 22 tests passing.
 
-### Phase 4: Integration & Testing - NEXT
+### Phase 4: Integration & Testing ✅ COMPLETED
 
-- [ ] Task 4.1: Integration test with real file
-- [ ] Task 4.2: Fix bugs and add assertions
-- [ ] Task 4.3: Public API and documentation
-- [ ] Task 4.4: Add README and examples
+- [x] Task 4.1: Integration test with real file - DONE
+- [x] Task 4.2: Fix bugs and add assertions - DONE
+- [x] Task 4.3: Public API and documentation - DONE
+- [x] Task 4.4: Add README and examples - DONE
 
-### Phase 5: Polish & Finalize
+**Status:** All 25 tests passing (22 unit + 3 integration), 2 doctests passing, working example with France fixture.
+
+### Phase 5: Polish & Finalize - NEXT
 
 - [ ] Task 5.1: Add missing dependencies to Cargo.toml
 - [ ] Task 5.2: Clippy and formatting
