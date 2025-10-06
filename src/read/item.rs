@@ -17,27 +17,34 @@ pub fn parse_items<R: Read + Seek>(
     let mut items = Vec::with_capacity(header.hdr_items as usize);
 
     for _ in 0..header.hdr_items {
-        // Read Item fields (42 bytes minimum)
-        let left = read_f32_le(reader)?;
-        let top = read_f32_le(reader)?;
-        let right = read_f32_le(reader)?;
-        let bottom = read_f32_le(reader)?;
-
-        let type_byte = read_u8(reader)?;
-        let alt_style_byte = read_u8(reader)?;
-        let min_alt = read_i16(reader, byte_order)?;
-        let max_alt = read_i16(reader, byte_order)?;
-        let points_offset = read_i32(reader, byte_order)?;
-        let time_out = read_i32(reader, byte_order)?;
-        let extra_data = read_u32(reader, byte_order)?;
-        let active_time = read_u64(reader, byte_order)?;
-        let extended_type_byte = read_u8(reader)?;
-
-        // Skip padding if SizeOfItem > 42
-        let padding = header.size_of_item - 42;
-        if padding > 0 {
-            skip_bytes(reader, padding as usize)?;
+        // Create 43-byte zero-filled buffer and read SizeOfItem bytes into it
+        // Per spec: remaining bytes should be set to 0 if SizeOfItem < 43
+        let mut item_buffer = [0u8; 43];
+        let bytes_to_read = std::cmp::min(header.size_of_item as usize, 43);
+        reader.read_exact(&mut item_buffer[..bytes_to_read])?;
+        
+        // If SizeOfItem > 43, skip the extra bytes
+        if header.size_of_item > 43 {
+            skip_bytes(reader, (header.size_of_item - 43) as usize)?;
         }
+        
+        // Parse from the buffer using a cursor (full 43-byte buffer, zero-padded if needed)
+        let mut cursor = std::io::Cursor::new(&item_buffer);
+        
+        let left = read_f32_le(&mut cursor)?;
+        let top = read_f32_le(&mut cursor)?;
+        let right = read_f32_le(&mut cursor)?;
+        let bottom = read_f32_le(&mut cursor)?;
+
+        let type_byte = read_u8(&mut cursor)?;
+        let alt_style_byte = read_u8(&mut cursor)?;
+        let min_alt = read_i16(&mut cursor, byte_order)?;
+        let max_alt = read_i16(&mut cursor, byte_order)?;
+        let points_offset = read_i32(&mut cursor, byte_order)?;
+        let time_out = read_i32(&mut cursor, byte_order)?;
+        let extra_data = read_u32(&mut cursor, byte_order)?;
+        let active_time = read_u64(&mut cursor, byte_order)?;
+        let extended_type_byte = read_u8(&mut cursor)?;
 
         items.push(Item {
             left,
