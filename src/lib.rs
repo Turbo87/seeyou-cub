@@ -3,4 +3,5 @@ mod read;
 mod types;
 
 pub use error::{Error, Warning};
+pub use read::parse;
 pub use types::*;
