@@ -8,25 +8,30 @@ fn parse_france_fixture() {
 
     let (cub, warnings) = parse(file).expect("Failed to parse CUB file");
 
-    // Basic assertions
-    assert!(cub.items().len() > 0, "Should have at least one airspace");
+    // Assert total number of airspaces
+    assert_eq!(cub.items().len(), 1368);
 
-    // Check bounding box makes sense for France
+    // Check bounding box for France
     let (west, south, east, north) = cub.header().bounding_box();
-    println!("Bounding box: W={} S={} E={} N={}", west, south, east, north);
+    assert!((west - (-0.085230246)).abs() < 0.0001);
+    assert!((south - 0.71856177).abs() < 0.0001);
+    assert!((east - 0.17016976).abs() < 0.0001);
+    assert!((north - 0.89215416).abs() < 0.0001);
 
-    // Print some stats
-    println!("Total airspaces: {}", cub.items().len());
-    println!("Warnings: {}", warnings.len());
-    for warning in &warnings {
-        println!("  Warning: {:?}", warning);
-    }
+    // Assert expected warnings
+    assert_eq!(warnings.len(), 1);
 
-    // Check first few items
-    for (i, item) in cub.items().iter().take(5).enumerate() {
-        println!("Item {}: style={:?} class={:?} alt={}-{}",
-            i, item.style(), item.class(), item.min_alt, item.max_alt);
-    }
+    // Check first few items have expected properties
+    use seeyou_cub::{CubStyle, CubClass};
+    assert_eq!(cub.items()[0].style(), CubStyle::RestrictedArea);
+    assert_eq!(cub.items()[0].class(), CubClass::Unknown);
+    assert_eq!(cub.items()[0].min_alt, 0);
+    assert_eq!(cub.items()[0].max_alt, 488);
+
+    assert_eq!(cub.items()[1].style(), CubStyle::ProhibitedArea);
+    assert_eq!(cub.items()[1].class(), CubClass::Unknown);
+    assert_eq!(cub.items()[1].min_alt, 0);
+    assert_eq!(cub.items()[1].max_alt, 610);
 }
 
 #[test]
@@ -37,39 +42,27 @@ fn parse_and_read_points() {
     let (mut cub, _warnings) = parse(file).expect("Failed to parse CUB file");
 
     // Parse points for first item
-    if let Some(first_item) = cub.items().first().cloned() {
-        let mut points = cub.read_points(&first_item).expect("Failed to read points");
+    let first_item = cub.items().first().cloned().expect("Should have at least one item");
+    let mut points = cub.read_points(&first_item).expect("Failed to read points");
 
-        let mut point_count = 0;
-        let mut first_point = None;
+    let mut point_count = 0;
+    let mut first_point = None;
 
-        for point_result in &mut points {
-            let point = point_result.expect("Failed to parse point");
-            if first_point.is_none() {
-                first_point = Some(point.clone());
-            }
-            point_count += 1;
+    for point_result in &mut points {
+        let point = point_result.expect("Failed to parse point");
+        if first_point.is_none() {
+            first_point = Some(point.clone());
         }
-
-        println!("First item has {} points", point_count);
-
-        if let Some(point) = first_point {
-            println!("First point: lon={} lat={}", point.lon, point.lat);
-            if let Some(name) = point.name {
-                println!("  Name: {}", name);
-            }
-            if let Some(freq) = point.frequency {
-                println!("  Frequency: {} Hz", freq);
-            }
-        }
-
-        // Check warnings from point parsing
-        for warning in points.warnings() {
-            println!("Point warning: {:?}", warning);
-        }
-
-        assert!(point_count > 0, "Should have at least one point");
+        point_count += 1;
     }
+
+    // Assert expected point count for first item
+    assert_eq!(point_count, 7);
+
+    // Assert first point coordinates
+    let first_point = first_point.expect("Should have at least one point");
+    assert!((first_point.lon - 0.033180647).abs() < 0.0001);
+    assert!((first_point.lat - 0.83465517).abs() < 0.0001);
 }
 
 #[test]
@@ -88,6 +81,6 @@ fn iterate_all_airspaces() {
         total_points += count;
     }
 
-    println!("Total points across all airspaces: {}", total_points);
-    assert!(total_points > 0);
+    // Assert expected total point count across all airspaces
+    assert_eq!(total_points, 93785);
 }
