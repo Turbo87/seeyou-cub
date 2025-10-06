@@ -1,3 +1,3 @@
 mod error;
-mod types;
 mod read;
+mod types;

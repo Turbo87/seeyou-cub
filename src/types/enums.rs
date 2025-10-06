@@ -1,8 +1,8 @@
 /// Byte ordering for integer fields
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ByteOrder {
-    LE,  // Little Endian
-    BE,  // Big Endian
+    LE, // Little Endian
+    BE, // Big Endian
 }
 
 impl ByteOrder {
@@ -266,18 +266,42 @@ impl DaysActive {
         Self { bits }
     }
 
-    pub fn sunday(&self) -> bool { self.bits & 0x001 != 0 }
-    pub fn monday(&self) -> bool { self.bits & 0x002 != 0 }
-    pub fn tuesday(&self) -> bool { self.bits & 0x004 != 0 }
-    pub fn wednesday(&self) -> bool { self.bits & 0x008 != 0 }
-    pub fn thursday(&self) -> bool { self.bits & 0x010 != 0 }
-    pub fn friday(&self) -> bool { self.bits & 0x020 != 0 }
-    pub fn saturday(&self) -> bool { self.bits & 0x040 != 0 }
-    pub fn holidays(&self) -> bool { self.bits & 0x080 != 0 }
-    pub fn aup(&self) -> bool { self.bits & 0x100 != 0 }
-    pub fn irregular(&self) -> bool { self.bits & 0x200 != 0 }
-    pub fn by_notam(&self) -> bool { self.bits & 0x400 != 0 }
-    pub fn is_unknown(&self) -> bool { self.bits == 0 }
+    pub fn sunday(&self) -> bool {
+        self.bits & 0x001 != 0
+    }
+    pub fn monday(&self) -> bool {
+        self.bits & 0x002 != 0
+    }
+    pub fn tuesday(&self) -> bool {
+        self.bits & 0x004 != 0
+    }
+    pub fn wednesday(&self) -> bool {
+        self.bits & 0x008 != 0
+    }
+    pub fn thursday(&self) -> bool {
+        self.bits & 0x010 != 0
+    }
+    pub fn friday(&self) -> bool {
+        self.bits & 0x020 != 0
+    }
+    pub fn saturday(&self) -> bool {
+        self.bits & 0x040 != 0
+    }
+    pub fn holidays(&self) -> bool {
+        self.bits & 0x080 != 0
+    }
+    pub fn aup(&self) -> bool {
+        self.bits & 0x100 != 0
+    }
+    pub fn irregular(&self) -> bool {
+        self.bits & 0x200 != 0
+    }
+    pub fn by_notam(&self) -> bool {
+        self.bits & 0x400 != 0
+    }
+    pub fn is_unknown(&self) -> bool {
+        self.bits == 0
+    }
 }
 
 /// Optional data type identifier in CubPoint sequences
@@ -308,8 +332,8 @@ impl CubDataId {
 /// NOTAM subject and action codes (decoded from ExtraData)
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NotamCodes {
-    pub subject: (char, char),  // First and last letter
-    pub action: (char, char),   // First and last letter
+    pub subject: (char, char), // First and last letter
+    pub action: (char, char),  // First and last letter
 }
 
 impl NotamCodes {
@@ -396,11 +420,10 @@ mod tests {
     #[test]
     fn notam_codes_decode() {
         // Example: subject "AA", action "BB"
-        let extra_data =
-            (1 << 23) |  // subject first: A
+        let extra_data = (1 << 23) |  // subject first: A
             (1 << 18) |  // subject last: A
             (2 << 13) |  // action first: B
-            (2 << 8);    // action last: B
+            (2 << 8); // action last: B
 
         let codes = NotamCodes::from_extra_data(extra_data).unwrap();
         assert_eq!(codes.subject, ('A', 'A'));

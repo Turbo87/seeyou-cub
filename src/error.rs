@@ -30,18 +30,13 @@ pub enum Warning {
     },
 
     /// SizeOfItem/SizeOfPoint smaller than expected structure size
-    OversizedItem {
-        expected: i32,
-        actual: i32,
-    },
+    OversizedItem { expected: i32, actual: i32 },
 
     /// Unrecognized optional point flag, skipped
     UnknownPointFlag(u8),
 
     /// Data appears truncated but parsing continued
-    TruncatedData {
-        context: String,
-    },
+    TruncatedData { context: String },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
