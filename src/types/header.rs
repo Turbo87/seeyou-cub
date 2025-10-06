@@ -4,7 +4,6 @@ use crate::types::ByteOrder;
 #[derive(Debug, Clone)]
 pub struct Header {
     // Raw fields (public)
-    pub ident: u32,
     pub title: String,
     pub allowed_serials: [u16; 8],
     pub pc_byte_order: u8,
