@@ -8,9 +8,11 @@ pub struct PointIterator<'a, R> {
     reader: &'a mut R,
     header: &'a Header,
     warnings: &'a mut Vec<Warning>,
+    points_offset: u64,
     origin_x: f32,
     origin_y: f32,
     done: bool,
+    started: bool,
     // Attributes parsed from current point sequence
     current_name: Option<String>,
     current_frequency: Option<u32>,
@@ -25,31 +27,38 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
         header: &'a Header,
         item: &Item,
         warnings: &'a mut Vec<Warning>,
-    ) -> Result<Self> {
-        // Seek to first point for this item
-        let offset = header.data_offset as u64 + item.points_offset as u64;
-        reader.seek(SeekFrom::Start(offset))?;
+    ) -> Self {
+        // Calculate offset for first point
+        let points_offset = header.data_offset as u64 + item.points_offset as u64;
 
         // Initialize origin to item's bottom-left
         let origin_x = item.left;
         let origin_y = item.bottom;
 
-        Ok(Self {
+        Self {
             reader,
             header,
             warnings,
+            points_offset,
             origin_x,
             origin_y,
             done: false,
+            started: false,
             current_name: None,
             current_frequency: None,
             current_frequency_name: None,
             current_optional: Vec::new(),
-        })
+        }
     }
 
     /// Parse next CubPoint
     fn parse_next_point(&mut self) -> Result<Option<ParsedPoint>> {
+        // Seek to points section on first call
+        if !self.started {
+            self.started = true;
+            self.reader.seek(SeekFrom::Start(self.points_offset))?;
+        }
+
         if self.done {
             return Ok(None);
         }
@@ -342,7 +351,7 @@ mod tests {
         let item = minimal_item();
         let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings);
 
         let point = iter.next().unwrap().unwrap();
         insta::assert_debug_snapshot!(point);
@@ -362,7 +371,7 @@ mod tests {
         let item = minimal_item();
         let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings);
         assert!(iter.next().is_none());
     }
 
@@ -398,7 +407,7 @@ mod tests {
         let item = minimal_item();
         let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings);
 
         let point1 = iter.next().unwrap().unwrap();
         let point2 = iter.next().unwrap().unwrap();
@@ -484,7 +493,7 @@ mod tests {
         let item = minimal_item();
         let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings);
 
         let point = iter.next().unwrap().unwrap();
 
@@ -514,7 +523,7 @@ mod tests {
         let item = minimal_item();
         let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings);
 
         let point = iter.next().unwrap().unwrap();
         assert!(point.name.is_none());
@@ -542,7 +551,7 @@ mod tests {
         let item = minimal_item();
         let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings);
 
         let point = iter.next().unwrap().unwrap();
         insta::assert_debug_snapshot!(point);
@@ -579,7 +588,7 @@ mod tests {
         let item = minimal_item();
         let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings);
 
         let point1 = iter.next().unwrap().unwrap();
         let point2 = iter.next().unwrap().unwrap();
@@ -620,7 +629,7 @@ mod tests {
         let item = minimal_item();
         let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings);
 
         let point = iter.next().unwrap().unwrap();
         assert_eq!(point.name, Some("Test".to_string()));

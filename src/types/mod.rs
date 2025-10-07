@@ -48,11 +48,14 @@ impl<R: Read + Seek> CubReader<R> {
     /// Returns an iterator that lazily parses items from the file.
     /// Requires the header to determine byte order and item count.
     /// Warnings are pushed to the provided vector during iteration.
+    ///
+    /// The iterator seeks to the items section on first iteration. If the seek
+    /// fails, the first item will be an `Err`.
     pub fn read_items<'a>(
         &'a mut self,
         header: &Header,
         warnings: &'a mut Vec<crate::error::Warning>,
-    ) -> Result<crate::read::ItemIterator<'a, R>> {
+    ) -> crate::read::ItemIterator<'a, R> {
         crate::read::ItemIterator::new(&mut self.inner, header, warnings)
     }
 
@@ -61,12 +64,15 @@ impl<R: Read + Seek> CubReader<R> {
     /// Returns an iterator that lazily parses points for the given item.
     /// Requires the header to determine byte order and point offsets.
     /// Warnings are pushed to the provided vector during iteration.
+    ///
+    /// The iterator seeks to the points section on first iteration. If the seek
+    /// fails, the first point will be an `Err`.
     pub fn read_points<'a>(
         &'a mut self,
         header: &'a Header,
         item: &Item,
         warnings: &'a mut Vec<crate::error::Warning>,
-    ) -> Result<crate::read::PointIterator<'a, R>> {
+    ) -> crate::read::PointIterator<'a, R> {
         crate::read::PointIterator::new(&mut self.inner, header, item, warnings)
     }
 }

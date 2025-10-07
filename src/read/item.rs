@@ -9,24 +9,23 @@ pub struct ItemIterator<'a, R> {
     byte_order: ByteOrder,
     size_of_item: i32,
     remaining: i32,
+    header_offset: i32,
+    started: bool,
 }
 
 impl<'a, R: Read + Seek> ItemIterator<'a, R> {
     /// Create new item iterator
-    ///
-    /// Seeks to the item section and prepares to parse items
-    pub fn new(reader: &'a mut R, header: &Header, warnings: &mut Vec<Warning>) -> Result<Self> {
+    pub fn new(reader: &'a mut R, header: &Header, warnings: &mut Vec<Warning>) -> Self {
         let _ = warnings; // Unused for now, but part of API for future warnings
 
-        // Seek to items section
-        reader.seek(SeekFrom::Start(header.header_offset as u64))?;
-
-        Ok(Self {
+        Self {
             reader,
             byte_order: header.byte_order(),
             size_of_item: header.size_of_item,
             remaining: header.hdr_items,
-        })
+            header_offset: header.header_offset,
+            started: false,
+        }
     }
 }
 
@@ -36,6 +35,14 @@ impl<'a, R: Read + Seek> Iterator for ItemIterator<'a, R> {
     fn next(&mut self) -> Option<Self::Item> {
         if self.remaining == 0 {
             return None;
+        }
+
+        // Seek to items section on first call
+        if !self.started {
+            self.started = true;
+            if let Err(e) = self.reader.seek(SeekFrom::Start(self.header_offset as u64)) {
+                return Some(Err(e.into()));
+            }
         }
 
         self.remaining -= 1;
@@ -197,7 +204,6 @@ mod tests {
         let mut warnings = Vec::new();
 
         let items: Vec<_> = ItemIterator::new(&mut cursor, &header, &mut warnings)
-            .unwrap()
             .collect::<Result<Vec<_>>>()
             .unwrap();
 

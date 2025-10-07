@@ -19,7 +19,6 @@ fn parse_france_fixture() {
     // Parse all items
     let items: Vec<_> = reader
         .read_items(&header, &mut warnings)
-        .expect("Failed to create item iterator")
         .collect::<Result<Vec<_>, _>>()
         .expect("Failed to parse items");
 
@@ -33,7 +32,6 @@ fn parse_france_fixture() {
     let first_item = items.first().unwrap();
     let points: Vec<_> = reader
         .read_points(&header, first_item, &mut warnings)
-        .expect("Failed to read points")
         .collect::<Result<Vec<_>, _>>()
         .expect("Failed to parse points");
 
@@ -42,7 +40,6 @@ fn parse_france_fixture() {
     let last_item = items.last().unwrap();
     let points: Vec<_> = reader
         .read_points(&header, last_item, &mut warnings)
-        .expect("Failed to read points")
         .collect::<Result<Vec<_>, _>>()
         .expect("Failed to parse points");
 
@@ -55,11 +52,7 @@ fn parse_france_fixture() {
     for item in &items {
         *style_counts.entry(item.style()).or_insert(0) += 1;
 
-        let mut point_iter = reader
-            .read_points(&header, item, &mut warnings)
-            .expect("Failed to read points");
-
-        for point_result in &mut point_iter {
+        for point_result in reader.read_points(&header, item, &mut warnings) {
             let _point = point_result.expect("Failed to parse point");
             total_points += 1;
         }

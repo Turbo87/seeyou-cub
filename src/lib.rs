@@ -13,7 +13,7 @@
 //!
 //! let header = reader.read_header(&mut warnings)?;
 //! let items: Vec<_> = reader
-//!     .read_items(&header, &mut warnings)?
+//!     .read_items(&header, &mut warnings)
 //!     .collect::<Result<Vec<_>, _>>()?;
 //!
 //! println!("Airspaces: {}", items.len());

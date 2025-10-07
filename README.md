@@ -33,7 +33,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Parse all items
     let items: Vec<_> = reader
-        .read_items(&header, &mut warnings)?
+        .read_items(&header, &mut warnings)
         .collect::<Result<Vec<_>, _>>()?;
 
     println!("Loaded {} airspaces", items.len());
@@ -55,7 +55,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Parse geometry for first airspace
     if let Some(first) = items.first() {
-        for point in reader.read_points(&header, first, &mut warnings)? {
+        for point in reader.read_points(&header, first, &mut warnings) {
             let pt = point?;
             println!("  Point: {} {}", pt.lon, pt.lat);
             if let Some(name) = &pt.name {

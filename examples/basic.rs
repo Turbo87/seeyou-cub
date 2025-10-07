@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Bounds: W={:.4} S={:.4} E={:.4} N={:.4}", w, s, e, n);
 
     let items: Vec<_> = reader
-        .read_items(&header, &mut warnings)?
+        .read_items(&header, &mut warnings)
         .collect::<Result<Vec<_>, _>>()?;
 
     println!("Airspaces: {}", items.len());
@@ -38,7 +38,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // Parse points
         let points: Vec<_> = reader
-            .read_points(&header, item, &mut warnings)?
+            .read_points(&header, item, &mut warnings)
             .collect::<Result<Vec<_>, _>>()?;
 
         println!("   Points: {}", points.len());
