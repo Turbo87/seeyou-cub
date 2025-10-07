@@ -87,11 +87,20 @@ pub fn parse_header<R: Read + Seek>(reader: &mut R, warnings: &mut Vec<Warning>)
     let data_offset = read_i32(reader, byte_order)?;
     let alignment = read_i32(reader, byte_order)?;
 
+    if size_of_item < 26 {
+        return Err(Error::UndersizedItems { size_of_item });
+    }
+
+    if size_of_item > 43 {
+        warnings.push(Warning::OversizedItems { size_of_item });
+    }
+
     if size_of_point < 5 {
-        warnings.push(Warning::OversizedItem {
-            expected: size_of_point,
-            actual: 5,
-        });
+        return Err(Error::UndersizedPoints { size_of_point });
+    }
+
+    if size_of_point > 5 {
+        warnings.push(Warning::OversizedPoints { size_of_point });
     }
 
     let header = Header {

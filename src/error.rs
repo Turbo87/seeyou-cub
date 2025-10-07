@@ -1,10 +1,10 @@
-use std::io;
+pub type Result<T> = std::result::Result<T, Error>;
 
 /// Unrecoverable parsing errors
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("I/O error: {0}")]
-    IoError(#[from] io::Error),
+    #[error(transparent)]
+    IoError(#[from] std::io::Error),
 
     #[error("Invalid magic bytes in header (expected 0x425543C2)")]
     InvalidMagicBytes,
@@ -12,34 +12,25 @@ pub enum Error {
     #[error("Encrypted CUB files not supported (encryption format undocumented)")]
     EncryptedFile,
 
-    #[error("Unexpected end of file: {0}")]
-    UnexpectedEof(String),
+    #[error("Unexpected point flag: 0x{0:02X}")]
+    UnexpectedPointFlag(u8),
 
-    #[error("Invalid point flag: 0x{0:02X}")]
-    InvalidPointFlag(u8),
+    #[error("SizeOfItem is smaller than the minimum structure size")]
+    UndersizedItems { size_of_item: i32 },
 
-    #[error("Invalid data: {0}")]
-    InvalidData(String),
+    #[error("SizeOfPoint is smaller than the minimum structure size")]
+    UndersizedPoints { size_of_point: i32 },
 }
 
 /// Non-fatal issues encountered during lenient parsing
 #[derive(Debug, Clone, PartialEq)]
 pub enum Warning {
-    /// Unknown enum value, used default instead
-    InvalidEnumValue {
-        field: String,
-        value: u8,
-        used_default: String,
-    },
+    /// SizeOfItem is larger than the expected structure size
+    OversizedItems { size_of_item: i32 },
 
-    /// SizeOfItem/SizeOfPoint smaller than expected structure size
-    OversizedItem { expected: i32, actual: i32 },
+    /// SizeOfPoint is larger than the expected structure size
+    OversizedPoints { size_of_point: i32 },
 
     /// Unrecognized optional point flag, skipped
     UnknownPointFlag(u8),
-
-    /// Data appears truncated but parsing continued
-    TruncatedData { context: String },
 }
-
-pub type Result<T> = std::result::Result<T, Error>;

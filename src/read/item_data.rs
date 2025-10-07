@@ -70,11 +70,7 @@ pub fn read_item_data<R: Read + Seek>(
             }
 
             _ => {
-                // Unexpected flag
-                return Err(Error::InvalidData(format!(
-                    "Unexpected point flag: 0x{:02X}",
-                    flag
-                )));
+                return Err(Error::UnexpectedPointFlag(flag));
             }
         }
     }
