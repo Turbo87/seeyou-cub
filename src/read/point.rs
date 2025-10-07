@@ -132,13 +132,30 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
         if (first_flag & 0x40) != 0 {
             let name_len = (first_flag & 0x3F) as usize;
             if name_len > 0 {
-                let name = read_string(self.reader, name_len)?;
-                self.current_name = Some(name.trim_end_matches('\0').to_string());
+                match read_string(self.reader, name_len) {
+                    Ok(name) => {
+                        self.current_name = Some(name.trim_end_matches('\0').to_string());
+                    }
+                    Err(crate::error::Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+                        // Hit EOF while reading name - treat as end of points
+                        self.done = true;
+                        return Ok(());
+                    }
+                    Err(e) => return Err(e),
+                }
             }
         }
 
         // Check for frequency attribute
-        let next_flag = read_u8(self.reader)?;
+        let next_flag = match read_u8(self.reader) {
+            Ok(flag) => flag,
+            Err(crate::error::Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+                // Hit EOF while reading next flag - treat as end of points
+                self.done = true;
+                return Ok(());
+            }
+            Err(e) => return Err(e),
+        };
         if (next_flag & 0xC0) == 0xC0 {
             let freq_name_len = (next_flag & 0x3F) as usize;
             let frequency = read_u32(self.reader, byte_order)?;
