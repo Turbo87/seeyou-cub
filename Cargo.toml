@@ -8,3 +8,7 @@ edition = "2024"
 exclude = [".github/*", "benches/*", "docs/*", "examples/*", "tests/*", ".gitignore"]
 
 [dependencies]
+
+[package.metadata.release]
+pre-release-commit-message = "Release v{{version}}"
+tag-message = ""
