@@ -1,4 +1,6 @@
-<!-- imported from https://github.com/naviter/seeyou_file_formats/blob/v2.1/CUB_file_format.md -->
+*Imported from https://github.com/naviter/seeyou_file_formats/blob/v2.1/CUB_file_format.md*
+
+---
 
 # SeeYou CUB File Format
 

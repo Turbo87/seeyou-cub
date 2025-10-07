@@ -1,6 +1,7 @@
 # seeyou-cub
 
-A Rust parser for the SeeYou CUB binary file format, which stores airspace data for flight navigation software.
+A Rust parser for the [SeeYou CUB binary file format](docs/CUB_file_format.md), 
+which stores airspace data for flight navigation software.
 
 ## Features
 
@@ -81,11 +82,8 @@ Enable `jiff` integration for convenient date/time handling:
 seeyou-cub = { version = "0.0.0", features = ["datetime"] }
 ```
 
-With this feature enabled, `Item::start_date()` and `Item::end_date()` return `jiff::civil::DateTime`.
-
-## File Format
-
-The CUB format specification is available in the `docs/CUB_file_format.md` file.
+With this feature enabled, `Item::start_date()` and `Item::end_date()` return 
+`jiff::civil::DateTime`.
 
 ## License
 
