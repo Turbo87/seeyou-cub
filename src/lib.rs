@@ -34,6 +34,7 @@
 
 // Re-export public API
 pub use error::{Error, Warning};
+pub use read::CubReader;
 pub use types::*;
 
 mod error;
