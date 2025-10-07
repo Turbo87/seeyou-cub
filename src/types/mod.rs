@@ -24,6 +24,11 @@ impl<R> CubReader<R> {
     pub fn new(inner: R) -> Self {
         Self { inner }
     }
+
+    /// Consume the reader and return the underlying reader
+    pub fn into_inner(self) -> R {
+        self.inner
+    }
 }
 
 impl CubReader<std::fs::File> {
