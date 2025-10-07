@@ -1,6 +1,5 @@
-use seeyou_cub::parse;
+use seeyou_cub::CubReader;
 use std::env;
-use std::fs::File;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
@@ -9,26 +8,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::process::exit(1);
     }
 
-    let file = File::open(&args[1])?;
-    let (mut cub, warnings) = parse(file)?;
+    let mut reader = CubReader::from_path(&args[1])?;
+    let mut warnings = Vec::new();
+
+    let header = reader.read_header(&mut warnings)?;
 
     println!("=== CUB File Info ===");
-    println!("Header: {}", cub.header().title);
-    println!("Airspaces: {}", cub.items().len());
+    println!("Header: {}", header.title);
 
-    let (w, s, e, n) = cub.header().bounding_box();
+    let (w, s, e, n) = header.bounding_box();
     println!("Bounds: W={:.4} S={:.4} E={:.4} N={:.4}", w, s, e, n);
 
-    if !warnings.is_empty() {
-        println!("\n=== Warnings ({}) ===", warnings.len());
-        for warning in warnings {
-            println!("  {:?}", warning);
-        }
-    }
+    let items: Vec<_> = reader
+        .read_items(&header, &mut warnings)?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    println!("Airspaces: {}", items.len());
 
     println!("\n=== First 10 Airspaces ===");
-    for i in 0..cub.items().len().min(10) {
-        let item = cub.items()[i].clone();
+    for (i, item) in items.iter().take(10).enumerate() {
         println!("{}. {:?} {:?}", i + 1, item.style(), item.class());
         println!(
             "   Altitude: {} - {} meters ({:?} - {:?})",
@@ -39,7 +37,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         );
 
         // Parse points
-        let points: Vec<_> = cub.read_points(&item)?.collect::<Result<Vec<_>, _>>()?;
+        let points: Vec<_> = reader
+            .read_points(&header, item, &mut warnings)?
+            .collect::<Result<Vec<_>, _>>()?;
 
         println!("   Points: {}", points.len());
 
@@ -50,6 +50,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             if let Some(freq) = first_pt.frequency {
                 println!("   Frequency: {} Hz", freq);
             }
+        }
+    }
+
+    if !warnings.is_empty() {
+        println!("\n=== Warnings ({}) ===", warnings.len());
+        for warning in &warnings {
+            println!("  {:?}", warning);
         }
     }
 

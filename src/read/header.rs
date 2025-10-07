@@ -4,9 +4,7 @@ use crate::types::{ByteOrder, Header};
 use std::io::{Read, Seek, SeekFrom};
 
 /// Parse CUB header (first 210 bytes)
-pub fn parse_header<R: Read + Seek>(reader: &mut R) -> Result<(Header, Vec<Warning>)> {
-    let mut warnings = Vec::new();
-
+pub fn parse_header<R: Read + Seek>(reader: &mut R, warnings: &mut Vec<Warning>) -> Result<Header> {
     // Seek to start
     reader.seek(SeekFrom::Start(0))?;
 
@@ -119,7 +117,7 @@ pub fn parse_header<R: Read + Seek>(reader: &mut R) -> Result<(Header, Vec<Warni
         alignment,
     };
 
-    Ok((header, warnings))
+    Ok(header)
 }
 
 #[cfg(test)]
@@ -181,7 +179,8 @@ mod tests {
     fn parse_valid_le_header() {
         let bytes = minimal_header_bytes(ByteOrder::LE, false);
         let mut cursor = Cursor::new(bytes);
-        let (header, warnings) = parse_header(&mut cursor).unwrap();
+        let mut warnings = Vec::new();
+        let header = parse_header(&mut cursor, &mut warnings).unwrap();
 
         insta::assert_debug_snapshot!(header);
         assert!(warnings.is_empty());
@@ -191,7 +190,8 @@ mod tests {
     fn parse_valid_be_header() {
         let bytes = minimal_header_bytes(ByteOrder::BE, false);
         let mut cursor = Cursor::new(bytes);
-        let (header, warnings) = parse_header(&mut cursor).unwrap();
+        let mut warnings = Vec::new();
+        let header = parse_header(&mut cursor, &mut warnings).unwrap();
 
         insta::assert_debug_snapshot!(header);
         assert!(warnings.is_empty());
@@ -202,8 +202,9 @@ mod tests {
         let mut bytes = minimal_header_bytes(ByteOrder::LE, false);
         bytes[0] = 0xFF; // Corrupt magic
         let mut cursor = Cursor::new(bytes);
+        let mut warnings = Vec::new();
 
-        match parse_header(&mut cursor) {
+        match parse_header(&mut cursor, &mut warnings) {
             Err(Error::InvalidMagicBytes) => {}
             _ => panic!("Expected InvalidMagicBytes error"),
         }
@@ -213,8 +214,9 @@ mod tests {
     fn encrypted_file_error() {
         let bytes = minimal_header_bytes(ByteOrder::LE, true);
         let mut cursor = Cursor::new(bytes);
+        let mut warnings = Vec::new();
 
-        match parse_header(&mut cursor) {
+        match parse_header(&mut cursor, &mut warnings) {
             Err(Error::EncryptedFile) => {}
             _ => panic!("Expected EncryptedFile error"),
         }

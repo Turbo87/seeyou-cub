@@ -22,22 +22,29 @@ seeyou-cub = "0.0.0"
 Basic example:
 
 ```rust
-use seeyou_cub::parse;
-use std::fs::File;
+use seeyou_cub::CubReader;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let file = File::open("airspace.cub")?;
-    let (mut cub, warnings) = parse(file)?;
+    let mut reader = CubReader::from_path("airspace.cub")?;
+    let mut warnings = Vec::new();
 
-    println!("Loaded {} airspaces", cub.items().len());
+    // Parse header
+    let header = reader.read_header(&mut warnings)?;
+
+    // Parse all items
+    let items: Vec<_> = reader
+        .read_items(&header, &mut warnings)?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    println!("Loaded {} airspaces", items.len());
 
     // Inspect warnings
-    for warning in warnings {
+    for warning in &warnings {
         eprintln!("Warning: {:?}", warning);
     }
 
     // Access airspace metadata
-    for item in cub.items() {
+    for item in &items {
         println!("{:?} {:?}: {}-{} meters",
             item.style(),
             item.class(),
@@ -47,8 +54,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Parse geometry for first airspace
-    if let Some(first) = cub.items().first() {
-        for point in cub.read_points(first)? {
+    if let Some(first) = items.first() {
+        for point in reader.read_points(&header, first, &mut warnings)? {
             let pt = point?;
             println!("  Point: {} {}", pt.lon, pt.lat);
             if let Some(name) = &pt.name {

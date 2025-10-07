@@ -1,52 +1,89 @@
 use crate::error::{Result, Warning};
 use crate::read::io::*;
-use crate::types::{Header, Item};
+use crate::types::{ByteOrder, Header, Item};
 use std::io::{Read, Seek, SeekFrom};
 
-/// Parse all items from CUB file
-pub fn parse_items<R: Read + Seek>(
-    reader: &mut R,
-    header: &Header,
-) -> Result<(Vec<Item>, Vec<Warning>)> {
-    let warnings = Vec::new();
-    let byte_order = header.byte_order();
+/// Iterator that parses items from a CUB file
+pub struct ItemIterator<'a, R> {
+    reader: &'a mut R,
+    byte_order: ByteOrder,
+    size_of_item: i32,
+    remaining: i32,
+}
 
-    // Seek to items section
-    reader.seek(SeekFrom::Start(header.header_offset as u64))?;
+impl<'a, R: Read + Seek> ItemIterator<'a, R> {
+    /// Create new item iterator
+    ///
+    /// Seeks to the item section and prepares to parse items
+    pub fn new(reader: &'a mut R, header: &Header, warnings: &mut Vec<Warning>) -> Result<Self> {
+        let _ = warnings; // Unused for now, but part of API for future warnings
 
-    let mut items = Vec::with_capacity(header.hdr_items as usize);
+        // Seek to items section
+        reader.seek(SeekFrom::Start(header.header_offset as u64))?;
 
-    for _ in 0..header.hdr_items {
+        Ok(Self {
+            reader,
+            byte_order: header.byte_order(),
+            size_of_item: header.size_of_item,
+            remaining: header.hdr_items,
+        })
+    }
+}
+
+impl<'a, R: Read + Seek> Iterator for ItemIterator<'a, R> {
+    type Item = Result<Item>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.remaining == 0 {
+            return None;
+        }
+
+        self.remaining -= 1;
+
         // Create 43-byte zero-filled buffer and read SizeOfItem bytes into it
         // Per spec: remaining bytes should be set to 0 if SizeOfItem < 43
         let mut item_buffer = [0u8; 43];
-        let bytes_to_read = std::cmp::min(header.size_of_item as usize, 43);
-        reader.read_exact(&mut item_buffer[..bytes_to_read])?;
+        let bytes_to_read = std::cmp::min(self.size_of_item as usize, 43);
+
+        if let Err(e) = self.reader.read_exact(&mut item_buffer[..bytes_to_read]) {
+            return Some(Err(e.into()));
+        }
 
         // If SizeOfItem > 43, skip the extra bytes
-        if header.size_of_item > 43 {
-            skip_bytes(reader, (header.size_of_item - 43) as usize)?;
+        if self.size_of_item > 43 {
+            if let Err(e) = skip_bytes(self.reader, (self.size_of_item - 43) as usize) {
+                return Some(Err(e));
+            }
         }
 
         // Parse from the buffer using a cursor (full 43-byte buffer, zero-padded if needed)
         let mut cursor = std::io::Cursor::new(&item_buffer);
 
-        let left = read_f32_le(&mut cursor)?;
-        let top = read_f32_le(&mut cursor)?;
-        let right = read_f32_le(&mut cursor)?;
-        let bottom = read_f32_le(&mut cursor)?;
+        macro_rules! try_parse {
+            ($expr:expr) => {
+                match $expr {
+                    Ok(val) => val,
+                    Err(e) => return Some(Err(e)),
+                }
+            };
+        }
 
-        let type_byte = read_u8(&mut cursor)?;
-        let alt_style_byte = read_u8(&mut cursor)?;
-        let min_alt = read_i16(&mut cursor, byte_order)?;
-        let max_alt = read_i16(&mut cursor, byte_order)?;
-        let points_offset = read_i32(&mut cursor, byte_order)?;
-        let time_out = read_i32(&mut cursor, byte_order)?;
-        let extra_data = read_u32(&mut cursor, byte_order)?;
-        let active_time = read_u64(&mut cursor, byte_order)?;
-        let extended_type_byte = read_u8(&mut cursor)?;
+        let left = try_parse!(read_f32_le(&mut cursor));
+        let top = try_parse!(read_f32_le(&mut cursor));
+        let right = try_parse!(read_f32_le(&mut cursor));
+        let bottom = try_parse!(read_f32_le(&mut cursor));
 
-        items.push(Item {
+        let type_byte = try_parse!(read_u8(&mut cursor));
+        let alt_style_byte = try_parse!(read_u8(&mut cursor));
+        let min_alt = try_parse!(read_i16(&mut cursor, self.byte_order));
+        let max_alt = try_parse!(read_i16(&mut cursor, self.byte_order));
+        let points_offset = try_parse!(read_i32(&mut cursor, self.byte_order));
+        let time_out = try_parse!(read_i32(&mut cursor, self.byte_order));
+        let extra_data = try_parse!(read_u32(&mut cursor, self.byte_order));
+        let active_time = try_parse!(read_u64(&mut cursor, self.byte_order));
+        let extended_type_byte = try_parse!(read_u8(&mut cursor));
+
+        Some(Ok(Item {
             left,
             top,
             right,
@@ -60,10 +97,13 @@ pub fn parse_items<R: Read + Seek>(
             extra_data,
             active_time,
             extended_type_byte,
-        });
+        }))
     }
 
-    Ok((items, warnings))
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.remaining as usize;
+        (remaining, Some(remaining))
+    }
 }
 
 #[cfg(test)]
@@ -154,8 +194,12 @@ mod tests {
         let header = minimal_header();
         let bytes = build_item_bytes(ByteOrder::LE);
         let mut cursor = Cursor::new(bytes);
+        let mut warnings = Vec::new();
 
-        let (items, warnings) = parse_items(&mut cursor, &header).unwrap();
+        let items: Vec<_> = ItemIterator::new(&mut cursor, &header, &mut warnings)
+            .unwrap()
+            .collect::<Result<Vec<_>>>()
+            .unwrap();
 
         assert_eq!(items.len(), 2);
         insta::assert_debug_snapshot!(items);

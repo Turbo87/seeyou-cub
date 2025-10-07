@@ -1,20 +1,24 @@
 //! SeeYou CUB file format parser
 //!
-//! This crate provides a parser for the SeeYou CUB binary file format,
+//! This crate provides a low-level parser for the SeeYou CUB binary file format,
 //! which stores airspace data for flight navigation software.
 //!
 //! # Examples
 //!
 //! ```no_run
-//! use seeyou_cub::parse;
-//! use std::fs::File;
+//! use seeyou_cub::CubReader;
 //!
-//! let file = File::open("airspace.cub")?;
-//! let (cub, warnings) = parse(file)?;
+//! let mut reader = CubReader::from_path("airspace.cub")?;
+//! let mut warnings = Vec::new();
 //!
-//! println!("Airspaces: {}", cub.items().len());
+//! let header = reader.read_header(&mut warnings)?;
+//! let items: Vec<_> = reader
+//!     .read_items(&header, &mut warnings)?
+//!     .collect::<Result<Vec<_>, _>>()?;
 //!
-//! for item in cub.items() {
+//! println!("Airspaces: {}", items.len());
+//!
+//! for item in &items {
 //!     println!("{:?}: {} - {} meters",
 //!         item.style(),
 //!         item.min_alt,
@@ -30,7 +34,6 @@
 
 // Re-export public API
 pub use error::{Error, Warning};
-pub use read::parse;
 pub use types::*;
 
 mod error;

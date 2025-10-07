@@ -7,10 +7,10 @@ use std::io::{Read, Seek, SeekFrom};
 pub struct PointIterator<'a, R> {
     reader: &'a mut R,
     header: &'a Header,
+    warnings: &'a mut Vec<Warning>,
     origin_x: f32,
     origin_y: f32,
     done: bool,
-    warnings: Vec<Warning>,
     // Attributes parsed from current point sequence
     current_name: Option<String>,
     current_frequency: Option<u32>,
@@ -20,7 +20,12 @@ pub struct PointIterator<'a, R> {
 
 impl<'a, R: Read + Seek> PointIterator<'a, R> {
     /// Create new point iterator for an item
-    pub(crate) fn new(reader: &'a mut R, header: &'a Header, item: &Item) -> Result<Self> {
+    pub fn new(
+        reader: &'a mut R,
+        header: &'a Header,
+        item: &Item,
+        warnings: &'a mut Vec<Warning>,
+    ) -> Result<Self> {
         // Seek to first point for this item
         let offset = header.data_offset as u64 + item.points_offset as u64;
         reader.seek(SeekFrom::Start(offset))?;
@@ -32,20 +37,15 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
         Ok(Self {
             reader,
             header,
+            warnings,
             origin_x,
             origin_y,
             done: false,
-            warnings: Vec::new(),
             current_name: None,
             current_frequency: None,
             current_frequency_name: None,
             current_optional: Vec::new(),
         })
-    }
-
-    /// Get warnings collected during parsing
-    pub fn warnings(&self) -> &[Warning] {
-        &self.warnings
     }
 
     /// Parse next CubPoint
@@ -136,7 +136,9 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
                     Ok(name) => {
                         self.current_name = Some(name.trim_end_matches('\0').to_string());
                     }
-                    Err(crate::error::Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+                    Err(crate::error::Error::IoError(ref e))
+                        if e.kind() == std::io::ErrorKind::UnexpectedEof =>
+                    {
                         // Hit EOF while reading name - treat as end of points
                         self.done = true;
                         return Ok(());
@@ -149,7 +151,9 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
         // Check for frequency attribute
         let next_flag = match read_u8(self.reader) {
             Ok(flag) => flag,
-            Err(crate::error::Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+            Err(crate::error::Error::IoError(ref e))
+                if e.kind() == std::io::ErrorKind::UnexpectedEof =>
+            {
                 // Hit EOF while reading next flag - treat as end of points
                 self.done = true;
                 return Ok(());
@@ -336,8 +340,9 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let header = minimal_header();
         let item = minimal_item();
+        let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
 
         let point = iter.next().unwrap().unwrap();
         insta::assert_debug_snapshot!(point);
@@ -355,8 +360,9 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let header = minimal_header();
         let item = minimal_item();
+        let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
         assert!(iter.next().is_none());
     }
 
@@ -390,8 +396,9 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let header = minimal_header();
         let item = minimal_item();
+        let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
 
         let point1 = iter.next().unwrap().unwrap();
         let point2 = iter.next().unwrap().unwrap();
@@ -475,8 +482,9 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let header = minimal_header();
         let item = minimal_item();
+        let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
 
         let point = iter.next().unwrap().unwrap();
 
@@ -504,8 +512,9 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let header = minimal_header();
         let item = minimal_item();
+        let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
 
         let point = iter.next().unwrap().unwrap();
         assert!(point.name.is_none());
@@ -531,8 +540,9 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let header = minimal_header();
         let item = minimal_item();
+        let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
 
         let point = iter.next().unwrap().unwrap();
         insta::assert_debug_snapshot!(point);
@@ -567,8 +577,9 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let header = minimal_header();
         let item = minimal_item();
+        let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
 
         let point1 = iter.next().unwrap().unwrap();
         let point2 = iter.next().unwrap().unwrap();
@@ -607,16 +618,17 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let header = minimal_header();
         let item = minimal_item();
+        let mut warnings = Vec::new();
 
-        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+        let mut iter = PointIterator::new(&mut cursor, &header, &item, &mut warnings).unwrap();
 
         let point = iter.next().unwrap().unwrap();
         assert_eq!(point.name, Some("Test".to_string()));
         assert!(point.optional_data.is_empty());
 
         // Should have collected a warning for unknown optional data ID
-        assert_eq!(iter.warnings().len(), 1);
-        match &iter.warnings()[0] {
+        assert_eq!(warnings.len(), 1);
+        match &warnings[0] {
             Warning::UnknownPointFlag(flag) => assert_eq!(*flag, 0xFF),
             _ => panic!("Expected UnknownPointFlag warning"),
         }

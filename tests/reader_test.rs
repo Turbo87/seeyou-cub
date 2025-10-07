@@ -1,38 +1,47 @@
-use seeyou_cub::{CubStyle, parse};
-use std::fs::File;
+use seeyou_cub::{CubReader, CubStyle};
 
 #[test]
 fn parse_france_fixture() {
-    let file =
-        File::open("tests/fixtures/france_2024.07.02.cub").expect("Failed to open fixture file");
+    let mut reader = CubReader::from_path("tests/fixtures/france_2024.07.02.cub")
+        .expect("Failed to open fixture file");
+    let mut warnings = Vec::new();
 
-    let (mut cub, warnings) = parse(file).expect("Failed to parse CUB file");
+    let header = reader
+        .read_header(&mut warnings)
+        .expect("Failed to parse header");
 
     // Validate warnings
     assert_eq!(warnings.len(), 0);
 
     // Snapshot the header
-    insta::assert_debug_snapshot!("header", cub.header());
+    insta::assert_debug_snapshot!("header", header);
+
+    // Parse all items
+    let items: Vec<_> = reader
+        .read_items(&header, &mut warnings)
+        .expect("Failed to create item iterator")
+        .collect::<Result<Vec<_>, _>>()
+        .expect("Failed to parse items");
 
     // Validate item count
-    assert_eq!(cub.items().len(), 1368);
+    assert_eq!(items.len(), 1368);
 
     // Snapshot first few items
-    insta::assert_debug_snapshot!("items_sample", &cub.items()[0..5]);
+    insta::assert_debug_snapshot!("items_sample", &items[0..5]);
 
     // Validate first item's points
-    let first_item = cub.items().first().unwrap().clone();
-    let points: Vec<_> = cub
-        .read_points(&first_item)
+    let first_item = items.first().unwrap();
+    let points: Vec<_> = reader
+        .read_points(&header, first_item, &mut warnings)
         .expect("Failed to read points")
         .collect::<Result<Vec<_>, _>>()
         .expect("Failed to parse points");
 
     insta::assert_debug_snapshot!("first_item_points", points);
 
-    let last_item = cub.items().last().unwrap().clone();
-    let points: Vec<_> = cub
-        .read_points(&last_item)
+    let last_item = items.last().unwrap();
+    let points: Vec<_> = reader
+        .read_points(&header, last_item, &mut warnings)
         .expect("Failed to read points")
         .collect::<Result<Vec<_>, _>>()
         .expect("Failed to parse points");
@@ -43,11 +52,12 @@ fn parse_france_fixture() {
     let mut total_points = 0;
     let mut style_counts = std::collections::HashMap::new();
 
-    let items = cub.items().to_vec();
     for item in &items {
         *style_counts.entry(item.style()).or_insert(0) += 1;
 
-        let mut point_iter = cub.read_points(item).expect("Failed to read points");
+        let mut point_iter = reader
+            .read_points(&header, item, &mut warnings)
+            .expect("Failed to read points");
 
         for point_result in &mut point_iter {
             let _point = point_result.expect("Failed to parse point");
