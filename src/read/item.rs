@@ -57,10 +57,10 @@ impl<R: Read + Seek> Iterator for ItemIterator<'_, R> {
         }
 
         // If SizeOfItem > 43, skip the extra bytes
-        if self.size_of_item > 43 {
-            if let Err(e) = skip_bytes(self.reader, (self.size_of_item - 43) as usize) {
-                return Some(Err(e));
-            }
+        if self.size_of_item > 43
+            && let Err(e) = skip_bytes(self.reader, (self.size_of_item - 43) as usize)
+        {
+            return Some(Err(e));
         }
 
         // Parse from the buffer using a cursor (full 43-byte buffer, zero-padded if needed)
