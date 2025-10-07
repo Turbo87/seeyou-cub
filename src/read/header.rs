@@ -89,14 +89,6 @@ pub fn parse_header<R: Read + Seek>(reader: &mut R) -> Result<(Header, Vec<Warni
     let data_offset = read_i32(reader, byte_order)?;
     let alignment = read_i32(reader, byte_order)?;
 
-    // Validate sizes
-    if size_of_item < 42 {
-        warnings.push(Warning::OversizedItem {
-            expected: size_of_item,
-            actual: 42,
-        });
-    }
-
     if size_of_point < 5 {
         warnings.push(Warning::OversizedItem {
             expected: size_of_point,
@@ -164,7 +156,7 @@ mod tests {
             bytes[offset..offset + 4].copy_from_slice(&val_bytes);
         };
 
-        write_i32(&mut bytes, 154, 42); // size_of_item
+        write_i32(&mut bytes, 154, 43); // size_of_item
         write_i32(&mut bytes, 158, 5); // size_of_point
         write_i32(&mut bytes, 162, 0); // hdr_items
         write_i32(&mut bytes, 166, 100); // max_pts
@@ -193,7 +185,7 @@ mod tests {
 
         assert_eq!(header.byte_order(), ByteOrder::LE);
         assert!(!header.is_encrypted());
-        assert_eq!(header.size_of_item, 42);
+        assert_eq!(header.size_of_item, 43);
         assert!(warnings.is_empty());
     }
 
@@ -204,7 +196,7 @@ mod tests {
         let (header, warnings) = parse_header(&mut cursor).unwrap();
 
         assert_eq!(header.byte_order(), ByteOrder::BE);
-        assert_eq!(header.size_of_item, 42);
+        assert_eq!(header.size_of_item, 43);
         assert!(warnings.is_empty());
     }
 

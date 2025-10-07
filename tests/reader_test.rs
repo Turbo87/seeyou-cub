@@ -18,8 +18,8 @@ fn parse_france_fixture() {
     assert!((east - 0.17016976).abs() < 0.0001);
     assert!((north - 0.89215416).abs() < 0.0001);
 
-    // Assert expected warnings
-    assert_eq!(warnings.len(), 1);
+    // Assert no warnings
+    assert_eq!(warnings.len(), 0);
 
     // Check first few items have expected properties
     use seeyou_cub::{CubClass, CubStyle};
@@ -130,7 +130,7 @@ fn comprehensive_france_parse() {
         "Should have substantial geometry (got {})",
         total_points
     );
-    assert_eq!(warnings.len(), 1, "Warning count mismatch");
+    assert_eq!(warnings.len(), 0, "Warning count mismatch");
 
     // Validate airspace distribution
     use seeyou_cub::CubStyle;

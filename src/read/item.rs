@@ -80,7 +80,7 @@ mod tests {
             is_secured: 0,
             crc32: 0,
             key: [0; 16],
-            size_of_item: 42,
+            size_of_item: 43,
             size_of_point: 5,
             hdr_items: 2,
             max_pts: 100,
@@ -92,7 +92,7 @@ mod tests {
             max_height: 1.0,
             lo_la_scale: 1.0,
             header_offset: 0,
-            data_offset: 84, // 2 items × 42 bytes
+            data_offset: 86, // 2 items × 43 bytes
             alignment: 0,
         }
     }
