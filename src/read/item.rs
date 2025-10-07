@@ -29,7 +29,7 @@ impl<'a, R: Read + Seek> ItemIterator<'a, R> {
     }
 }
 
-impl<'a, R: Read + Seek> Iterator for ItemIterator<'a, R> {
+impl<R: Read + Seek> Iterator for ItemIterator<'_, R> {
     type Item = Result<Item>;
 
     fn next(&mut self) -> Option<Self::Item> {
