@@ -1,0 +1,38 @@
+---
+source: tests/reader_test.rs
+expression: style_counts
+---
+[
+    (
+        Unknown,
+        452,
+    ),
+    (
+        RestrictedArea,
+        435,
+    ),
+    (
+        GliderSector,
+        135,
+    ),
+    (
+        ProhibitedArea,
+        113,
+    ),
+    (
+        DangerArea,
+        111,
+    ),
+    (
+        ControlZone,
+        92,
+    ),
+    (
+        RadioMandatoryZone,
+        21,
+    ),
+    (
+        TransponderMandatoryZone,
+        9,
+    ),
+]

@@ -1,78 +1,6 @@
-use seeyou_cub::{CubReader, CubStyle};
-
-#[test]
-fn parse_france_fixture_with_item_data() {
-    let mut reader = CubReader::from_path("tests/fixtures/france_2024.07.02.cub")
-        .expect("Failed to open fixture file");
-    let mut warnings = Vec::new();
-
-    let header = reader
-        .read_header(&mut warnings)
-        .expect("Failed to parse header");
-
-    // Parse all items
-    let items: Vec<_> = reader
-        .read_items(&header, &mut warnings)
-        .collect::<Result<Vec<_>, _>>()
-        .expect("Failed to parse items");
-
-    assert_eq!(items.len(), 1368);
-
-    // Parse item data for first item
-    let first_item = items.first().unwrap();
-    let item_data = reader
-        .read_item_data(&header, first_item, &mut warnings)
-        .expect("Failed to parse item data");
-
-    insta::assert_debug_snapshot!("first_item_data", item_data);
-
-    // Parse item data for last item (has name attribute)
-    let last_item = items.last().unwrap();
-    let item_data = reader
-        .read_item_data(&header, last_item, &mut warnings)
-        .expect("Failed to parse item data");
-
-    insta::assert_debug_snapshot!("last_item_data", item_data);
-
-    // Count total points using new API
-    let mut total_points = 0;
-    let mut items_with_names = 0;
-    let mut items_without_names = 0;
-
-    for (i, item) in items.iter().enumerate() {
-        let item_data = reader
-            .read_item_data(&header, item, &mut warnings)
-            .expect(&format!("Failed to parse item data for item {}", i));
-
-        if item_data.name.is_some() {
-            items_with_names += 1;
-        } else {
-            items_without_names += 1;
-            eprintln!("Item {} has NO name, {} points", i, item_data.points.len());
-        }
-
-        if i < 5 || i >= items.len() - 5 {
-            eprintln!(
-                "Item {}: {} points, name: {:?}",
-                i,
-                item_data.points.len(),
-                item_data.name
-            );
-        }
-        total_points += item_data.points.len();
-    }
-
-    eprintln!("Total points: {}", total_points);
-    eprintln!("Items with names: {}", items_with_names);
-    eprintln!("Items without names: {}", items_without_names);
-    eprintln!("Total warnings: {}", warnings.len());
-
-    // The old assertion of 93784 was based on buggy parsing behavior
-    // With the corrected implementation, we're parsing 65067 points
-    assert_eq!(total_points, 65067, "Total points with correct parsing");
-    assert_eq!(items_with_names, 1368, "All items should have names");
-    assert_eq!(items_without_names, 0, "No items without names");
-}
+use insta::assert_debug_snapshot;
+use seeyou_cub::CubReader;
+use std::collections::HashMap;
 
 #[test]
 fn parse_france_fixture() {
@@ -84,69 +12,88 @@ fn parse_france_fixture() {
         .read_header(&mut warnings)
         .expect("Failed to parse header");
 
-    // Validate warnings
-    assert_eq!(warnings.len(), 0);
+    assert_debug_snapshot!("header", header);
 
-    // Snapshot the header
-    insta::assert_debug_snapshot!("header", header);
-
-    // Parse all items
     let items: Vec<_> = reader
         .read_items(&header, &mut warnings)
         .collect::<Result<Vec<_>, _>>()
         .expect("Failed to parse items");
 
-    // Validate item count
     assert_eq!(items.len(), 1368);
+    assert_debug_snapshot!("items_first_5", &items[0..5]);
+    assert_debug_snapshot!("items_last_5", &items[items.len() - 5..]);
 
-    // Snapshot first few items
-    insta::assert_debug_snapshot!("items_sample", &items[0..5]);
+    // Airspace type distribution
+    let mut class_counts = HashMap::new();
+    for item in &items {
+        *class_counts.entry(item.class()).or_insert(0) += 1;
+    }
+    let mut class_counts = class_counts.iter().collect::<Vec<_>>();
+    class_counts.sort_by(|a, b| a.1.cmp(b.1).reverse());
+    assert_debug_snapshot!("class_counts", class_counts);
 
-    // Validate all airspaces and collect statistics
-    let mut total_points = 0;
-    let mut style_counts = std::collections::HashMap::new();
-
+    let mut style_counts = HashMap::new();
     for item in &items {
         *style_counts.entry(item.style()).or_insert(0) += 1;
+    }
+    let mut style_counts = style_counts.iter().collect::<Vec<_>>();
+    style_counts.sort_by(|a, b| a.1.cmp(b.1).reverse());
+    assert_debug_snapshot!("style_counts", style_counts);
 
+    // First item complete data
+    let first_item = items.first().unwrap();
+    let first_item_data = reader
+        .read_item_data(&header, first_item, &mut warnings)
+        .expect("Failed to parse first item data");
+    assert_debug_snapshot!("first_item_data", first_item_data);
+
+    // Last item complete data
+    let last_item = items.last().unwrap();
+    let last_item_data = reader
+        .read_item_data(&header, last_item, &mut warnings)
+        .expect("Failed to parse last item data");
+    assert_debug_snapshot!("last_item_data", last_item_data);
+
+    // Collect all names and auto-select representatives
+    let mut all_names = Vec::new();
+    let mut min_points_item: (usize, usize) = (0, usize::MAX); // (index, point_count)
+    let mut max_points_item: (usize, usize) = (0, 0);
+
+    for (i, item) in items.iter().enumerate() {
         let item_data = reader
             .read_item_data(&header, item, &mut warnings)
-            .expect("Failed to parse item data");
-        total_points += item_data.points.len();
+            .expect(&format!("Failed to parse item data for item {}", i));
+
+        let name = item_data.name.unwrap_or_default();
+        all_names.push(name.clone());
+
+        // Track min/max by point count
+        let point_count = item_data.points.len();
+        if min_points_item.1 > point_count {
+            min_points_item = (i, point_count);
+        }
+        if max_points_item.1 < point_count {
+            max_points_item = (i, point_count);
+        }
     }
 
-    // Validate total points (corrected count with proper parsing)
-    assert_eq!(total_points, 65067, "Total points mismatch");
+    all_names.sort();
+    assert_debug_snapshot!("all_airspace_names", all_names);
 
-    // Validate airspace type distribution
-    assert_eq!(
-        *style_counts.get(&CubStyle::Unknown).unwrap_or(&0),
-        452,
-        "Unknown airspace count mismatch"
-    );
-    assert_eq!(
-        *style_counts.get(&CubStyle::RestrictedArea).unwrap_or(&0),
-        435,
-        "Restricted area count mismatch"
-    );
-    assert_eq!(
-        *style_counts.get(&CubStyle::ProhibitedArea).unwrap_or(&0),
-        113,
-        "Prohibited area count mismatch"
-    );
-    assert_eq!(
-        *style_counts.get(&CubStyle::DangerArea).unwrap_or(&0),
-        111,
-        "Danger area count mismatch"
-    );
-    assert_eq!(
-        *style_counts.get(&CubStyle::GliderSector).unwrap_or(&0),
-        135,
-        "Glider sector count mismatch"
-    );
-    assert_eq!(
-        *style_counts.get(&CubStyle::ControlZone).unwrap_or(&0),
-        92,
-        "Control zone count mismatch"
-    );
+    // Snapshot smallest airspace by point count
+    let item = &items[min_points_item.0];
+    let item_data = reader
+        .read_item_data(&header, item, &mut warnings)
+        .expect("Failed to parse smallest item data");
+    assert_debug_snapshot!("representative_smallest_by_points", item_data);
+
+    // Snapshot largest airspace by point count
+    let item = &items[max_points_item.0];
+    let item_data = reader
+        .read_item_data(&header, item, &mut warnings)
+        .expect("Failed to parse largest item data");
+    assert_debug_snapshot!("representative_largest_by_points", item_data);
+
+    // Ensure that there are no warnings
+    assert_eq!(warnings.len(), 0);
 }
