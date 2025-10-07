@@ -17,7 +17,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-seeyou-cub = "0.0.0"
+seeyou-cub = "0.1.0"
 ```
 
 Basic example:
