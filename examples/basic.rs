@@ -30,14 +30,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for i in 0..cub.items().len().min(10) {
         let item = cub.items()[i].clone();
         println!("{}. {:?} {:?}", i + 1, item.style(), item.class());
-        println!("   Altitude: {} - {} meters ({:?} - {:?})",
-            item.min_alt, item.max_alt,
-            item.min_alt_style(), item.max_alt_style()
+        println!(
+            "   Altitude: {} - {} meters ({:?} - {:?})",
+            item.min_alt,
+            item.max_alt,
+            item.min_alt_style(),
+            item.max_alt_style()
         );
 
         // Parse points
-        let points: Vec<_> = cub.read_points(&item)?
-            .collect::<Result<Vec<_>, _>>()?;
+        let points: Vec<_> = cub.read_points(&item)?.collect::<Result<Vec<_>, _>>()?;
 
         println!("   Points: {}", points.len());
 

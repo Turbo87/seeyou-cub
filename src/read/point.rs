@@ -248,7 +248,7 @@ impl<'a, R: Read + Seek> PointIterator<'a, R> {
     }
 }
 
-impl<'a, R: Read + Seek> Iterator for PointIterator<'a, R> {
+impl<R: Read + Seek> Iterator for PointIterator<'_, R> {
     type Item = Result<ParsedPoint>;
 
     fn next(&mut self) -> Option<Self::Item> {
