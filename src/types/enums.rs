@@ -101,7 +101,7 @@ impl CubStyle {
 ///
 /// ICAO airspace classification (A through G) indicating
 /// the level of air traffic control services provided.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum CubClass {
     Unknown,
     ClassA,
