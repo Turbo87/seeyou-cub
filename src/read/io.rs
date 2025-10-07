@@ -123,7 +123,7 @@ mod tests {
 
     #[test]
     fn test_read_f32_le() {
-        let value = 3.14159f32;
+        let value = std::f32::consts::PI;
         let bytes = value.to_le_bytes();
         let mut cursor = Cursor::new(bytes);
         let result = read_f32_le(&mut cursor).unwrap();

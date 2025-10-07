@@ -62,7 +62,7 @@ fn parse_france_fixture() {
     for (i, item) in items.iter().enumerate() {
         let item_data = reader
             .read_item_data(&header, item, &mut warnings)
-            .expect(&format!("Failed to parse item data for item {}", i));
+            .unwrap_or_else(|_| panic!("Failed to parse item data for item {}", i));
 
         let name = item_data.name.unwrap_or_default();
         all_names.push(name.clone());
