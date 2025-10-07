@@ -1,0 +1,35 @@
+---
+source: tests/reader_test.rs
+expression: item_data
+---
+ItemData {
+    points: [
+        Point {
+            lon: 0.033180647,
+            lat: 0.83465517,
+        },
+        Point {
+            lon: 0.033224326,
+            lat: 0.8346504,
+        },
+        Point {
+            lon: 0.03319982,
+            lat: 0.83466476,
+        },
+        Point {
+            lon: 0.033180647,
+            lat: 0.83465517,
+        },
+    ],
+    name: Some(
+        "R265 LA GREMUSE",
+    ),
+    frequency: None,
+    frequency_name: None,
+    icao_code: None,
+    secondary_frequency: None,
+    exception_rules: None,
+    notam_remarks: None,
+    notam_id: None,
+    notam_insert_time: None,
+}

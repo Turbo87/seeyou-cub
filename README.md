@@ -53,14 +53,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         );
     }
 
-    // Parse geometry for first airspace
+    // Parse complete data (geometry + metadata) for first airspace
     if let Some(first) = items.first() {
-        for point in reader.read_points(&header, first, &mut warnings) {
-            let pt = point?;
-            println!("  Point: {} {}", pt.lon, pt.lat);
-            if let Some(name) = &pt.name {
-                println!("    Name: {}", name);
-            }
+        let item_data = reader.read_item_data(&header, first, &mut warnings)?;
+
+        if let Some(name) = &item_data.name {
+            println!("  Name: {}", name);
+        }
+
+        for point in &item_data.points {
+            println!("  Point: {} {}", point.lon, point.lat);
         }
     }
 

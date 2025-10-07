@@ -64,20 +64,18 @@ impl<R: Read + Seek> CubReader<R> {
         crate::read::ItemIterator::new(&mut self.inner, header, warnings)
     }
 
-    /// Parse points for a specific item
+    /// Parse complete item data (geometry + metadata)
     ///
-    /// Returns an iterator that lazily parses points for the given item.
-    /// Requires the header to determine byte order and point offsets.
-    /// Warnings are pushed to the provided vector during iteration.
-    ///
-    /// The iterator seeks to the points section on first iteration. If the seek
-    /// fails, the first point will be an `Err`.
-    pub fn read_points<'a>(
-        &'a mut self,
-        header: &'a Header,
+    /// Parses the point stream for the given item, returning both the boundary
+    /// geometry and any associated metadata (name, frequency, ICAO code, etc.).
+    /// Requires the header to determine byte order and offsets.
+    /// Warnings are pushed to the provided vector during parsing.
+    pub fn read_item_data(
+        &mut self,
+        header: &Header,
         item: &Item,
-        warnings: &'a mut Vec<crate::error::Warning>,
-    ) -> crate::read::PointIterator<'a, R> {
-        crate::read::PointIterator::new(&mut self.inner, header, item, warnings)
+        warnings: &mut Vec<crate::error::Warning>,
+    ) -> Result<ItemData> {
+        crate::read::read_item_data(&mut self.inner, header, item, warnings)
     }
 }

@@ -17,6 +17,9 @@ pub enum Error {
 
     #[error("Invalid point flag: 0x{0:02X}")]
     InvalidPointFlag(u8),
+
+    #[error("Invalid data: {0}")]
+    InvalidData(String),
 }
 
 /// Non-fatal issues encountered during lenient parsing

@@ -36,20 +36,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             item.max_alt_style()
         );
 
-        // Parse points
-        let points: Vec<_> = reader
-            .read_points(&header, item, &mut warnings)
-            .collect::<Result<Vec<_>, _>>()?;
+        // Parse item data (geometry + metadata)
+        let item_data = reader.read_item_data(&header, item, &mut warnings)?;
 
-        println!("   Points: {}", points.len());
+        println!("   Points: {}", item_data.points.len());
 
-        if let Some(first_pt) = points.first() {
-            if let Some(name) = &first_pt.name {
-                println!("   Name: {}", name);
-            }
-            if let Some(freq) = first_pt.frequency {
-                println!("   Frequency: {} Hz", freq);
-            }
+        if let Some(name) = &item_data.name {
+            println!("   Name: {}", name);
+        }
+        if let Some(freq) = item_data.frequency {
+            println!("   Frequency: {} Hz", freq);
         }
     }
 

@@ -1,0 +1,87 @@
+---
+source: tests/reader_test.rs
+expression: item_data
+---
+ItemData {
+    points: [
+        Point {
+            lon: 0.01745355,
+            lat: 0.8726647,
+        },
+        Point {
+            lon: 0.01745355,
+            lat: 0.8464845,
+        },
+        Point {
+            lon: 0.013671746,
+            lat: 0.8417673,
+        },
+        Point {
+            lon: 0.023799524,
+            lat: 0.8417673,
+        },
+        Point {
+            lon: 0.02844422,
+            lat: 0.8403761,
+        },
+        Point {
+            lon: 0.03577932,
+            lat: 0.8403761,
+        },
+        Point {
+            lon: 0.043633223,
+            lat: 0.83775806,
+        },
+        Point {
+            lon: 0.06952207,
+            lat: 0.83775806,
+        },
+        Point {
+            lon: 0.06635653,
+            lat: 0.8443853,
+        },
+        Point {
+            lon: 0.06477084,
+            lat: 0.8476627,
+        },
+        Point {
+            lon: 0.060795687,
+            lat: 0.85579306,
+        },
+        Point {
+            lon: 0.058870696,
+            lat: 0.86073816,
+        },
+        Point {
+            lon: 0.05820648,
+            lat: 0.8624932,
+        },
+        Point {
+            lon: 0.056485493,
+            lat: 0.8668471,
+        },
+        Point {
+            lon: 0.055161864,
+            lat: 0.87052184,
+        },
+        Point {
+            lon: 0.054395914,
+            lat: 0.8726647,
+        },
+        Point {
+            lon: 0.017453548,
+            lat: 0.8726647,
+        },
+    ],
+    name: Some(
+        "Paris1",
+    ),
+    frequency: None,
+    frequency_name: None,
+    icao_code: None,
+    secondary_frequency: None,
+    exception_rules: None,
+    notam_remarks: None,
+    notam_id: None,
+    notam_insert_time: None,
+}
