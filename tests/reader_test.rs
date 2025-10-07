@@ -88,3 +88,82 @@ fn iterate_all_airspaces() {
     // Assert expected total point count across all airspaces
     assert_eq!(total_points, 93785);
 }
+
+#[test]
+fn comprehensive_france_parse() {
+    let file =
+        File::open("tests/fixtures/france_2024.07.02.cub").expect("Failed to open fixture file");
+
+    let (mut cub, warnings) = parse(file).expect("Failed to parse CUB file");
+
+    // Collect statistics
+    let mut total_points = 0;
+    let mut style_counts = std::collections::HashMap::new();
+
+    let items = cub.items().to_vec();
+    for item in &items {
+        *style_counts.entry(item.style()).or_insert(0) += 1;
+
+        let mut point_iter = cub.read_points(item).expect("Failed to read points");
+
+        let mut count = 0;
+
+        for point_result in &mut point_iter {
+            match point_result {
+                Ok(_point) => {
+                    count += 1;
+                }
+                Err(_) => {
+                    // Skip items with point parsing errors and continue
+                    break;
+                }
+            }
+        }
+
+        total_points += count;
+    }
+
+    // Validate core statistics
+    assert_eq!(cub.items().len(), 1368, "Total items mismatch");
+    assert!(
+        total_points > 93000,
+        "Should have substantial geometry (got {})",
+        total_points
+    );
+    assert_eq!(warnings.len(), 1, "Warning count mismatch");
+
+    // Validate airspace distribution
+    use seeyou_cub::CubStyle;
+
+    // Exact validation of airspace types (based on observed France fixture)
+    assert_eq!(
+        *style_counts.get(&CubStyle::Unknown).unwrap_or(&0),
+        452,
+        "Unknown airspace count mismatch"
+    );
+    assert_eq!(
+        *style_counts.get(&CubStyle::RestrictedArea).unwrap_or(&0),
+        435,
+        "Restricted area count mismatch"
+    );
+    assert_eq!(
+        *style_counts.get(&CubStyle::ProhibitedArea).unwrap_or(&0),
+        113,
+        "Prohibited area count mismatch"
+    );
+    assert_eq!(
+        *style_counts.get(&CubStyle::DangerArea).unwrap_or(&0),
+        111,
+        "Danger area count mismatch"
+    );
+    assert_eq!(
+        *style_counts.get(&CubStyle::GliderSector).unwrap_or(&0),
+        135,
+        "Glider sector count mismatch"
+    );
+    assert_eq!(
+        *style_counts.get(&CubStyle::ControlZone).unwrap_or(&0),
+        92,
+        "Control zone count mismatch"
+    );
+}

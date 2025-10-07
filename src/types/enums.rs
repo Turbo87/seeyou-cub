@@ -21,7 +21,7 @@ impl ByteOrder {
 ///
 /// Indicates the specific type of airspace such as controlled zones,
 /// restricted areas, danger areas, etc.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum CubStyle {
     Unknown,
     ControlZone,
