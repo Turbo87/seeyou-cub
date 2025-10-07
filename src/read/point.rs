@@ -329,4 +329,323 @@ mod tests {
 
         assert!(iter.next().is_none());
     }
+
+    #[test]
+    fn parse_item_with_no_points() {
+        let mut bytes = Vec::new();
+
+        // Just end marker, no points
+        bytes.push(0x00);
+
+        let mut cursor = Cursor::new(bytes);
+        let header = minimal_header();
+        let item = minimal_item();
+
+        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+        assert!(iter.next().is_none());
+    }
+
+    #[test]
+    fn parse_point_sequence_with_origin_updates() {
+        let mut bytes = Vec::new();
+
+        // First origin update: move origin by (1000, 2000)
+        bytes.push(0x81);
+        bytes.extend_from_slice(&1000i16.to_le_bytes());
+        bytes.extend_from_slice(&2000i16.to_le_bytes());
+
+        // Point relative to new origin
+        bytes.push(0x01);
+        bytes.extend_from_slice(&50i16.to_le_bytes());
+        bytes.extend_from_slice(&100i16.to_le_bytes());
+
+        // Second origin update: move origin by (500, 300)
+        bytes.push(0x81);
+        bytes.extend_from_slice(&500i16.to_le_bytes());
+        bytes.extend_from_slice(&300i16.to_le_bytes());
+
+        // Point relative to second origin
+        bytes.push(0x01);
+        bytes.extend_from_slice(&10i16.to_le_bytes());
+        bytes.extend_from_slice(&20i16.to_le_bytes());
+
+        // End marker
+        bytes.push(0x00);
+
+        let mut cursor = Cursor::new(bytes);
+        let header = minimal_header();
+        let item = minimal_item();
+
+        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+
+        // First point: origin (0,0) + update (1000,2000) + offset (50,100)
+        let point1 = iter.next().unwrap().unwrap();
+        let expected_lon1 = (1000.0 + 50.0) * 0.0001;
+        let expected_lat1 = (2000.0 + 100.0) * 0.0001;
+        assert!((point1.lon - expected_lon1).abs() < 0.00001);
+        assert!((point1.lat - expected_lat1).abs() < 0.00001);
+
+        // Second point: previous origin (0.105, 0.21) + update (500,300) + offset (10,20)
+        let point2 = iter.next().unwrap().unwrap();
+        let expected_lon2 = (1000.0 + 500.0 + 10.0) * 0.0001;
+        let expected_lat2 = (2000.0 + 300.0 + 20.0) * 0.0001;
+        assert!((point2.lon - expected_lon2).abs() < 0.00001);
+        assert!((point2.lat - expected_lat2).abs() < 0.00001);
+
+        assert!(iter.next().is_none());
+    }
+
+    #[test]
+    fn parse_point_with_all_attributes() {
+        let mut bytes = Vec::new();
+
+        // Name attribute (0x40 | length)
+        let name = "Test Airspace";
+        bytes.push(0x40 | name.len() as u8);
+        bytes.extend_from_slice(name.as_bytes());
+
+        // Frequency attribute (0xC0 | freq_name_length)
+        let freq_name = "Tower";
+        bytes.push(0xC0 | freq_name.len() as u8);
+        bytes.extend_from_slice(&123456789u32.to_le_bytes());
+        bytes.extend_from_slice(freq_name.as_bytes());
+
+        // Optional data: ICAO code
+        bytes.push(0xA0);
+        bytes.push(0x00); // CubDataId::IcaoCode
+        bytes.push(0x00); // b1 (unused)
+        bytes.push(0x00); // b2 (unused)
+        bytes.push(0x04); // b3 (length)
+        bytes.extend_from_slice(b"LFPG");
+
+        // Optional data: Secondary frequency
+        bytes.push(0xA0);
+        bytes.push(0x01); // CubDataId::SecondaryFrequency
+        bytes.push(0x12); // b1
+        bytes.push(0x34); // b2
+        bytes.push(0x56); // b3
+
+        // Optional data: Exception rules
+        bytes.push(0xA0);
+        bytes.push(0x02); // CubDataId::ExceptionRules
+        bytes.push(0x00); // b1 (unused)
+        bytes.push(0x00); // b2 (length high)
+        bytes.push(0x05); // b3 (length low)
+        bytes.extend_from_slice(b"Rules");
+
+        // Optional data: NOTAM remarks
+        bytes.push(0xA0);
+        bytes.push(0x03); // CubDataId::NotamRemarks
+        bytes.push(0x00); // b1 (unused)
+        bytes.push(0x00); // b2 (length high)
+        bytes.push(0x07); // b3 (length low)
+        bytes.extend_from_slice(b"Remarks");
+
+        // Optional data: NOTAM ID
+        bytes.push(0xA0);
+        bytes.push(0x04); // CubDataId::NotamId
+        bytes.push(0x00); // b1 (unused)
+        bytes.push(0x00); // b2 (unused)
+        bytes.push(0x06); // b3 (length)
+        bytes.extend_from_slice(b"A12345");
+
+        // Optional data: NOTAM insert time
+        bytes.push(0xA0);
+        bytes.push(0x05); // CubDataId::NotamInsertTime
+        bytes.push(0x12); // b1
+        bytes.push(0x34); // b2
+        bytes.push(0x56); // b3
+        bytes.push(0x78); // b4
+
+        // Point coordinates
+        bytes.push(0x01);
+        bytes.extend_from_slice(&100i16.to_le_bytes());
+        bytes.extend_from_slice(&200i16.to_le_bytes());
+
+        // End marker
+        bytes.push(0x00);
+
+        let mut cursor = Cursor::new(bytes);
+        let header = minimal_header();
+        let item = minimal_item();
+
+        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+
+        let point = iter.next().unwrap().unwrap();
+
+        assert_eq!(point.name, Some("Test Airspace".to_string()));
+        assert_eq!(point.frequency, Some(123456789));
+        assert_eq!(point.frequency_name, Some("Tower".to_string()));
+        assert_eq!(point.optional_data.len(), 6);
+
+        // Verify all optional data
+        match &point.optional_data[0] {
+            OptionalData::IcaoCode(code) => assert_eq!(code, "LFPG"),
+            _ => panic!("Expected IcaoCode"),
+        }
+
+        match &point.optional_data[1] {
+            OptionalData::SecondaryFrequency(freq) => assert_eq!(*freq, 0x123456),
+            _ => panic!("Expected SecondaryFrequency"),
+        }
+
+        match &point.optional_data[2] {
+            OptionalData::ExceptionRules(rules) => assert_eq!(rules, "Rules"),
+            _ => panic!("Expected ExceptionRules"),
+        }
+
+        match &point.optional_data[3] {
+            OptionalData::NotamRemarks(remarks) => assert_eq!(remarks, "Remarks"),
+            _ => panic!("Expected NotamRemarks"),
+        }
+
+        match &point.optional_data[4] {
+            OptionalData::NotamId(id) => assert_eq!(id, "A12345"),
+            _ => panic!("Expected NotamId"),
+        }
+
+        match &point.optional_data[5] {
+            OptionalData::NotamInsertTime(time) => assert_eq!(*time, 0x12345678),
+            _ => panic!("Expected NotamInsertTime"),
+        }
+
+        assert!(iter.next().is_none());
+    }
+
+    #[test]
+    fn parse_point_with_empty_name() {
+        let mut bytes = Vec::new();
+
+        // Name attribute with zero length
+        bytes.push(0x40);
+
+        // Point
+        bytes.push(0x01);
+        bytes.extend_from_slice(&100i16.to_le_bytes());
+        bytes.extend_from_slice(&200i16.to_le_bytes());
+
+        // End marker
+        bytes.push(0x00);
+
+        let mut cursor = Cursor::new(bytes);
+        let header = minimal_header();
+        let item = minimal_item();
+
+        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+
+        let point = iter.next().unwrap().unwrap();
+        assert!(point.name.is_none());
+    }
+
+    #[test]
+    fn parse_point_with_null_padded_name() {
+        let mut bytes = Vec::new();
+
+        // Name with null padding
+        let name_bytes = b"Test\0\0\0\0";
+        bytes.push(0x40 | name_bytes.len() as u8);
+        bytes.extend_from_slice(name_bytes);
+
+        // Point
+        bytes.push(0x01);
+        bytes.extend_from_slice(&100i16.to_le_bytes());
+        bytes.extend_from_slice(&200i16.to_le_bytes());
+
+        // End marker
+        bytes.push(0x00);
+
+        let mut cursor = Cursor::new(bytes);
+        let header = minimal_header();
+        let item = minimal_item();
+
+        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+
+        let point = iter.next().unwrap().unwrap();
+        assert_eq!(point.name, Some("Test".to_string()));
+    }
+
+    #[test]
+    fn parse_multiple_points_attributes_reset() {
+        let mut bytes = Vec::new();
+
+        // First point with name
+        bytes.push(0x40 | 5);
+        bytes.extend_from_slice(b"First");
+        bytes.push(0x01);
+        bytes.extend_from_slice(&100i16.to_le_bytes());
+        bytes.extend_from_slice(&100i16.to_le_bytes());
+
+        // Second point with different name
+        bytes.push(0x40 | 6);
+        bytes.extend_from_slice(b"Second");
+        bytes.push(0x01);
+        bytes.extend_from_slice(&200i16.to_le_bytes());
+        bytes.extend_from_slice(&200i16.to_le_bytes());
+
+        // Third point with no attributes
+        bytes.push(0x01);
+        bytes.extend_from_slice(&300i16.to_le_bytes());
+        bytes.extend_from_slice(&300i16.to_le_bytes());
+
+        // End marker
+        bytes.push(0x00);
+
+        let mut cursor = Cursor::new(bytes);
+        let header = minimal_header();
+        let item = minimal_item();
+
+        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+
+        let point1 = iter.next().unwrap().unwrap();
+        assert_eq!(point1.name, Some("First".to_string()));
+
+        let point2 = iter.next().unwrap().unwrap();
+        assert_eq!(point2.name, Some("Second".to_string()));
+
+        let point3 = iter.next().unwrap().unwrap();
+        assert!(point3.name.is_none());
+
+        assert!(iter.next().is_none());
+    }
+
+    #[test]
+    fn parse_unknown_optional_data_warning() {
+        let mut bytes = Vec::new();
+
+        // Start with a name attribute to establish proper structure
+        bytes.push(0x40 | 4);
+        bytes.extend_from_slice(b"Test");
+
+        // Unknown optional data type (following the frequency check path)
+        bytes.push(0xA0);
+        bytes.push(0xFF); // Invalid data ID
+        bytes.push(0x00);
+        bytes.push(0x00);
+        bytes.push(0x00);
+
+        // Point
+        bytes.push(0x01);
+        bytes.extend_from_slice(&100i16.to_le_bytes());
+        bytes.extend_from_slice(&200i16.to_le_bytes());
+
+        // End marker
+        bytes.push(0x00);
+
+        let mut cursor = Cursor::new(bytes);
+        let header = minimal_header();
+        let item = minimal_item();
+
+        let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
+
+        let point = iter.next().unwrap().unwrap();
+        assert_eq!(point.name, Some("Test".to_string()));
+        assert!(point.optional_data.is_empty());
+
+        // Should have collected a warning for unknown optional data ID
+        assert_eq!(iter.warnings().len(), 1);
+        match &iter.warnings()[0] {
+            Warning::UnknownPointFlag(flag) => assert_eq!(*flag, 0xFF),
+            _ => panic!("Expected UnknownPointFlag warning"),
+        }
+    }
 }
