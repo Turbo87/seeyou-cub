@@ -1,0 +1,14 @@
+---
+source: src/read/point.rs
+expression: point
+---
+ParsedPoint {
+    lon: 0.01,
+    lat: 0.02,
+    name: Some(
+        "Test",
+    ),
+    frequency: None,
+    frequency_name: None,
+    optional_data: [],
+}

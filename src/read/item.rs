@@ -158,9 +158,7 @@ mod tests {
         let (items, warnings) = parse_items(&mut cursor, &header).unwrap();
 
         assert_eq!(items.len(), 2);
-        assert_eq!(items[0].left, 0.1);
-        assert_eq!(items[0].min_alt, 100);
-        assert_eq!(items[0].max_alt, 5000);
+        insta::assert_debug_snapshot!(items);
         assert!(warnings.is_empty());
     }
 }

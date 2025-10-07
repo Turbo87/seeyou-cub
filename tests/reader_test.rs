@@ -1,4 +1,4 @@
-use seeyou_cub::parse;
+use seeyou_cub::{CubStyle, parse};
 use std::fs::File;
 
 #[test]
@@ -11,47 +11,33 @@ fn parse_france_fixture() {
     // Validate warnings
     assert_eq!(warnings.len(), 0);
 
-    // Validate header
+    // Snapshot the header
+    insta::assert_debug_snapshot!("header", cub.header());
+
+    // Validate item count
     assert_eq!(cub.items().len(), 1368);
 
-    let (west, south, east, north) = cub.header().bounding_box();
-    assert!((west - (-0.085230246)).abs() < 0.0001);
-    assert!((south - 0.71856177).abs() < 0.0001);
-    assert!((east - 0.17016976).abs() < 0.0001);
-    assert!((north - 0.89215416).abs() < 0.0001);
-
-    // Validate first few items
-    use seeyou_cub::{CubClass, CubStyle};
-    assert_eq!(cub.items()[0].style(), CubStyle::RestrictedArea);
-    assert_eq!(cub.items()[0].class(), CubClass::Unknown);
-    assert_eq!(cub.items()[0].min_alt, 0);
-    assert_eq!(cub.items()[0].max_alt, 488);
-
-    assert_eq!(cub.items()[1].style(), CubStyle::ProhibitedArea);
-    assert_eq!(cub.items()[1].class(), CubClass::Unknown);
-    assert_eq!(cub.items()[1].min_alt, 0);
-    assert_eq!(cub.items()[1].max_alt, 610);
+    // Snapshot first few items
+    insta::assert_debug_snapshot!("items_sample", &cub.items()[0..5]);
 
     // Validate first item's points
-    let first_item = cub.items()[0].clone();
-    let mut points = cub.read_points(&first_item).expect("Failed to read points");
+    let first_item = cub.items().first().unwrap().clone();
+    let points: Vec<_> = cub
+        .read_points(&first_item)
+        .expect("Failed to read points")
+        .collect::<Result<Vec<_>, _>>()
+        .expect("Failed to parse points");
 
-    let mut point_count = 0;
-    let mut first_point = None;
+    insta::assert_debug_snapshot!("first_item_points", points);
 
-    for point_result in &mut points {
-        let point = point_result.expect("Failed to parse point");
-        if first_point.is_none() {
-            first_point = Some(point.clone());
-        }
-        point_count += 1;
-    }
+    let last_item = cub.items().last().unwrap().clone();
+    let points: Vec<_> = cub
+        .read_points(&last_item)
+        .expect("Failed to read points")
+        .collect::<Result<Vec<_>, _>>()
+        .expect("Failed to parse points");
 
-    assert_eq!(point_count, 7);
-
-    let first_point = first_point.expect("Should have at least one point");
-    assert!((first_point.lon - 0.033180647).abs() < 0.0001);
-    assert!((first_point.lat - 0.83465517).abs() < 0.0001);
+    insta::assert_debug_snapshot!("last_item_points", points);
 
     // Validate all airspaces and collect statistics
     let mut total_points = 0;

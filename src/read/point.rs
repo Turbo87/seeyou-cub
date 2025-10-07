@@ -340,9 +340,7 @@ mod tests {
         let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
 
         let point = iter.next().unwrap().unwrap();
-        assert!((point.lon - (0.0 + 100.0 * 0.0001)).abs() < 0.00001);
-        assert!((point.lat - (0.0 + 200.0 * 0.0001)).abs() < 0.00001);
-        assert!(point.name.is_none());
+        insta::assert_debug_snapshot!(point);
 
         assert!(iter.next().is_none());
     }
@@ -395,19 +393,11 @@ mod tests {
 
         let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
 
-        // First point: origin (0,0) + update (1000,2000) + offset (50,100)
         let point1 = iter.next().unwrap().unwrap();
-        let expected_lon1 = (1000.0 + 50.0) * 0.0001;
-        let expected_lat1 = (2000.0 + 100.0) * 0.0001;
-        assert!((point1.lon - expected_lon1).abs() < 0.00001);
-        assert!((point1.lat - expected_lat1).abs() < 0.00001);
-
-        // Second point: previous origin (0.105, 0.21) + update (500,300) + offset (10,20)
         let point2 = iter.next().unwrap().unwrap();
-        let expected_lon2 = (1000.0 + 500.0 + 10.0) * 0.0001;
-        let expected_lat2 = (2000.0 + 300.0 + 20.0) * 0.0001;
-        assert!((point2.lon - expected_lon2).abs() < 0.00001);
-        assert!((point2.lat - expected_lat2).abs() < 0.00001);
+
+        insta::assert_debug_snapshot!("origin_update_point1", point1);
+        insta::assert_debug_snapshot!("origin_update_point2", point2);
 
         assert!(iter.next().is_none());
     }
@@ -490,41 +480,8 @@ mod tests {
 
         let point = iter.next().unwrap().unwrap();
 
-        assert_eq!(point.name, Some("Test Airspace".to_string()));
-        assert_eq!(point.frequency, Some(123456789));
-        assert_eq!(point.frequency_name, Some("Tower".to_string()));
         assert_eq!(point.optional_data.len(), 6);
-
-        // Verify all optional data
-        match &point.optional_data[0] {
-            OptionalData::IcaoCode(code) => assert_eq!(code, "LFPG"),
-            _ => panic!("Expected IcaoCode"),
-        }
-
-        match &point.optional_data[1] {
-            OptionalData::SecondaryFrequency(freq) => assert_eq!(*freq, 0x123456),
-            _ => panic!("Expected SecondaryFrequency"),
-        }
-
-        match &point.optional_data[2] {
-            OptionalData::ExceptionRules(rules) => assert_eq!(rules, "Rules"),
-            _ => panic!("Expected ExceptionRules"),
-        }
-
-        match &point.optional_data[3] {
-            OptionalData::NotamRemarks(remarks) => assert_eq!(remarks, "Remarks"),
-            _ => panic!("Expected NotamRemarks"),
-        }
-
-        match &point.optional_data[4] {
-            OptionalData::NotamId(id) => assert_eq!(id, "A12345"),
-            _ => panic!("Expected NotamId"),
-        }
-
-        match &point.optional_data[5] {
-            OptionalData::NotamInsertTime(time) => assert_eq!(*time, 0x12345678),
-            _ => panic!("Expected NotamInsertTime"),
-        }
+        insta::assert_debug_snapshot!(point);
 
         assert!(iter.next().is_none());
     }
@@ -578,7 +535,7 @@ mod tests {
         let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
 
         let point = iter.next().unwrap().unwrap();
-        assert_eq!(point.name, Some("Test".to_string()));
+        insta::assert_debug_snapshot!(point);
     }
 
     #[test]
@@ -614,13 +571,12 @@ mod tests {
         let mut iter = PointIterator::new(&mut cursor, &header, &item).unwrap();
 
         let point1 = iter.next().unwrap().unwrap();
-        assert_eq!(point1.name, Some("First".to_string()));
-
         let point2 = iter.next().unwrap().unwrap();
-        assert_eq!(point2.name, Some("Second".to_string()));
-
         let point3 = iter.next().unwrap().unwrap();
-        assert!(point3.name.is_none());
+
+        insta::assert_debug_snapshot!("attributes_reset_point1", point1);
+        insta::assert_debug_snapshot!("attributes_reset_point2", point2);
+        insta::assert_debug_snapshot!("attributes_reset_point3", point3);
 
         assert!(iter.next().is_none());
     }

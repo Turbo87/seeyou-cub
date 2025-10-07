@@ -183,9 +183,7 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let (header, warnings) = parse_header(&mut cursor).unwrap();
 
-        assert_eq!(header.byte_order(), ByteOrder::LE);
-        assert!(!header.is_encrypted());
-        assert_eq!(header.size_of_item, 43);
+        insta::assert_debug_snapshot!(header);
         assert!(warnings.is_empty());
     }
 
@@ -195,8 +193,7 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let (header, warnings) = parse_header(&mut cursor).unwrap();
 
-        assert_eq!(header.byte_order(), ByteOrder::BE);
-        assert_eq!(header.size_of_item, 43);
+        insta::assert_debug_snapshot!(header);
         assert!(warnings.is_empty());
     }
 

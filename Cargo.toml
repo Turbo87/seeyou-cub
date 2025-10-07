@@ -17,6 +17,7 @@ default = []
 datetime = ["jiff"]
 
 [dev-dependencies]
+insta = "1"
 
 [package.metadata.release]
 pre-release-commit-message = "Release v{{version}}"
