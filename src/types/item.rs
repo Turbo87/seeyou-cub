@@ -3,7 +3,7 @@ use crate::{
     NotamTraffic, NotamType,
 };
 
-/// Airspace item (42 bytes minimum, may be larger per Header.size_of_item)
+/// Airspace item (26 bytes minimum, may be larger per `Header::size_of_item`)
 ///
 /// Represents a single airspace with its bounding box, altitude limits,
 /// classification, and metadata. Contains bit-packed fields that are
