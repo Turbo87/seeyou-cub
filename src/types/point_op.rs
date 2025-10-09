@@ -5,12 +5,21 @@
 /// 2. Converted to lat/lon via lo_la_scale multiplication
 ///
 /// This enum represents the raw operations before conversion.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum PointOp {
     /// Move the origin to a new position relative to the current origin
     MoveOrigin { x: i16, y: i16 },
     /// Add a new point relative to the current origin
     NewPoint { x: i16, y: i16 },
+}
+
+impl std::fmt::Debug for PointOp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PointOp::MoveOrigin { x, y } => write!(f, "MoveOrigin {{ x: {x:?}, y: {y:?} }}"),
+            PointOp::NewPoint { x, y } => write!(f, "NewPoint {{ x: {x:?}, y: {y:?} }}"),
+        }
+    }
 }
 
 #[cfg(test)]

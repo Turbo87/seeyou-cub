@@ -4,98 +4,29 @@ expression: last_item_data
 ---
 ItemData {
     point_ops: [
-        MoveOrigin {
-            x: 0,
-            y: 32767,
-        },
-        NewPoint {
-            x: 7100,
-            y: 32767,
-        },
-        NewPoint {
-            x: 7100,
-            y: -16384,
-        },
-        NewPoint {
-            x: 0,
-            y: -25240,
-        },
-        NewPoint {
-            x: 19014,
-            y: -25240,
-        },
-        NewPoint {
-            x: 27734,
-            y: -27852,
-        },
-        MoveOrigin {
-            x: 32767,
-            y: 0,
-        },
-        NewPoint {
-            x: 8738,
-            y: -27852,
-        },
-        NewPoint {
-            x: 23483,
-            y: -32767,
-        },
-        MoveOrigin {
-            x: 32767,
-            y: 0,
-        },
-        MoveOrigin {
-            x: 32767,
-            y: 0,
-        },
-        NewPoint {
-            x: 6553,
-            y: -32767,
-        },
-        NewPoint {
-            x: 610,
-            y: -20325,
-        },
-        NewPoint {
-            x: -2367,
-            y: -14172,
-        },
-        NewPoint {
-            x: -9830,
-            y: 1092,
-        },
-        NewPoint {
-            x: -13444,
-            y: 10376,
-        },
-        NewPoint {
-            x: -14691,
-            y: 13671,
-        },
-        NewPoint {
-            x: -17922,
-            y: 21845,
-        },
-        NewPoint {
-            x: -20407,
-            y: 28744,
-        },
-        NewPoint {
-            x: -21845,
-            y: 32767,
-        },
-        MoveOrigin {
-            x: -32767,
-            y: 0,
-        },
-        MoveOrigin {
-            x: -32767,
-            y: 0,
-        },
-        NewPoint {
-            x: -25667,
-            y: 32767,
-        },
+        MoveOrigin { x: 0, y: 32767 },
+        NewPoint { x: 7100, y: 32767 },
+        NewPoint { x: 7100, y: -16384 },
+        NewPoint { x: 0, y: -25240 },
+        NewPoint { x: 19014, y: -25240 },
+        NewPoint { x: 27734, y: -27852 },
+        MoveOrigin { x: 32767, y: 0 },
+        NewPoint { x: 8738, y: -27852 },
+        NewPoint { x: 23483, y: -32767 },
+        MoveOrigin { x: 32767, y: 0 },
+        MoveOrigin { x: 32767, y: 0 },
+        NewPoint { x: 6553, y: -32767 },
+        NewPoint { x: 610, y: -20325 },
+        NewPoint { x: -2367, y: -14172 },
+        NewPoint { x: -9830, y: 1092 },
+        NewPoint { x: -13444, y: 10376 },
+        NewPoint { x: -14691, y: 13671 },
+        NewPoint { x: -17922, y: 21845 },
+        NewPoint { x: -20407, y: 28744 },
+        NewPoint { x: -21845, y: 32767 },
+        MoveOrigin { x: -32767, y: 0 },
+        MoveOrigin { x: -32767, y: 0 },
+        NewPoint { x: -25667, y: 32767 },
     ],
     name: Some(
         "Paris1",

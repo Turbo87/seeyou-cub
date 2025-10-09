@@ -4,18 +4,9 @@ expression: item_data
 ---
 ItemData {
     point_ops: [
-        MoveOrigin {
-            x: 100,
-            y: 200,
-        },
-        NewPoint {
-            x: 10,
-            y: 20,
-        },
-        NewPoint {
-            x: 30,
-            y: 40,
-        },
+        MoveOrigin { x: 100, y: 200 },
+        NewPoint { x: 10, y: 20 },
+        NewPoint { x: 30, y: 40 },
     ],
     name: Some(
         "Test Airspace",

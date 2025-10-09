@@ -4,22 +4,10 @@ expression: first_item_data
 ---
 ItemData {
     point_ops: [
-        NewPoint {
-            x: 0,
-            y: 9,
-        },
-        NewPoint {
-            x: 82,
-            y: 0,
-        },
-        NewPoint {
-            x: 36,
-            y: 27,
-        },
-        NewPoint {
-            x: 0,
-            y: 9,
-        },
+        NewPoint { x: 0, y: 9 },
+        NewPoint { x: 82, y: 0 },
+        NewPoint { x: 36, y: 27 },
+        NewPoint { x: 0, y: 9 },
     ],
     name: Some(
         "R265 LA GREMUSE",
