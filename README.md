@@ -6,7 +6,6 @@ which stores airspace data for flight navigation software.
 ## Features
 
 - **Two-tier API**: High-level iterator for convenience, low-level functions for control
-- **Lenient parsing**: Collects warnings instead of failing on spec violations
 - **Memory efficient**: Lazy parsing with no internal caching
 - **UTF-8 with fallback**: Decodes strings as UTF-8 with Extended ASCII fallback
 - **Coordinate conversion**: Automatic conversion from raw i16 offsets to lat/lon
@@ -32,18 +31,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Iterate over all airspaces
     for result in reader.read_airspaces() {
-        let (airspace, warnings) = result?;
+        let airspace = result?;
 
         // All fields are decoded and ready to use
         if let Some(name) = &airspace.name {
             println!("{}: {:?} {:?}", name, airspace.style, airspace.class);
             println!("  Altitude: {} - {} meters", airspace.min_alt, airspace.max_alt);
             println!("  Points: {}", airspace.points.len());
-        }
-
-        // Warnings are per-airspace
-        for warning in warnings {
-            eprintln!("  Warning: {:?}", warning);
         }
     }
 

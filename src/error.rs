@@ -26,16 +26,3 @@ pub enum Error {
     #[error("Coordinate out of valid range (lat: {}, lon: {})", .point.lat, .point.lon)]
     CoordinateOutOfRange { point: Point },
 }
-
-/// Non-fatal issues encountered during lenient parsing
-#[derive(Debug, Clone, PartialEq)]
-pub enum Warning {
-    /// SizeOfItem is larger than the expected structure size
-    OversizedItems { size_of_item: i32 },
-
-    /// SizeOfPoint is larger than the expected structure size
-    OversizedPoints { size_of_point: i32 },
-
-    /// Unrecognized optional point flag, skipped
-    UnknownPointFlag(u8),
-}

@@ -4,7 +4,7 @@ use crate::convert::resolve_point_ops;
 use crate::decode::decode_string;
 use crate::error::Result;
 use crate::raw::{read_header, read_item, read_item_data};
-use crate::{Airspace, Header, Item, RawItemData, Warning};
+use crate::{Airspace, Header, Item, RawItemData};
 use std::fs::File;
 use std::io::{BufReader, Read, Seek, SeekFrom};
 use std::path::Path;
@@ -23,11 +23,8 @@ use std::path::Path;
 ///
 /// let mut reader = CubReader::from_path("airspace.cub")?;
 /// for result in reader.read_airspaces() {
-///     let (airspace, warnings) = result?;
+///     let airspace = result?;
 ///     println!("{:?}: {} points", airspace.name, airspace.points.len());
-///     for warning in warnings {
-///         eprintln!("Warning: {:?}", warning);
-///     }
 /// }
 /// # Ok::<(), seeyou_cub::Error>(())
 /// ```
@@ -65,8 +62,7 @@ impl<R: Read + Seek> CubReader<R> {
 
     /// Create iterator over all airspaces in the file
     ///
-    /// Returns an iterator that yields `Result<(Airspace, Vec<Warning>)>` for each airspace.
-    /// Warnings are collected during parsing but don't prevent successful parsing.
+    /// Returns an iterator that yields `Result<Airspace>` for each airspace.
     ///
     /// The iterator performs lazy parsing - airspaces are only decoded when `.next()` is called.
     pub fn read_airspaces(&mut self) -> AirspaceIterator<'_, R> {
@@ -80,7 +76,7 @@ impl<R: Read + Seek> CubReader<R> {
 
 /// Iterator over airspaces in a CUB file
 ///
-/// Yields `Result<(Airspace, Vec<Warning>)>` for each airspace.
+/// Yields `Result<Airspace>` for each airspace.
 /// Created by calling `CubReader::read_airspaces()`.
 pub struct AirspaceIterator<'a, R: Read + Seek> {
     reader: &'a mut BufReader<R>,
@@ -89,7 +85,7 @@ pub struct AirspaceIterator<'a, R: Read + Seek> {
 }
 
 impl<R: Read + Seek> AirspaceIterator<'_, R> {
-    fn read_airspace(&mut self, index: usize) -> Result<(Airspace, Vec<Warning>)> {
+    fn read_airspace(&mut self, index: usize) -> Result<Airspace> {
         let item_offset =
             self.header.header_offset as u64 + (index as u64 * self.header.size_of_item as u64);
 
@@ -102,27 +98,24 @@ impl<R: Read + Seek> AirspaceIterator<'_, R> {
         let raw_data = read_item_data(self.reader, self.header)?;
 
         // Convert to high-level Airspace
-        let mut warnings = Vec::new();
-        let airspace = convert_to_airspace(self.header, &item, raw_data, &mut warnings)?;
-
-        Ok((airspace, warnings))
+        convert_to_airspace(self.header, &item, raw_data)
     }
 }
 
 impl<'a, R: Read + Seek> Iterator for AirspaceIterator<'a, R> {
-    type Item = Result<(Airspace, Vec<Warning>)>;
+    type Item = Result<Airspace>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.current_index >= self.header.hdr_items {
             return None;
         }
 
-        let (airspace, warnings) = match self.read_airspace(self.current_index as usize) {
-            Ok((airspace, warnings)) => (airspace, warnings),
+        let airspace = match self.read_airspace(self.current_index as usize) {
+            Ok(airspace) => airspace,
             Err(err) => return Some(Err(err)),
         };
         self.current_index += 1;
-        Some(Ok((airspace, warnings)))
+        Some(Ok(airspace))
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
@@ -134,12 +127,7 @@ impl<'a, R: Read + Seek> Iterator for AirspaceIterator<'a, R> {
 impl<'a, R: Read + Seek> ExactSizeIterator for AirspaceIterator<'a, R> {}
 
 /// Convert raw item + item data to high-level Airspace
-fn convert_to_airspace(
-    header: &Header,
-    item: &Item,
-    item_data: RawItemData,
-    _warnings: &mut Vec<Warning>,
-) -> Result<Airspace> {
+fn convert_to_airspace(header: &Header, item: &Item, item_data: RawItemData) -> Result<Airspace> {
     // Convert coordinates from raw i16 offsets to f64 lat/lon radians
     let points = resolve_point_ops(
         &item_data.point_ops,
@@ -237,13 +225,12 @@ mod tests {
         let mut reader = CubReader::from_path("tests/fixtures/france_2024.07.02.cub")
             .expect("Failed to open fixture");
 
-        let (airspace, warnings) = reader
+        let airspace = reader
             .read_airspaces()
             .next()
             .expect("Expected at least one airspace")
             .expect("Failed to read first airspace");
 
-        assert_eq!(warnings.len(), 0);
         assert_debug_snapshot!(airspace);
     }
 
@@ -277,7 +264,7 @@ mod tests {
         let mut names: Vec<_> = reader
             .read_airspaces()
             .filter_map(|r| r.ok())
-            .map(|(a, _w)| a.name.unwrap_or_default())
+            .map(|a| a.name.unwrap_or_default())
             .collect();
 
         names.sort();

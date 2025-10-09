@@ -10,17 +10,12 @@ fn parse_france_fixture() {
     let header = reader.header();
     assert_debug_snapshot!("header", header);
 
-    let results: Vec<_> = reader
+    let airspaces: Vec<_> = reader
         .read_airspaces()
         .collect::<Result<Vec<_>, _>>()
         .expect("Failed to parse airspaces");
 
-    // Extract airspaces and warnings
-    let airspaces: Vec<_> = results.iter().map(|(a, _w)| a).collect();
-    let all_warnings: Vec<_> = results.iter().flat_map(|(_a, w)| w).collect();
-
     assert_eq!(airspaces.len(), 1368);
-    assert_eq!(all_warnings.len(), 0);
 
     // Snapshot first and last 5 airspaces
     assert_debug_snapshot!("airspaces_first_5", &airspaces[0..5]);

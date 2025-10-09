@@ -29,7 +29,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Airspaces: {}", results.len());
 
     println!("\n=== First 10 Airspaces ===");
-    for (i, (airspace, warnings)) in results.iter().take(10).enumerate() {
+    for (i, airspace) in results.iter().take(10).enumerate() {
         println!("{}. {:?} {:?}", i + 1, airspace.style, airspace.class);
         println!(
             "   Altitude: {} - {} meters ({:?} - {:?})",
@@ -44,15 +44,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         if let Some(freq) = airspace.frequency {
             println!("   Frequency: {} Hz", freq);
         }
-
-        if !warnings.is_empty() {
-            println!("   Warnings: {} for this airspace", warnings.len());
-        }
-    }
-
-    let total_warnings: usize = results.iter().map(|(_a, w)| w.len()).sum();
-    if total_warnings > 0 {
-        println!("\n=== Total Warnings: {} ===", total_warnings);
     }
 
     Ok(())
