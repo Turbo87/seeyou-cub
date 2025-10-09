@@ -6,6 +6,8 @@
 
 mod header;
 mod item;
+mod item_data;
 
 pub use header::read_header;
 pub use item::read_item;
+pub use item_data::read_item_data;
