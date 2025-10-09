@@ -15,7 +15,6 @@ Header {
         0,
     ],
     pc_byte_order: 1,
-    is_secured: 0,
     crc32: 0,
     key: [
         142,

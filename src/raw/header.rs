@@ -97,7 +97,6 @@ impl Header {
             title,
             allowed_serials,
             pc_byte_order,
-            is_secured,
             crc32,
             key,
             size_of_item,

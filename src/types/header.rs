@@ -10,7 +10,6 @@ pub struct Header {
     pub title: String,
     pub allowed_serials: [u16; 8],
     pub pc_byte_order: u8,
-    pub is_secured: u8,
     pub crc32: u32,
     pub key: [u8; 16],
     pub size_of_item: i32,
@@ -33,11 +32,6 @@ impl Header {
     /// Get bounding box as (west, south, east, north) in radians
     pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
         (self.left, self.bottom, self.right, self.top)
-    }
-
-    /// Check if file is encrypted
-    pub fn is_encrypted(&self) -> bool {
-        self.is_secured != 0
     }
 
     /// Get byte order for integers

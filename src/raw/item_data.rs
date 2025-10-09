@@ -212,7 +212,6 @@ mod tests {
             title: String::from("Test"),
             allowed_serials: [0; 8],
             pc_byte_order: 1, // LE
-            is_secured: 0,
             crc32: 0,
             key: [0; 16],
             size_of_item: 42,
