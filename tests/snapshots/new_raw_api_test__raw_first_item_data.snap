@@ -1,0 +1,51 @@
+---
+source: tests/new_raw_api_test.rs
+expression: first_item_data
+---
+RawItemData {
+    point_ops: [
+        NewPoint {
+            x: 0,
+            y: 9,
+        },
+        NewPoint {
+            x: 82,
+            y: 0,
+        },
+        NewPoint {
+            x: 36,
+            y: 27,
+        },
+        NewPoint {
+            x: 0,
+            y: 9,
+        },
+    ],
+    name: Some(
+        [
+            82,
+            50,
+            54,
+            53,
+            32,
+            76,
+            65,
+            32,
+            71,
+            82,
+            69,
+            77,
+            85,
+            83,
+            69,
+        ],
+    ),
+    frequency: None,
+    frequency_name: None,
+    icao_code: None,
+    secondary_frequency: None,
+    exception_rules: None,
+    notam_remarks: None,
+    notam_id: None,
+    notam_insert_time: None,
+}

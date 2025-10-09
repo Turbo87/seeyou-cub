@@ -38,6 +38,6 @@ pub use read::CubReader;
 pub use types::*;
 
 mod error;
-mod new_api;
+pub mod new_api;
 mod read;
 mod types;
