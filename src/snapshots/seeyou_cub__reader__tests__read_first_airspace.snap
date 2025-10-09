@@ -1,6 +1,6 @@
 ---
-source: tests/reader_test.rs
-expression: smallest_airspace
+source: src/reader.rs
+expression: airspace
 ---
 Airspace {
     left: 0.03318064659833908,

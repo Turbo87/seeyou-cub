@@ -1,3 +1,5 @@
+use crate::Point;
+
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// Unrecoverable parsing errors
@@ -20,17 +22,7 @@ pub enum Error {
 
     #[error("SizeOfPoint is smaller than the minimum structure size")]
     UndersizedPoints { size_of_point: i32 },
-}
 
-/// Non-fatal issues encountered during lenient parsing
-#[derive(Debug, Clone, PartialEq)]
-pub enum Warning {
-    /// SizeOfItem is larger than the expected structure size
-    OversizedItems { size_of_item: i32 },
-
-    /// SizeOfPoint is larger than the expected structure size
-    OversizedPoints { size_of_point: i32 },
-
-    /// Unrecognized optional point flag, skipped
-    UnknownPointFlag(u8),
+    #[error("Coordinate out of valid range (lat: {}, lon: {})", .point.lat, .point.lon)]
+    CoordinateOutOfRange { point: Point },
 }

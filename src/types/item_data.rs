@@ -1,60 +1,32 @@
-/// A single geometric point in an airspace boundary
-#[derive(Debug, Clone, PartialEq)]
-pub struct Point {
-    /// Longitude in degrees
-    pub lon: f32,
-    /// Latitude in degrees
-    pub lat: f32,
-}
+use crate::{ByteString, PointOp};
 
-/// Complete data for an airspace item, including geometry and metadata
+/// Low-level item data with raw point operations and unprocessed attributes
 ///
-/// Contains both the boundary geometry (as a sequence of points) and
-/// optional metadata attributes parsed from the point stream.
-#[derive(Debug, Clone)]
+/// This struct represents data as close to the file format as possible:
+/// - Point operations are raw i16 offsets (not yet converted to lat/lon)
+/// - Strings are raw bytes (not yet decoded from UTF-8/Extended ASCII)
+/// - Optional attributes remain as raw bytes for maximum flexibility
+#[derive(Debug, Clone, PartialEq)]
 pub struct ItemData {
-    /// Boundary geometry points
-    pub points: Vec<Point>,
+    /// Raw point operations (origin moves and new points with i16 x/y offsets)
+    pub point_ops: Vec<PointOp>,
 
-    /// Airspace name
-    pub name: Option<String>,
+    /// Airspace name (raw bytes, not decoded)
+    pub name: Option<ByteString>,
     /// Primary frequency in Hz
     pub frequency: Option<u32>,
-    /// Primary frequency name/label
-    pub frequency_name: Option<String>,
-    /// ICAO code
-    pub icao_code: Option<String>,
+    /// Primary frequency name/label (raw bytes, not decoded)
+    pub frequency_name: Option<ByteString>,
+    /// ICAO code (raw bytes, not decoded)
+    pub icao_code: Option<ByteString>,
     /// Secondary frequency in Hz
     pub secondary_frequency: Option<u32>,
-    /// Class exception rules
-    pub exception_rules: Option<String>,
-    /// NOTAM remarks
-    pub notam_remarks: Option<String>,
-    /// NOTAM identifier
-    pub notam_id: Option<String>,
+    /// Class exception rules (raw bytes, not decoded)
+    pub exception_rules: Option<ByteString>,
+    /// NOTAM remarks (raw bytes, not decoded)
+    pub notam_remarks: Option<ByteString>,
+    /// NOTAM identifier (raw bytes, not decoded)
+    pub notam_id: Option<ByteString>,
     /// NOTAM insert time (raw encoded value)
     pub notam_insert_time: Option<u32>,
-}
-
-#[cfg(feature = "datetime")]
-use jiff::civil::DateTime;
-
-#[cfg(feature = "datetime")]
-impl ItemData {
-    /// Get NOTAM insert time as DateTime (requires "datetime" feature)
-    pub fn notam_insert_datetime(&self) -> Option<DateTime> {
-        self.notam_insert_time.and_then(|raw| {
-            let (year, month, day, hour, minute) = crate::types::item::decode_notam_time(raw);
-            DateTime::new(
-                year as i16,
-                month as i8,
-                day as i8,
-                hour as i8,
-                minute as i8,
-                0,
-                0,
-            )
-            .ok()
-        })
-    }
 }

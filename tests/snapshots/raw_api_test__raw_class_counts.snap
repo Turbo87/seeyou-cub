@@ -1,0 +1,26 @@
+---
+source: tests/raw_api_test.rs
+expression: class_counts
+---
+[
+    (
+        Unknown,
+        836,
+    ),
+    (
+        ClassD,
+        377,
+    ),
+    (
+        ClassE,
+        110,
+    ),
+    (
+        ClassC,
+        36,
+    ),
+    (
+        ClassA,
+        9,
+    ),
+]

@@ -9,34 +9,28 @@
 //! use seeyou_cub::CubReader;
 //!
 //! let mut reader = CubReader::from_path("airspace.cub")?;
-//! let mut warnings = Vec::new();
 //!
-//! let header = reader.read_header(&mut warnings)?;
-//! let items: Vec<_> = reader
-//!     .read_items(&header, &mut warnings)
-//!     .collect::<Result<Vec<_>, _>>()?;
+//! for result in reader.read_airspaces() {
+//!     let airspace = result?;
 //!
-//! println!("Airspaces: {}", items.len());
-//!
-//! for item in &items {
-//!     println!("{:?}: {} - {} meters",
-//!         item.style(),
-//!         item.min_alt,
-//!         item.max_alt
-//!     );
+//!     if let Some(name) = &airspace.name {
+//!         println!("{}: {:?} {:?}", name, airspace.style, airspace.class);
+//!         println!("  Altitude: {} - {} meters", airspace.min_alt, airspace.max_alt);
+//!         println!("  Points: {}", airspace.points.len());
+//!     }
 //! }
 //! # Ok::<(), Box<dyn std::error::Error>>(())
 //! ```
-//!
-//! # Features
-//!
-//! - `datetime`: Enable `jiff` integration for date/time decoding
 
-// Re-export public API
-pub use error::{Error, Warning};
-pub use read::CubReader;
-pub use types::*;
+pub use crate::byte_string::ByteString;
+pub use crate::error::Error;
+pub use crate::reader::CubReader;
+pub use crate::types::*;
 
+mod byte_string;
+mod convert;
+mod decode;
 mod error;
-mod read;
+pub mod raw;
+mod reader;
 mod types;

@@ -1,15 +1,14 @@
 # seeyou-cub
 
-A Rust parser for the [SeeYou CUB binary file format](docs/CUB_file_format.md), 
+A Rust parser for the [SeeYou CUB binary file format](docs/CUB_file_format.md),
 which stores airspace data for flight navigation software.
 
 ## Features
 
-- Parse CUB files from any `Read + Seek` source
-- Lenient parsing with warning collection
-- Lazy geometry parsing for memory efficiency
-- Support for both little-endian and big-endian files
-- Optional `jiff` integration for date/time handling
+- **Two-tier API**: High-level iterator for convenience, low-level functions for control
+- **Memory efficient**: Lazy parsing with no internal caching
+- **UTF-8 with fallback**: Decodes strings as UTF-8 with Extended ASCII fallback
+- **Coordinate conversion**: Automatic conversion from raw i16 offsets to lat/lon
 
 ## Usage
 
@@ -20,50 +19,25 @@ Add to your `Cargo.toml`:
 seeyou-cub = "0.1.0"
 ```
 
-Basic example:
+### High-Level API
+
+The high-level API provides an iterator that yields fully-decoded `Airspace` structs:
 
 ```rust
 use seeyou_cub::CubReader;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut reader = CubReader::from_path("airspace.cub")?;
-    let mut warnings = Vec::new();
 
-    // Parse header
-    let header = reader.read_header(&mut warnings)?;
+    // Iterate over all airspaces
+    for result in reader.read_airspaces() {
+        let airspace = result?;
 
-    // Parse all items
-    let items: Vec<_> = reader
-        .read_items(&header, &mut warnings)
-        .collect::<Result<Vec<_>, _>>()?;
-
-    println!("Loaded {} airspaces", items.len());
-
-    // Inspect warnings
-    for warning in &warnings {
-        eprintln!("Warning: {:?}", warning);
-    }
-
-    // Access airspace metadata
-    for item in &items {
-        println!("{:?} {:?}: {}-{} meters",
-            item.style(),
-            item.class(),
-            item.min_alt,
-            item.max_alt,
-        );
-    }
-
-    // Parse complete data (geometry + metadata) for first airspace
-    if let Some(first) = items.first() {
-        let item_data = reader.read_item_data(&header, first, &mut warnings)?;
-
-        if let Some(name) = &item_data.name {
-            println!("  Name: {}", name);
-        }
-
-        for point in &item_data.points {
-            println!("  Point: {} {}", point.lon, point.lat);
+        // All fields are decoded and ready to use
+        if let Some(name) = &airspace.name {
+            println!("{}: {:?} {:?}", name, airspace.style, airspace.class);
+            println!("  Altitude: {} - {} meters", airspace.min_alt, airspace.max_alt);
+            println!("  Points: {}", airspace.points.len());
         }
     }
 
@@ -71,19 +45,48 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-## Optional Features
+### Low-Level API
 
-### `datetime`
+The low-level API provides direct access to raw file data with minimal transformation:
 
-Enable `jiff` integration for convenient date/time handling:
+```rust
+use seeyou_cub::{Header, Item, ItemData};
+use std::fs::File;
+use std::io::{Seek, SeekFrom};
 
-```toml
-[dependencies]
-seeyou-cub = { version = "0.0.0", features = ["datetime"] }
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut file = File::open("airspace.cub")?;
+
+    // Read header
+    let header = Header::read(&mut file)?;
+    println!("CUB file: {}", header.title);
+
+    // Read items (airspace metadata)
+    for i in 0..header.hdr_items {
+        let offset = header.header_offset as u64 + (i as u64 * header.size_of_item as u64);
+        file.seek(SeekFrom::Start(offset))?;
+
+        let item = Item::read(&mut file, &header)?;
+
+        // Read raw item data (point operations + raw bytes)
+        let data_offset = header.data_offset as u64 + item.points_offset as u64;
+        file.seek(SeekFrom::Start(data_offset))?;
+
+        let item_data = ItemData::read(&mut file, &header)?;
+
+        // Access raw point operations (i16 offsets, not yet converted to lat/lon)
+        println!("Point operations: {}", item_data.point_ops.len());
+
+        // Strings are ByteString (raw bytes with human-readable debug output)
+        if let Some(name_bytes) = &item_data.name {
+            let name = String::from_utf8_lossy(name_bytes.as_bytes());
+            println!("Name: {}", name);
+        }
+    }
+
+    Ok(())
+}
 ```
-
-With this feature enabled, `Item::start_date()` and `Item::end_date()` return 
-`jiff::civil::DateTime`.
 
 ## License
 

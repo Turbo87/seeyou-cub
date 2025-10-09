@@ -1,0 +1,38 @@
+---
+source: src/raw/item_data.rs
+expression: item_data
+---
+ItemData {
+    point_ops: [
+        MoveOrigin { x: 100, y: 200 },
+        NewPoint { x: 10, y: 20 },
+        NewPoint { x: 30, y: 40 },
+    ],
+    name: Some(
+        "Test Airspace",
+    ),
+    frequency: Some(
+        123450,
+    ),
+    frequency_name: Some(
+        "Tower",
+    ),
+    icao_code: Some(
+        "LFPG",
+    ),
+    secondary_frequency: Some(
+        128500,
+    ),
+    exception_rules: Some(
+        "Class D when tower active",
+    ),
+    notam_remarks: Some(
+        "Active during airshow",
+    ),
+    notam_id: Some(
+        "A1234/25",
+    ),
+    notam_insert_time: Some(
+        305419896,
+    ),
+}
