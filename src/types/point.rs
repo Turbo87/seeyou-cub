@@ -2,7 +2,7 @@
 ///
 /// Represents a single point in an airspace boundary with lat/lon coordinates in radians.
 /// This is the high-level representation after converting raw i16 x/y offsets.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Clone, PartialEq)]
 pub struct Point {
     /// Latitude in radians (positive = North)
     pub lat: f64,
@@ -22,6 +22,12 @@ impl Point {
             && self.lat <= std::f64::consts::FRAC_PI_2
             && self.lon >= -std::f64::consts::PI
             && self.lon <= std::f64::consts::PI
+    }
+}
+
+impl std::fmt::Debug for Point {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Point {{ lat: {:?}, lon: {:?} }}", self.lat, self.lon)
     }
 }
 
