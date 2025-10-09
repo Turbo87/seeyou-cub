@@ -5,5 +5,6 @@
 //! the existing API working.
 
 pub mod convert;
+pub mod decode;
 pub mod raw;
 pub mod types;
