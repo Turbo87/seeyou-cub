@@ -1,5 +1,6 @@
 //! Type definitions for new API
 
+mod point;
 mod point_op;
 mod raw_item_data;
 
@@ -7,5 +8,6 @@ mod raw_item_data;
 pub use crate::types::{AltStyle, CubClass, CubStyle, DaysActive, ExtendedType};
 pub use crate::types::{Header, NotamCodes, NotamScope, NotamTraffic, NotamType};
 
+pub use point::Point;
 pub use point_op::PointOp;
 pub use raw_item_data::RawItemData;
