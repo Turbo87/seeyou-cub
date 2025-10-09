@@ -89,50 +89,36 @@ fn parse_attributes<R: Read>(
         }
     }
 
-    // Check for frequency attribute
-    let next_flag = match read_u8(reader) {
-        Ok(flag) => flag,
-        Err(Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
-            return Ok(item_data);
-        }
-        Err(e) => return Err(e),
-    };
-
-    if (next_flag & 0xC0) == 0xC0 {
-        // Frequency attribute
-        let freq_name_len = (next_flag & 0x3F) as usize;
-        item_data.frequency = Some(read_u32(reader, byte_order)?);
-
-        if freq_name_len > 0 {
-            item_data.frequency_name = Some(read_bytes(reader, freq_name_len)?);
-        }
-
-        parse_optional_data(reader, &mut item_data)?;
-    } else if next_flag == 0xA0 {
-        parse_optional_data_record(reader, &mut item_data)?;
-        parse_optional_data(reader, &mut item_data)?;
-    }
-
-    Ok(item_data)
-}
-
-/// Parse optional data records (0xA0 flags)
-fn parse_optional_data<R: Read>(reader: &mut R, item_data: &mut RawItemData) -> Result<()> {
+    // Parse all optional attributes (frequency and 0xA0 records)
     loop {
         let flag = match read_u8(reader) {
             Ok(flag) => flag,
             Err(Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
-                return Ok(());
+                return Ok(item_data);
             }
             Err(e) => return Err(e),
         };
 
-        if flag != 0xA0 {
-            // Not optional data, we're done
-            return Ok(());
-        }
+        match flag {
+            flag if (flag & 0xC0) == 0xC0 => {
+                // Frequency attribute
+                let freq_name_len = (flag & 0x3F) as usize;
+                item_data.frequency = Some(read_u32(reader, byte_order)?);
 
-        parse_optional_data_record(reader, item_data)?;
+                if freq_name_len > 0 {
+                    item_data.frequency_name = Some(read_bytes(reader, freq_name_len)?);
+                }
+            }
+
+            0xA0 => {
+                parse_optional_data_record(reader, &mut item_data)?;
+            }
+
+            _ => {
+                // Unknown flag, stop parsing
+                return Ok(item_data);
+            }
+        }
     }
 }
 
