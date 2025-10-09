@@ -5,5 +5,7 @@
 //! without seeking. Users must manage file positioning themselves.
 
 mod header;
+mod item;
 
 pub use header::read_header;
+pub use item::read_item;
