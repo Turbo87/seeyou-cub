@@ -7,7 +7,7 @@ use crate::PointOp;
 /// - Strings are raw bytes (not yet decoded from UTF-8/Extended ASCII)
 /// - Optional attributes remain as raw bytes for maximum flexibility
 #[derive(Debug, Clone, PartialEq)]
-pub struct RawItemData {
+pub struct ItemData {
     /// Raw point operations (origin moves and new points with i16 x/y offsets)
     pub point_ops: Vec<PointOp>,
 

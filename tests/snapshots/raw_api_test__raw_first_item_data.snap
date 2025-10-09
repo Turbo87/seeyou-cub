@@ -2,7 +2,7 @@
 source: tests/raw_api_test.rs
 expression: first_item_data
 ---
-RawItemData {
+ItemData {
     point_ops: [
         NewPoint {
             x: 0,

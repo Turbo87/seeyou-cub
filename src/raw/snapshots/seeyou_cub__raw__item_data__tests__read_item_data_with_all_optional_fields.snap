@@ -2,7 +2,7 @@
 source: src/raw/item_data.rs
 expression: item_data
 ---
-RawItemData {
+ItemData {
     point_ops: [
         MoveOrigin {
             x: 100,

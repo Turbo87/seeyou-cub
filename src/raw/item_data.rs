@@ -1,9 +1,9 @@
 use crate::error::Result;
 use crate::raw::io::{read_bytes, read_i16, read_u8, read_u32};
-use crate::{CubDataId, Error, Header, PointOp, RawItemData};
+use crate::{CubDataId, Error, Header, ItemData, PointOp};
 use std::io::Read;
 
-impl RawItemData {
+impl ItemData {
     /// Read raw item data from the current position
     ///
     /// Reads point operations and attributes without decoding strings or converting coordinates.
@@ -15,7 +15,7 @@ impl RawItemData {
     ///
     /// # Returns
     ///
-    /// The parsed `RawItemData` or an error if reading fails
+    /// The parsed `ItemData` or an error if reading fails
     pub fn read<R: Read>(reader: &mut R, header: &Header) -> Result<Self> {
         let byte_order = header.byte_order();
 
@@ -74,8 +74,8 @@ fn parse_attributes<R: Read>(
     reader: &mut R,
     header: &Header,
     first_flag: u8,
-    mut item_data: RawItemData,
-) -> Result<RawItemData> {
+    mut item_data: ItemData,
+) -> Result<ItemData> {
     let byte_order = header.byte_order();
 
     // First attribute: name
@@ -125,7 +125,7 @@ fn parse_attributes<R: Read>(
 }
 
 /// Parse single optional data record
-fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut RawItemData) -> Result<()> {
+fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut ItemData) -> Result<()> {
     let data_id = read_u8(reader)?;
     let b1 = read_u8(reader)?;
     let b2 = read_u8(reader)?;
@@ -195,7 +195,7 @@ mod tests {
         file.seek(SeekFrom::Start(data_offset as u64)).unwrap();
 
         // Read item data
-        let item_data = RawItemData::read(&mut file, &header).expect("Failed to read item data");
+        let item_data = ItemData::read(&mut file, &header).expect("Failed to read item data");
         insta::assert_debug_snapshot!(item_data);
 
         // Verify name field is raw bytes and can be decoded
@@ -317,7 +317,7 @@ mod tests {
         data.push((insert_time & 0xFF) as u8); // b4
 
         let mut cursor = Cursor::new(data);
-        let item_data = RawItemData::read(&mut cursor, &header).expect("Failed to read item data");
+        let item_data = ItemData::read(&mut cursor, &header).expect("Failed to read item data");
 
         insta::assert_debug_snapshot!(item_data);
     }

@@ -3,7 +3,7 @@
 use crate::convert::resolve_point_ops;
 use crate::decode::decode_string;
 use crate::error::Result;
-use crate::{Airspace, Header, Item, RawItemData};
+use crate::{Airspace, Header, Item, ItemData};
 use std::fs::File;
 use std::io::{BufReader, Read, Seek, SeekFrom};
 use std::path::Path;
@@ -94,7 +94,7 @@ impl<R: Read + Seek> AirspaceIterator<'_, R> {
         let data_offset = self.header.data_offset as u64 + item.points_offset as u64;
         self.reader.seek(SeekFrom::Start(data_offset))?;
 
-        let raw_data = RawItemData::read(self.reader, self.header)?;
+        let raw_data = ItemData::read(self.reader, self.header)?;
 
         // Convert to high-level Airspace
         convert_to_airspace(self.header, &item, raw_data)
@@ -126,7 +126,7 @@ impl<'a, R: Read + Seek> Iterator for AirspaceIterator<'a, R> {
 impl<'a, R: Read + Seek> ExactSizeIterator for AirspaceIterator<'a, R> {}
 
 /// Convert raw item + item data to high-level Airspace
-fn convert_to_airspace(header: &Header, item: &Item, item_data: RawItemData) -> Result<Airspace> {
+fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Result<Airspace> {
     // Convert coordinates from raw i16 offsets to f64 lat/lon radians
     let points = resolve_point_ops(
         &item_data.point_ops,

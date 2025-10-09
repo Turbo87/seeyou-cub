@@ -2,7 +2,7 @@
 source: tests/raw_api_test.rs
 expression: last_item_data
 ---
-RawItemData {
+ItemData {
     point_ops: [
         MoveOrigin {
             x: 0,
