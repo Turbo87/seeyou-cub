@@ -1,4 +1,4 @@
-use crate::PointOp;
+use crate::{ByteString, PointOp};
 
 /// Low-level item data with raw point operations and unprocessed attributes
 ///
@@ -12,21 +12,21 @@ pub struct ItemData {
     pub point_ops: Vec<PointOp>,
 
     /// Airspace name (raw bytes, not decoded)
-    pub name: Option<Vec<u8>>,
+    pub name: Option<ByteString>,
     /// Primary frequency in Hz
     pub frequency: Option<u32>,
     /// Primary frequency name/label (raw bytes, not decoded)
-    pub frequency_name: Option<Vec<u8>>,
+    pub frequency_name: Option<ByteString>,
     /// ICAO code (raw bytes, not decoded)
-    pub icao_code: Option<Vec<u8>>,
+    pub icao_code: Option<ByteString>,
     /// Secondary frequency in Hz
     pub secondary_frequency: Option<u32>,
     /// Class exception rules (raw bytes, not decoded)
-    pub exception_rules: Option<Vec<u8>>,
+    pub exception_rules: Option<ByteString>,
     /// NOTAM remarks (raw bytes, not decoded)
-    pub notam_remarks: Option<Vec<u8>>,
+    pub notam_remarks: Option<ByteString>,
     /// NOTAM identifier (raw bytes, not decoded)
-    pub notam_id: Option<Vec<u8>>,
+    pub notam_id: Option<ByteString>,
     /// NOTAM insert time (raw encoded value)
     pub notam_insert_time: Option<u32>,
 }

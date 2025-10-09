@@ -105,7 +105,7 @@ fn parse_france_fixture_raw_api() {
         let name = item_data
             .name
             .as_ref()
-            .map(|bytes| String::from_utf8_lossy(bytes).to_string())
+            .map(|bs| String::from_utf8_lossy(bs.as_bytes()).to_string())
             .unwrap_or_default();
         all_names.push(name);
 

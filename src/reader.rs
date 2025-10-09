@@ -139,27 +139,27 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
     let name = item_data
         .name
         .as_ref()
-        .map(|bytes| decode_string(bytes).into_owned());
+        .map(|bs| decode_string(bs.as_bytes()).into_owned());
     let frequency_name = item_data
         .frequency_name
         .as_ref()
-        .map(|bytes| decode_string(bytes).into_owned());
+        .map(|bs| decode_string(bs.as_bytes()).into_owned());
     let icao_code = item_data
         .icao_code
         .as_ref()
-        .map(|bytes| decode_string(bytes).into_owned());
+        .map(|bs| decode_string(bs.as_bytes()).into_owned());
     let exception_rules = item_data
         .exception_rules
         .as_ref()
-        .map(|bytes| decode_string(bytes).into_owned());
+        .map(|bs| decode_string(bs.as_bytes()).into_owned());
     let notam_remarks = item_data
         .notam_remarks
         .as_ref()
-        .map(|bytes| decode_string(bytes).into_owned());
+        .map(|bs| decode_string(bs.as_bytes()).into_owned());
     let notam_id = item_data
         .notam_id
         .as_ref()
-        .map(|bytes| decode_string(bytes).into_owned());
+        .map(|bs| decode_string(bs.as_bytes()).into_owned());
 
     Ok(Airspace {
         // Bounding box (convert to f64 for consistency)

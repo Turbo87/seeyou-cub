@@ -87,7 +87,7 @@ fn parse_attributes<R: Read>(
 
         let name_len = (first_flag & 0x3F) as usize;
         if name_len > 0 {
-            item_data.name = Some(read_bytes(reader, name_len)?);
+            item_data.name = Some(read_bytes(reader, name_len)?.into());
         }
     }
 
@@ -108,7 +108,7 @@ fn parse_attributes<R: Read>(
                 item_data.frequency = Some(read_u32(reader, byte_order)?);
 
                 if freq_name_len > 0 {
-                    item_data.frequency_name = Some(read_bytes(reader, freq_name_len)?);
+                    item_data.frequency_name = Some(read_bytes(reader, freq_name_len)?.into());
                 }
             }
 
@@ -134,7 +134,7 @@ fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut ItemData)
     match CubDataId::from_byte(data_id) {
         Some(CubDataId::IcaoCode) => {
             let len = b3 as usize;
-            item_data.icao_code = Some(read_bytes(reader, len)?);
+            item_data.icao_code = Some(read_bytes(reader, len)?.into());
         }
 
         Some(CubDataId::SecondaryFrequency) => {
@@ -144,17 +144,17 @@ fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut ItemData)
 
         Some(CubDataId::ExceptionRules) => {
             let len = (((b2 as u16) << 8) | (b3 as u16)) as usize;
-            item_data.exception_rules = Some(read_bytes(reader, len)?);
+            item_data.exception_rules = Some(read_bytes(reader, len)?.into());
         }
 
         Some(CubDataId::NotamRemarks) => {
             let len = (((b2 as u16) << 8) | (b3 as u16)) as usize;
-            item_data.notam_remarks = Some(read_bytes(reader, len)?);
+            item_data.notam_remarks = Some(read_bytes(reader, len)?.into());
         }
 
         Some(CubDataId::NotamId) => {
             let len = b3 as usize;
-            item_data.notam_id = Some(read_bytes(reader, len)?);
+            item_data.notam_id = Some(read_bytes(reader, len)?.into());
         }
 
         Some(CubDataId::NotamInsertTime) => {
@@ -200,7 +200,7 @@ mod tests {
 
         // Verify name field is raw bytes and can be decoded
         assert!(item_data.name.is_some());
-        let name_bytes = item_data.name.as_ref().unwrap();
+        let name_bytes = item_data.name.as_ref().unwrap().as_bytes();
         let name_str = String::from_utf8_lossy(name_bytes);
         assert_eq!(name_str, "R265 LA GREMUSE");
     }

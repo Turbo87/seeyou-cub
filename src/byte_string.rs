@@ -1,0 +1,113 @@
+use std::fmt;
+
+/// Wrapper around `Vec<u8>` that provides human-readable debug output
+///
+/// This type is used for string fields in the low-level API where the encoding
+/// may be UTF-8 or Extended ASCII (CP1252). The debug output attempts UTF-8
+/// decoding and falls back to showing hex bytes for invalid sequences.
+#[derive(Clone, PartialEq, Eq)]
+pub struct ByteString(Vec<u8>);
+
+impl ByteString {
+    /// Create a new `ByteString` from a byte vector
+    pub fn new(bytes: Vec<u8>) -> Self {
+        Self(bytes)
+    }
+
+    /// Get a reference to the underlying bytes
+    pub fn as_bytes(&self) -> &[u8] {
+        &self.0
+    }
+
+    /// Convert into the underlying byte vector
+    pub fn into_bytes(self) -> Vec<u8> {
+        self.0
+    }
+}
+
+impl From<Vec<u8>> for ByteString {
+    fn from(bytes: Vec<u8>) -> Self {
+        Self(bytes)
+    }
+}
+
+impl AsRef<[u8]> for ByteString {
+    fn as_ref(&self) -> &[u8] {
+        &self.0
+    }
+}
+
+impl fmt::Debug for ByteString {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match std::str::from_utf8(&self.0) {
+            Ok(s) => write!(f, "{:?}", s),
+            Err(_) => {
+                // Show as hex if not valid UTF-8
+                write!(f, "b\"")?;
+                for &byte in &self.0 {
+                    if byte.is_ascii_graphic() || byte == b' ' {
+                        write!(f, "{}", byte as char)?;
+                    } else {
+                        write!(f, "\\x{:02x}", byte)?;
+                    }
+                }
+                write!(f, "\"")
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn debug_valid_utf8() {
+        let bs = ByteString::new(b"Hello World".to_vec());
+        assert_eq!(format!("{:?}", bs), "\"Hello World\"");
+    }
+
+    #[test]
+    fn debug_utf8_with_special_chars() {
+        let bs = ByteString::new("Zürich".as_bytes().to_vec());
+        assert_eq!(format!("{:?}", bs), "\"Zürich\"");
+    }
+
+    #[test]
+    fn debug_invalid_utf8() {
+        // CP1252 character é (0xE9) - not valid UTF-8 on its own
+        let bs = ByteString::new(vec![0xE9]);
+        assert_eq!(format!("{:?}", bs), "b\"\\xe9\"");
+    }
+
+    #[test]
+    fn debug_mixed_extended_ascii() {
+        // Mix of ASCII and CP1252 characters: "Hello é"
+        let bs = ByteString::new(vec![0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0xE9]);
+        assert_eq!(format!("{:?}", bs), "b\"Hello \\xe9\"");
+    }
+
+    #[test]
+    fn debug_empty() {
+        let bs = ByteString::new(vec![]);
+        assert_eq!(format!("{:?}", bs), "\"\"");
+    }
+
+    #[test]
+    fn as_bytes() {
+        let bs = ByteString::new(b"test".to_vec());
+        assert_eq!(bs.as_bytes(), b"test");
+    }
+
+    #[test]
+    fn into_bytes() {
+        let bs = ByteString::new(b"test".to_vec());
+        assert_eq!(bs.into_bytes(), b"test");
+    }
+
+    #[test]
+    fn from_vec() {
+        let bs = ByteString::from(b"test".to_vec());
+        assert_eq!(bs.as_bytes(), b"test");
+    }
+}

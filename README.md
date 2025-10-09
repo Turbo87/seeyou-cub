@@ -77,9 +77,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         // Access raw point operations (i16 offsets, not yet converted to lat/lon)
         println!("Point operations: {}", item_data.point_ops.len());
 
-        // Strings are raw bytes (not yet decoded from UTF-8/Extended ASCII)
+        // Strings are ByteString (raw bytes with human-readable debug output)
         if let Some(name_bytes) = &item_data.name {
-            let name = String::from_utf8_lossy(name_bytes);
+            let name = String::from_utf8_lossy(name_bytes.as_bytes());
             println!("Name: {}", name);
         }
     }
