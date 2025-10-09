@@ -7,4 +7,7 @@
 pub mod convert;
 pub mod decode;
 pub mod raw;
+pub mod reader;
 pub mod types;
+
+pub use reader::CubReader;
