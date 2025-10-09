@@ -186,7 +186,7 @@ impl ExtendedType {
             0x06 => Some(ExtendedType::UpperTrafficArea),
             0x07 => Some(ExtendedType::MilitaryTrainingArea),
             0x08 => Some(ExtendedType::OverflightRestriction),
-            0x00 => Some(ExtendedType::TraTsaFeedingRoute),
+            0x09 => Some(ExtendedType::TraTsaFeedingRoute),
             0x0a => Some(ExtendedType::VfrSector),
             _ => None,
         }

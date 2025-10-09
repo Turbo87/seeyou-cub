@@ -51,11 +51,7 @@ impl Item {
 
     /// Get extended type if present
     pub fn extended_type(&self) -> Option<ExtendedType> {
-        if self.extended_type_byte == 0 {
-            None
-        } else {
-            ExtendedType::from_byte(self.extended_type_byte)
-        }
+        ExtendedType::from_byte(self.extended_type_byte)
     }
 
     /// Get active days flags
