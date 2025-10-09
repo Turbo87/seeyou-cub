@@ -4,5 +4,6 @@
 //! replace the current API. Development happens here in parallel to keep
 //! the existing API working.
 
+pub mod convert;
 pub mod raw;
 pub mod types;

@@ -1,3 +1,5 @@
+use crate::new_api::types::Point;
+
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// Unrecoverable parsing errors
@@ -20,6 +22,9 @@ pub enum Error {
 
     #[error("SizeOfPoint is smaller than the minimum structure size")]
     UndersizedPoints { size_of_point: i32 },
+
+    #[error("Coordinate out of valid range (lat: {}, lon: {})", .point.lat, .point.lon)]
+    CoordinateOutOfRange { point: Point },
 }
 
 /// Non-fatal issues encountered during lenient parsing
