@@ -1,0 +1,6144 @@
+---
+source: tests/raw_api_test.rs
+expression: item_data
+---
+RawItemData {
+    point_ops: [
+        NewPoint {
+            x: 0,
+            y: 3741,
+        },
+        NewPoint {
+            x: 36,
+            y: 3532,
+        },
+        NewPoint {
+            x: 309,
+            y: 3450,
+        },
+        NewPoint {
+            x: 337,
+            y: 3258,
+        },
+        NewPoint {
+            x: 428,
+            y: 3213,
+        },
+        NewPoint {
+            x: 919,
+            y: 3231,
+        },
+        NewPoint {
+            x: 1183,
+            y: 3404,
+        },
+        NewPoint {
+            x: 1329,
+            y: 3386,
+        },
+        NewPoint {
+            x: 1456,
+            y: 3304,
+        },
+        NewPoint {
+            x: 1484,
+            y: 3213,
+        },
+        NewPoint {
+            x: 1402,
+            y: 3149,
+        },
+        NewPoint {
+            x: 1493,
+            y: 3104,
+        },
+        NewPoint {
+            x: 1538,
+            y: 2995,
+        },
+        NewPoint {
+            x: 1757,
+            y: 3031,
+        },
+        NewPoint {
+            x: 1866,
+            y: 3104,
+        },
+        NewPoint {
+            x: 2066,
+            y: 3040,
+        },
+        NewPoint {
+            x: 1839,
+            y: 2885,
+        },
+        NewPoint {
+            x: 1766,
+            y: 2712,
+        },
+        NewPoint {
+            x: 1629,
+            y: 2712,
+        },
+        NewPoint {
+            x: 1465,
+            y: 2603,
+        },
+        NewPoint {
+            x: 1556,
+            y: 2521,
+        },
+        NewPoint {
+            x: 1402,
+            y: 2476,
+        },
+        NewPoint {
+            x: 1666,
+            y: 2330,
+        },
+        NewPoint {
+            x: 1629,
+            y: 2230,
+        },
+        NewPoint {
+            x: 1502,
+            y: 2212,
+        },
+        NewPoint {
+            x: 1229,
+            y: 2348,
+        },
+        NewPoint {
+            x: 1129,
+            y: 2248,
+        },
+        NewPoint {
+            x: 1347,
+            y: 2112,
+        },
+        NewPoint {
+            x: 1320,
+            y: 2039,
+        },
+        NewPoint {
+            x: 1247,
+            y: 2057,
+        },
+        NewPoint {
+            x: 1311,
+            y: 2030,
+        },
+        NewPoint {
+            x: 1356,
+            y: 2021,
+        },
+        NewPoint {
+            x: 1447,
+            y: 2012,
+        },
+        NewPoint {
+            x: 1475,
+            y: 1939,
+        },
+        NewPoint {
+            x: 1593,
+            y: 1902,
+        },
+        NewPoint {
+            x: 1566,
+            y: 1866,
+        },
+        NewPoint {
+            x: 1921,
+            y: 1875,
+        },
+        NewPoint {
+            x: 2121,
+            y: 1993,
+        },
+        NewPoint {
+            x: 2476,
+            y: 1839,
+        },
+        NewPoint {
+            x: 2731,
+            y: 1857,
+        },
+        NewPoint {
+            x: 2685,
+            y: 1857,
+        },
+        NewPoint {
+            x: 2658,
+            y: 2030,
+        },
+        NewPoint {
+            x: 2603,
+            y: 2075,
+        },
+        NewPoint {
+            x: 2366,
+            y: 2066,
+        },
+        NewPoint {
+            x: 2330,
+            y: 2130,
+        },
+        NewPoint {
+            x: 2285,
+            y: 2084,
+        },
+        NewPoint {
+            x: 2294,
+            y: 2166,
+        },
+        NewPoint {
+            x: 2339,
+            y: 2285,
+        },
+        NewPoint {
+            x: 2685,
+            y: 2439,
+        },
+        NewPoint {
+            x: 2640,
+            y: 2558,
+        },
+        NewPoint {
+            x: 2958,
+            y: 2485,
+        },
+        NewPoint {
+            x: 3058,
+            y: 2576,
+        },
+        NewPoint {
+            x: 3249,
+            y: 2576,
+        },
+        NewPoint {
+            x: 3204,
+            y: 2612,
+        },
+        NewPoint {
+            x: 3249,
+            y: 2621,
+        },
+        NewPoint {
+            x: 3022,
+            y: 2721,
+        },
+        NewPoint {
+            x: 2721,
+            y: 2776,
+        },
+        NewPoint {
+            x: 3131,
+            y: 2995,
+        },
+        NewPoint {
+            x: 3377,
+            y: 2721,
+        },
+        NewPoint {
+            x: 3595,
+            y: 2576,
+        },
+        NewPoint {
+            x: 3978,
+            y: 2494,
+        },
+        NewPoint {
+            x: 4069,
+            y: 2649,
+        },
+        NewPoint {
+            x: 4150,
+            y: 2649,
+        },
+        NewPoint {
+            x: 4141,
+            y: 2585,
+        },
+        NewPoint {
+            x: 4251,
+            y: 2530,
+        },
+        NewPoint {
+            x: 4114,
+            y: 2348,
+        },
+        NewPoint {
+            x: 4014,
+            y: 2330,
+        },
+        NewPoint {
+            x: 4041,
+            y: 2266,
+        },
+        NewPoint {
+            x: 3941,
+            y: 2103,
+        },
+        NewPoint {
+            x: 3686,
+            y: 1984,
+        },
+        NewPoint {
+            x: 3532,
+            y: 1802,
+        },
+        NewPoint {
+            x: 3532,
+            y: 1729,
+        },
+        NewPoint {
+            x: 3686,
+            y: 1748,
+        },
+        NewPoint {
+            x: 3759,
+            y: 1839,
+        },
+        NewPoint {
+            x: 3841,
+            y: 1802,
+        },
+        NewPoint {
+            x: 4141,
+            y: 1866,
+        },
+        NewPoint {
+            x: 4150,
+            y: 1975,
+        },
+        NewPoint {
+            x: 4232,
+            y: 1993,
+        },
+        NewPoint {
+            x: 4451,
+            y: 1948,
+        },
+        NewPoint {
+            x: 4496,
+            y: 1884,
+        },
+        NewPoint {
+            x: 4760,
+            y: 1857,
+        },
+        NewPoint {
+            x: 4806,
+            y: 1748,
+        },
+        NewPoint {
+            x: 4942,
+            y: 1839,
+        },
+        NewPoint {
+            x: 5088,
+            y: 1757,
+        },
+        NewPoint {
+            x: 5124,
+            y: 1638,
+        },
+        NewPoint {
+            x: 5015,
+            y: 1465,
+        },
+        NewPoint {
+            x: 5106,
+            y: 1411,
+        },
+        NewPoint {
+            x: 5024,
+            y: 1347,
+        },
+        NewPoint {
+            x: 5088,
+            y: 1338,
+        },
+        NewPoint {
+            x: 5252,
+            y: 1429,
+        },
+        NewPoint {
+            x: 5306,
+            y: 1383,
+        },
+        NewPoint {
+            x: 5225,
+            y: 1265,
+        },
+        NewPoint {
+            x: 5416,
+            y: 1411,
+        },
+        NewPoint {
+            x: 5407,
+            y: 1484,
+        },
+        NewPoint {
+            x: 5261,
+            y: 1502,
+        },
+        NewPoint {
+            x: 5416,
+            y: 1584,
+        },
+        NewPoint {
+            x: 5397,
+            y: 1602,
+        },
+        NewPoint {
+            x: 5316,
+            y: 1629,
+        },
+        NewPoint {
+            x: 5279,
+            y: 1666,
+        },
+        NewPoint {
+            x: 5170,
+            y: 1711,
+        },
+        NewPoint {
+            x: 5133,
+            y: 1839,
+        },
+        NewPoint {
+            x: 5042,
+            y: 1811,
+        },
+        NewPoint {
+            x: 5015,
+            y: 1884,
+        },
+        NewPoint {
+            x: 4860,
+            y: 1911,
+        },
+        NewPoint {
+            x: 4833,
+            y: 1866,
+        },
+        NewPoint {
+            x: 4624,
+            y: 1930,
+        },
+        NewPoint {
+            x: 4660,
+            y: 1948,
+        },
+        NewPoint {
+            x: 4578,
+            y: 2030,
+        },
+        NewPoint {
+            x: 4624,
+            y: 2075,
+        },
+        NewPoint {
+            x: 4897,
+            y: 2039,
+        },
+        NewPoint {
+            x: 4587,
+            y: 2203,
+        },
+        NewPoint {
+            x: 4906,
+            y: 2339,
+        },
+        NewPoint {
+            x: 5707,
+            y: 2084,
+        },
+        NewPoint {
+            x: 6508,
+            y: 2148,
+        },
+        NewPoint {
+            x: 6563,
+            y: 2166,
+        },
+        NewPoint {
+            x: 6490,
+            y: 2230,
+        },
+        NewPoint {
+            x: 6635,
+            y: 2339,
+        },
+        NewPoint {
+            x: 6462,
+            y: 2385,
+        },
+        NewPoint {
+            x: 6517,
+            y: 2430,
+        },
+        NewPoint {
+            x: 6626,
+            y: 2494,
+        },
+        NewPoint {
+            x: 6845,
+            y: 2376,
+        },
+        NewPoint {
+            x: 6963,
+            y: 2512,
+        },
+        NewPoint {
+            x: 7254,
+            y: 2703,
+        },
+        NewPoint {
+            x: 7227,
+            y: 2776,
+        },
+        NewPoint {
+            x: 7300,
+            y: 2867,
+        },
+        NewPoint {
+            x: 7482,
+            y: 2803,
+        },
+        NewPoint {
+            x: 7482,
+            y: 2740,
+        },
+        NewPoint {
+            x: 7582,
+            y: 2649,
+        },
+        NewPoint {
+            x: 7746,
+            y: 2649,
+        },
+        NewPoint {
+            x: 7746,
+            y: 2694,
+        },
+        NewPoint {
+            x: 7928,
+            y: 2785,
+        },
+        NewPoint {
+            x: 7746,
+            y: 2922,
+        },
+        NewPoint {
+            x: 7864,
+            y: 2922,
+        },
+        NewPoint {
+            x: 7891,
+            y: 3004,
+        },
+        NewPoint {
+            x: 7928,
+            y: 2995,
+        },
+        NewPoint {
+            x: 8183,
+            y: 2831,
+        },
+        NewPoint {
+            x: 8110,
+            y: 2703,
+        },
+        NewPoint {
+            x: 8346,
+            y: 2658,
+        },
+        NewPoint {
+            x: 8274,
+            y: 2612,
+        },
+        NewPoint {
+            x: 8319,
+            y: 2585,
+        },
+        NewPoint {
+            x: 8146,
+            y: 2630,
+        },
+        NewPoint {
+            x: 8028,
+            y: 2530,
+        },
+        NewPoint {
+            x: 8092,
+            y: 2448,
+        },
+        NewPoint {
+            x: 8237,
+            y: 2403,
+        },
+        NewPoint {
+            x: 8155,
+            y: 2321,
+        },
+        NewPoint {
+            x: 8092,
+            y: 2075,
+        },
+        NewPoint {
+            x: 7991,
+            y: 1993,
+        },
+        NewPoint {
+            x: 8028,
+            y: 1984,
+        },
+        NewPoint {
+            x: 8001,
+            y: 1939,
+        },
+        NewPoint {
+            x: 8055,
+            y: 1857,
+        },
+        NewPoint {
+            x: 8201,
+            y: 1820,
+        },
+        NewPoint {
+            x: 8310,
+            y: 1857,
+        },
+        NewPoint {
+            x: 8337,
+            y: 1820,
+        },
+        NewPoint {
+            x: 8019,
+            y: 1675,
+        },
+        NewPoint {
+            x: 8101,
+            y: 1675,
+        },
+        NewPoint {
+            x: 8073,
+            y: 1584,
+        },
+        NewPoint {
+            x: 7910,
+            y: 1647,
+        },
+        NewPoint {
+            x: 7964,
+            y: 1556,
+        },
+        NewPoint {
+            x: 8164,
+            y: 1456,
+        },
+        NewPoint {
+            x: 8019,
+            y: 1493,
+        },
+        NewPoint {
+            x: 7910,
+            y: 1438,
+        },
+        NewPoint {
+            x: 7964,
+            y: 1356,
+        },
+        NewPoint {
+            x: 7791,
+            y: 1256,
+        },
+        NewPoint {
+            x: 7828,
+            y: 1147,
+        },
+        NewPoint {
+            x: 7718,
+            y: 1274,
+        },
+        NewPoint {
+            x: 7718,
+            y: 1575,
+        },
+        NewPoint {
+            x: 7618,
+            y: 1538,
+        },
+        NewPoint {
+            x: 7591,
+            y: 1493,
+        },
+        NewPoint {
+            x: 7664,
+            y: 1438,
+        },
+        NewPoint {
+            x: 7591,
+            y: 1411,
+        },
+        NewPoint {
+            x: 7646,
+            y: 1365,
+        },
+        NewPoint {
+            x: 7627,
+            y: 1229,
+        },
+        NewPoint {
+            x: 7746,
+            y: 1101,
+        },
+        NewPoint {
+            x: 7527,
+            y: 1074,
+        },
+        NewPoint {
+            x: 7282,
+            y: 947,
+        },
+        NewPoint {
+            x: 7209,
+            y: 883,
+        },
+        NewPoint {
+            x: 7272,
+            y: 655,
+        },
+        NewPoint {
+            x: 7555,
+            y: 555,
+        },
+        NewPoint {
+            x: 7746,
+            y: 391,
+        },
+        NewPoint {
+            x: 7910,
+            y: 455,
+        },
+        NewPoint {
+            x: 7964,
+            y: 346,
+        },
+        NewPoint {
+            x: 7900,
+            y: 264,
+        },
+        NewPoint {
+            x: 8128,
+            y: 173,
+        },
+        NewPoint {
+            x: 8174,
+            y: 227,
+        },
+        NewPoint {
+            x: 8265,
+            y: 200,
+        },
+        NewPoint {
+            x: 8210,
+            y: 300,
+        },
+        NewPoint {
+            x: 8246,
+            y: 319,
+        },
+        NewPoint {
+            x: 8128,
+            y: 319,
+        },
+        NewPoint {
+            x: 8101,
+            y: 419,
+        },
+        NewPoint {
+            x: 8255,
+            y: 346,
+        },
+        NewPoint {
+            x: 8456,
+            y: 455,
+        },
+        NewPoint {
+            x: 8592,
+            y: 227,
+        },
+        NewPoint {
+            x: 8538,
+            y: 127,
+        },
+        NewPoint {
+            x: 8620,
+            y: 109,
+        },
+        NewPoint {
+            x: 8620,
+            y: 0,
+        },
+        NewPoint {
+            x: 8701,
+            y: 36,
+        },
+        NewPoint {
+            x: 8701,
+            y: 118,
+        },
+        NewPoint {
+            x: 8592,
+            y: 328,
+        },
+        NewPoint {
+            x: 8683,
+            y: 227,
+        },
+        NewPoint {
+            x: 8920,
+            y: 255,
+        },
+        NewPoint {
+            x: 9084,
+            y: 164,
+        },
+        NewPoint {
+            x: 9229,
+            y: 200,
+        },
+        NewPoint {
+            x: 9248,
+            y: 237,
+        },
+        NewPoint {
+            x: 9157,
+            y: 300,
+        },
+        NewPoint {
+            x: 9184,
+            y: 364,
+        },
+        NewPoint {
+            x: 9248,
+            y: 364,
+        },
+        NewPoint {
+            x: 9193,
+            y: 464,
+        },
+        NewPoint {
+            x: 9066,
+            y: 482,
+        },
+        NewPoint {
+            x: 9002,
+            y: 410,
+        },
+        NewPoint {
+            x: 8984,
+            y: 482,
+        },
+        NewPoint {
+            x: 8902,
+            y: 491,
+        },
+        NewPoint {
+            x: 8756,
+            y: 382,
+        },
+        NewPoint {
+            x: 8802,
+            y: 310,
+        },
+        NewPoint {
+            x: 8747,
+            y: 319,
+        },
+        NewPoint {
+            x: 8747,
+            y: 428,
+        },
+        NewPoint {
+            x: 8583,
+            y: 664,
+        },
+        NewPoint {
+            x: 8629,
+            y: 701,
+        },
+        NewPoint {
+            x: 8529,
+            y: 755,
+        },
+        NewPoint {
+            x: 8574,
+            y: 774,
+        },
+        NewPoint {
+            x: 8538,
+            y: 819,
+        },
+        NewPoint {
+            x: 8346,
+            y: 910,
+        },
+        NewPoint {
+            x: 8428,
+            y: 992,
+        },
+        NewPoint {
+            x: 8437,
+            y: 1083,
+        },
+        NewPoint {
+            x: 8392,
+            y: 1129,
+        },
+        NewPoint {
+            x: 8310,
+            y: 1110,
+        },
+        NewPoint {
+            x: 8237,
+            y: 1220,
+        },
+        NewPoint {
+            x: 8365,
+            y: 1274,
+        },
+        NewPoint {
+            x: 8465,
+            y: 1174,
+        },
+        NewPoint {
+            x: 8501,
+            y: 983,
+        },
+        NewPoint {
+            x: 8629,
+            y: 892,
+        },
+        NewPoint {
+            x: 8610,
+            y: 856,
+        },
+        NewPoint {
+            x: 8565,
+            y: 892,
+        },
+        NewPoint {
+            x: 8601,
+            y: 783,
+        },
+        NewPoint {
+            x: 8783,
+            y: 746,
+        },
+        NewPoint {
+            x: 8765,
+            y: 674,
+        },
+        NewPoint {
+            x: 8893,
+            y: 628,
+        },
+        NewPoint {
+            x: 8902,
+            y: 564,
+        },
+        NewPoint {
+            x: 9020,
+            y: 519,
+        },
+        NewPoint {
+            x: 9002,
+            y: 537,
+        },
+        NewPoint {
+            x: 8956,
+            y: 555,
+        },
+        NewPoint {
+            x: 8920,
+            y: 573,
+        },
+        NewPoint {
+            x: 8911,
+            y: 628,
+        },
+        NewPoint {
+            x: 8838,
+            y: 683,
+        },
+        NewPoint {
+            x: 8820,
+            y: 792,
+        },
+        NewPoint {
+            x: 9339,
+            y: 664,
+        },
+        NewPoint {
+            x: 9548,
+            y: 683,
+        },
+        NewPoint {
+            x: 9921,
+            y: 592,
+        },
+        NewPoint {
+            x: 10103,
+            y: 628,
+        },
+        NewPoint {
+            x: 10176,
+            y: 455,
+        },
+        NewPoint {
+            x: 10285,
+            y: 410,
+        },
+        NewPoint {
+            x: 10294,
+            y: 501,
+        },
+        NewPoint {
+            x: 10367,
+            y: 482,
+        },
+        NewPoint {
+            x: 10176,
+            y: 692,
+        },
+        NewPoint {
+            x: 10294,
+            y: 755,
+        },
+        NewPoint {
+            x: 10067,
+            y: 737,
+        },
+        NewPoint {
+            x: 10076,
+            y: 819,
+        },
+        NewPoint {
+            x: 10003,
+            y: 837,
+        },
+        NewPoint {
+            x: 10039,
+            y: 883,
+        },
+        NewPoint {
+            x: 9958,
+            y: 928,
+        },
+        NewPoint {
+            x: 9903,
+            y: 919,
+        },
+        NewPoint {
+            x: 9976,
+            y: 765,
+        },
+        NewPoint {
+            x: 9930,
+            y: 746,
+        },
+        NewPoint {
+            x: 9812,
+            y: 746,
+        },
+        NewPoint {
+            x: 9821,
+            y: 828,
+        },
+        NewPoint {
+            x: 9766,
+            y: 856,
+        },
+        NewPoint {
+            x: 9548,
+            y: 765,
+        },
+        NewPoint {
+            x: 9348,
+            y: 801,
+        },
+        NewPoint {
+            x: 9466,
+            y: 737,
+        },
+        NewPoint {
+            x: 9430,
+            y: 728,
+        },
+        NewPoint {
+            x: 9311,
+            y: 737,
+        },
+        NewPoint {
+            x: 9220,
+            y: 783,
+        },
+        NewPoint {
+            x: 9311,
+            y: 865,
+        },
+        NewPoint {
+            x: 9311,
+            y: 947,
+        },
+        NewPoint {
+            x: 9248,
+            y: 892,
+        },
+        NewPoint {
+            x: 8956,
+            y: 947,
+        },
+        NewPoint {
+            x: 8947,
+            y: 983,
+        },
+        NewPoint {
+            x: 9093,
+            y: 1056,
+        },
+        NewPoint {
+            x: 9029,
+            y: 1138,
+        },
+        NewPoint {
+            x: 8847,
+            y: 1147,
+        },
+        NewPoint {
+            x: 8747,
+            y: 1047,
+        },
+        NewPoint {
+            x: 8538,
+            y: 1183,
+        },
+        NewPoint {
+            x: 8538,
+            y: 1147,
+        },
+        NewPoint {
+            x: 8447,
+            y: 1311,
+        },
+        NewPoint {
+            x: 8447,
+            y: 1383,
+        },
+        NewPoint {
+            x: 8565,
+            y: 1502,
+        },
+        NewPoint {
+            x: 8756,
+            y: 1502,
+        },
+        NewPoint {
+            x: 8893,
+            y: 1584,
+        },
+        NewPoint {
+            x: 8802,
+            y: 1675,
+        },
+        NewPoint {
+            x: 8893,
+            y: 1684,
+        },
+        NewPoint {
+            x: 8865,
+            y: 1802,
+        },
+        NewPoint {
+            x: 8947,
+            y: 1902,
+        },
+        NewPoint {
+            x: 8902,
+            y: 1966,
+        },
+        NewPoint {
+            x: 8647,
+            y: 1902,
+        },
+        NewPoint {
+            x: 8601,
+            y: 1966,
+        },
+        NewPoint {
+            x: 8474,
+            y: 1957,
+        },
+        NewPoint {
+            x: 8437,
+            y: 2002,
+        },
+        NewPoint {
+            x: 8401,
+            y: 2112,
+        },
+        NewPoint {
+            x: 8729,
+            y: 2303,
+        },
+        NewPoint {
+            x: 8492,
+            y: 2357,
+        },
+        NewPoint {
+            x: 8629,
+            y: 2558,
+        },
+        NewPoint {
+            x: 9093,
+            y: 2767,
+        },
+        NewPoint {
+            x: 9238,
+            y: 2539,
+        },
+        NewPoint {
+            x: 9257,
+            y: 2294,
+        },
+        NewPoint {
+            x: 9466,
+            y: 2157,
+        },
+        NewPoint {
+            x: 9512,
+            y: 2166,
+        },
+        NewPoint {
+            x: 9484,
+            y: 2385,
+        },
+        NewPoint {
+            x: 9621,
+            y: 2476,
+        },
+        NewPoint {
+            x: 9630,
+            y: 2403,
+        },
+        NewPoint {
+            x: 9721,
+            y: 2503,
+        },
+        NewPoint {
+            x: 9757,
+            y: 2339,
+        },
+        NewPoint {
+            x: 9948,
+            y: 2303,
+        },
+        NewPoint {
+            x: 9894,
+            y: 2658,
+        },
+        NewPoint {
+            x: 9775,
+            y: 2649,
+        },
+        NewPoint {
+            x: 9730,
+            y: 2721,
+        },
+        NewPoint {
+            x: 9721,
+            y: 2676,
+        },
+        NewPoint {
+            x: 9684,
+            y: 2694,
+        },
+        NewPoint {
+            x: 9684,
+            y: 3013,
+        },
+        NewPoint {
+            x: 9566,
+            y: 2831,
+        },
+        NewPoint {
+            x: 9539,
+            y: 2931,
+        },
+        NewPoint {
+            x: 9439,
+            y: 2985,
+        },
+        NewPoint {
+            x: 9493,
+            y: 3177,
+        },
+        NewPoint {
+            x: 9229,
+            y: 3268,
+        },
+        NewPoint {
+            x: 9193,
+            y: 3331,
+        },
+        NewPoint {
+            x: 9120,
+            y: 3304,
+        },
+        NewPoint {
+            x: 9184,
+            y: 3413,
+        },
+        NewPoint {
+            x: 9157,
+            y: 3495,
+        },
+        NewPoint {
+            x: 9311,
+            y: 3586,
+        },
+        NewPoint {
+            x: 9238,
+            y: 3705,
+        },
+        NewPoint {
+            x: 9257,
+            y: 3741,
+        },
+        NewPoint {
+            x: 9311,
+            y: 3686,
+        },
+        NewPoint {
+            x: 9566,
+            y: 3741,
+        },
+        NewPoint {
+            x: 9730,
+            y: 3868,
+        },
+        NewPoint {
+            x: 9867,
+            y: 4105,
+        },
+        NewPoint {
+            x: 10140,
+            y: 4296,
+        },
+        NewPoint {
+            x: 9939,
+            y: 4460,
+        },
+        NewPoint {
+            x: 10085,
+            y: 4651,
+        },
+        NewPoint {
+            x: 9958,
+            y: 4715,
+        },
+        NewPoint {
+            x: 9757,
+            y: 4651,
+        },
+        NewPoint {
+            x: 9848,
+            y: 4706,
+        },
+        NewPoint {
+            x: 9721,
+            y: 4660,
+        },
+        NewPoint {
+            x: 9703,
+            y: 4569,
+        },
+        NewPoint {
+            x: 9630,
+            y: 4606,
+        },
+        NewPoint {
+            x: 9757,
+            y: 4769,
+        },
+        NewPoint {
+            x: 9712,
+            y: 4851,
+        },
+        NewPoint {
+            x: 9530,
+            y: 4742,
+        },
+        NewPoint {
+            x: 9302,
+            y: 4733,
+        },
+        NewPoint {
+            x: 9512,
+            y: 4951,
+        },
+        NewPoint {
+            x: 9703,
+            y: 5052,
+        },
+        NewPoint {
+            x: 9557,
+            y: 5170,
+        },
+        NewPoint {
+            x: 9339,
+            y: 5106,
+        },
+        NewPoint {
+            x: 9275,
+            y: 5215,
+        },
+        NewPoint {
+            x: 9047,
+            y: 5134,
+        },
+        NewPoint {
+            x: 9084,
+            y: 5243,
+        },
+        NewPoint {
+            x: 9311,
+            y: 5516,
+        },
+        NewPoint {
+            x: 8856,
+            y: 5534,
+        },
+        NewPoint {
+            x: 8874,
+            y: 5598,
+        },
+        NewPoint {
+            x: 9038,
+            y: 5616,
+        },
+        NewPoint {
+            x: 9029,
+            y: 5671,
+        },
+        NewPoint {
+            x: 9266,
+            y: 5607,
+        },
+        NewPoint {
+            x: 9411,
+            y: 5634,
+        },
+        NewPoint {
+            x: 9603,
+            y: 5834,
+        },
+        NewPoint {
+            x: 9557,
+            y: 5953,
+        },
+        NewPoint {
+            x: 9266,
+            y: 5953,
+        },
+        NewPoint {
+            x: 9275,
+            y: 6053,
+        },
+        NewPoint {
+            x: 9129,
+            y: 6089,
+        },
+        NewPoint {
+            x: 9056,
+            y: 5971,
+        },
+        NewPoint {
+            x: 8856,
+            y: 5871,
+        },
+        NewPoint {
+            x: 8638,
+            y: 5880,
+        },
+        NewPoint {
+            x: 8774,
+            y: 5962,
+        },
+        NewPoint {
+            x: 8656,
+            y: 6025,
+        },
+        NewPoint {
+            x: 8547,
+            y: 5998,
+        },
+        NewPoint {
+            x: 8410,
+            y: 6098,
+        },
+        NewPoint {
+            x: 8592,
+            y: 6189,
+        },
+        NewPoint {
+            x: 8483,
+            y: 6198,
+        },
+        NewPoint {
+            x: 8383,
+            y: 6353,
+        },
+        NewPoint {
+            x: 8073,
+            y: 6371,
+        },
+        NewPoint {
+            x: 8073,
+            y: 6490,
+        },
+        NewPoint {
+            x: 8237,
+            y: 6699,
+        },
+        NewPoint {
+            x: 8137,
+            y: 6735,
+        },
+        NewPoint {
+            x: 8101,
+            y: 6881,
+        },
+        NewPoint {
+            x: 7891,
+            y: 6954,
+        },
+        NewPoint {
+            x: 7891,
+            y: 7018,
+        },
+        NewPoint {
+            x: 8237,
+            y: 7054,
+        },
+        NewPoint {
+            x: 8392,
+            y: 6890,
+        },
+        NewPoint {
+            x: 8756,
+            y: 6781,
+        },
+        NewPoint {
+            x: 8838,
+            y: 6681,
+        },
+        NewPoint {
+            x: 8774,
+            y: 6644,
+        },
+        NewPoint {
+            x: 8811,
+            y: 6617,
+        },
+        NewPoint {
+            x: 9147,
+            y: 6553,
+        },
+        NewPoint {
+            x: 9275,
+            y: 6572,
+        },
+        NewPoint {
+            x: 9293,
+            y: 6544,
+        },
+        NewPoint {
+            x: 9439,
+            y: 6581,
+        },
+        NewPoint {
+            x: 9393,
+            y: 6526,
+        },
+        NewPoint {
+            x: 9430,
+            y: 6462,
+        },
+        NewPoint {
+            x: 9675,
+            y: 6453,
+        },
+        NewPoint {
+            x: 9639,
+            y: 6417,
+        },
+        NewPoint {
+            x: 9684,
+            y: 6362,
+        },
+        NewPoint {
+            x: 9821,
+            y: 6317,
+        },
+        NewPoint {
+            x: 9803,
+            y: 6198,
+        },
+        NewPoint {
+            x: 9894,
+            y: 6107,
+        },
+        NewPoint {
+            x: 10240,
+            y: 5989,
+        },
+        NewPoint {
+            x: 10085,
+            y: 5944,
+        },
+        NewPoint {
+            x: 10140,
+            y: 5898,
+        },
+        NewPoint {
+            x: 10604,
+            y: 5862,
+        },
+        NewPoint {
+            x: 10531,
+            y: 5789,
+        },
+        NewPoint {
+            x: 10540,
+            y: 5743,
+        },
+        NewPoint {
+            x: 10449,
+            y: 5752,
+        },
+        NewPoint {
+            x: 10422,
+            y: 5689,
+        },
+        NewPoint {
+            x: 10376,
+            y: 5734,
+        },
+        NewPoint {
+            x: 10094,
+            y: 5680,
+        },
+        NewPoint {
+            x: 10094,
+            y: 5625,
+        },
+        NewPoint {
+            x: 10240,
+            y: 5579,
+        },
+        NewPoint {
+            x: 10322,
+            y: 5461,
+        },
+        NewPoint {
+            x: 10440,
+            y: 5470,
+        },
+        NewPoint {
+            x: 10240,
+            y: 5316,
+        },
+        NewPoint {
+            x: 10349,
+            y: 5143,
+        },
+        NewPoint {
+            x: 10149,
+            y: 5288,
+        },
+        NewPoint {
+            x: 10085,
+            y: 5161,
+        },
+        NewPoint {
+            x: 10276,
+            y: 5061,
+        },
+        NewPoint {
+            x: 10576,
+            y: 5024,
+        },
+        NewPoint {
+            x: 10667,
+            y: 4970,
+        },
+        NewPoint {
+            x: 10376,
+            y: 4924,
+        },
+        NewPoint {
+            x: 10476,
+            y: 4669,
+        },
+        NewPoint {
+            x: 10449,
+            y: 4642,
+        },
+        NewPoint {
+            x: 10695,
+            y: 4678,
+        },
+        NewPoint {
+            x: 10895,
+            y: 4651,
+        },
+        NewPoint {
+            x: 11013,
+            y: 4578,
+        },
+        NewPoint {
+            x: 11141,
+            y: 4323,
+        },
+        NewPoint {
+            x: 11086,
+            y: 4150,
+        },
+        NewPoint {
+            x: 11041,
+            y: 4160,
+        },
+        NewPoint {
+            x: 11050,
+            y: 3932,
+        },
+        NewPoint {
+            x: 11150,
+            y: 3914,
+        },
+        NewPoint {
+            x: 11095,
+            y: 3859,
+        },
+        NewPoint {
+            x: 11305,
+            y: 3886,
+        },
+        NewPoint {
+            x: 11578,
+            y: 4050,
+        },
+        NewPoint {
+            x: 11578,
+            y: 4096,
+        },
+        NewPoint {
+            x: 11505,
+            y: 4105,
+        },
+        NewPoint {
+            x: 11569,
+            y: 4123,
+        },
+        NewPoint {
+            x: 11541,
+            y: 4296,
+        },
+        NewPoint {
+            x: 11414,
+            y: 4278,
+        },
+        NewPoint {
+            x: 11478,
+            y: 4414,
+        },
+        NewPoint {
+            x: 11478,
+            y: 4505,
+        },
+        NewPoint {
+            x: 11423,
+            y: 4533,
+        },
+        NewPoint {
+            x: 11523,
+            y: 4633,
+        },
+        NewPoint {
+            x: 11314,
+            y: 4733,
+        },
+        NewPoint {
+            x: 11341,
+            y: 4769,
+        },
+        NewPoint {
+            x: 11232,
+            y: 4797,
+        },
+        NewPoint {
+            x: 11332,
+            y: 4961,
+        },
+        NewPoint {
+            x: 11013,
+            y: 4979,
+        },
+        NewPoint {
+            x: 11150,
+            y: 5188,
+        },
+        NewPoint {
+            x: 11104,
+            y: 5224,
+        },
+        NewPoint {
+            x: 11168,
+            y: 5352,
+        },
+        NewPoint {
+            x: 11450,
+            y: 5552,
+        },
+        NewPoint {
+            x: 11396,
+            y: 5570,
+        },
+        NewPoint {
+            x: 11423,
+            y: 5634,
+        },
+        NewPoint {
+            x: 11350,
+            y: 5661,
+        },
+        NewPoint {
+            x: 11496,
+            y: 5880,
+        },
+        NewPoint {
+            x: 11960,
+            y: 6089,
+        },
+        NewPoint {
+            x: 12206,
+            y: 5953,
+        },
+        NewPoint {
+            x: 12269,
+            y: 5843,
+        },
+        NewPoint {
+            x: 12242,
+            y: 5807,
+        },
+        NewPoint {
+            x: 12306,
+            y: 5816,
+        },
+        NewPoint {
+            x: 12370,
+            y: 5707,
+        },
+        NewPoint {
+            x: 12570,
+            y: 5762,
+        },
+        NewPoint {
+            x: 12533,
+            y: 5716,
+        },
+        NewPoint {
+            x: 12588,
+            y: 5607,
+        },
+        NewPoint {
+            x: 12670,
+            y: 5725,
+        },
+        NewPoint {
+            x: 12770,
+            y: 5716,
+        },
+        NewPoint {
+            x: 12834,
+            y: 5607,
+        },
+        NewPoint {
+            x: 13143,
+            y: 5752,
+        },
+        NewPoint {
+            x: 12998,
+            y: 5625,
+        },
+        NewPoint {
+            x: 13116,
+            y: 5561,
+        },
+        NewPoint {
+            x: 13353,
+            y: 5552,
+        },
+        NewPoint {
+            x: 13353,
+            y: 5416,
+        },
+        NewPoint {
+            x: 13416,
+            y: 5470,
+        },
+        NewPoint {
+            x: 13407,
+            y: 5561,
+        },
+        NewPoint {
+            x: 13717,
+            y: 5643,
+        },
+        NewPoint {
+            x: 13771,
+            y: 5607,
+        },
+        NewPoint {
+            x: 13799,
+            y: 5671,
+        },
+        NewPoint {
+            x: 13971,
+            y: 5552,
+        },
+        NewPoint {
+            x: 13926,
+            y: 5616,
+        },
+        NewPoint {
+            x: 13999,
+            y: 5680,
+        },
+        NewPoint {
+            x: 14135,
+            y: 5734,
+        },
+        NewPoint {
+            x: 14235,
+            y: 5707,
+        },
+        NewPoint {
+            x: 14272,
+            y: 5816,
+        },
+        NewPoint {
+            x: 14181,
+            y: 5871,
+        },
+        NewPoint {
+            x: 14035,
+            y: 5789,
+        },
+        NewPoint {
+            x: 14090,
+            y: 5752,
+        },
+        NewPoint {
+            x: 13871,
+            y: 5725,
+        },
+        NewPoint {
+            x: 13844,
+            y: 5789,
+        },
+        NewPoint {
+            x: 13689,
+            y: 5789,
+        },
+        NewPoint {
+            x: 13753,
+            y: 5916,
+        },
+        NewPoint {
+            x: 13617,
+            y: 5989,
+        },
+        NewPoint {
+            x: 13762,
+            y: 6007,
+        },
+        NewPoint {
+            x: 13680,
+            y: 6135,
+        },
+        NewPoint {
+            x: 13416,
+            y: 6308,
+        },
+        NewPoint {
+            x: 13444,
+            y: 6362,
+        },
+        NewPoint {
+            x: 13598,
+            y: 6262,
+        },
+        NewPoint {
+            x: 13735,
+            y: 6308,
+        },
+        NewPoint {
+            x: 13835,
+            y: 6217,
+        },
+        NewPoint {
+            x: 13917,
+            y: 6253,
+        },
+        NewPoint {
+            x: 14053,
+            y: 6189,
+        },
+        NewPoint {
+            x: 14053,
+            y: 6116,
+        },
+        NewPoint {
+            x: 14135,
+            y: 6062,
+        },
+        NewPoint {
+            x: 14345,
+            y: 6107,
+        },
+        NewPoint {
+            x: 14272,
+            y: 5998,
+        },
+        NewPoint {
+            x: 14290,
+            y: 5925,
+        },
+        NewPoint {
+            x: 14427,
+            y: 5925,
+        },
+        NewPoint {
+            x: 14499,
+            y: 5971,
+        },
+        NewPoint {
+            x: 14490,
+            y: 5907,
+        },
+        NewPoint {
+            x: 14554,
+            y: 5880,
+        },
+        NewPoint {
+            x: 14536,
+            y: 5989,
+        },
+        NewPoint {
+            x: 14454,
+            y: 6007,
+        },
+        NewPoint {
+            x: 14508,
+            y: 6098,
+        },
+        NewPoint {
+            x: 14472,
+            y: 6135,
+        },
+        NewPoint {
+            x: 14654,
+            y: 6317,
+        },
+        NewPoint {
+            x: 14636,
+            y: 6253,
+        },
+        NewPoint {
+            x: 14590,
+            y: 6208,
+        },
+        NewPoint {
+            x: 14718,
+            y: 6126,
+        },
+        NewPoint {
+            x: 15091,
+            y: 6126,
+        },
+        NewPoint {
+            x: 15146,
+            y: 6053,
+        },
+        NewPoint {
+            x: 15036,
+            y: 5998,
+        },
+        NewPoint {
+            x: 15036,
+            y: 5962,
+        },
+        NewPoint {
+            x: 14827,
+            y: 5916,
+        },
+        NewPoint {
+            x: 14891,
+            y: 5880,
+        },
+        NewPoint {
+            x: 15046,
+            y: 5880,
+        },
+        NewPoint {
+            x: 14745,
+            y: 5698,
+        },
+        NewPoint {
+            x: 15036,
+            y: 5625,
+        },
+        NewPoint {
+            x: 15218,
+            y: 5780,
+        },
+        NewPoint {
+            x: 15164,
+            y: 5616,
+        },
+        NewPoint {
+            x: 14945,
+            y: 5525,
+        },
+        NewPoint {
+            x: 15300,
+            y: 5516,
+        },
+        NewPoint {
+            x: 15346,
+            y: 5407,
+        },
+        NewPoint {
+            x: 15701,
+            y: 5452,
+        },
+        NewPoint {
+            x: 15837,
+            y: 5607,
+        },
+        NewPoint {
+            x: 16001,
+            y: 5698,
+        },
+        NewPoint {
+            x: 16402,
+            y: 5762,
+        },
+        NewPoint {
+            x: 16666,
+            y: 5734,
+        },
+        NewPoint {
+            x: 16575,
+            y: 5798,
+        },
+        NewPoint {
+            x: 16584,
+            y: 5852,
+        },
+        NewPoint {
+            x: 16921,
+            y: 5816,
+        },
+        NewPoint {
+            x: 17048,
+            y: 5661,
+        },
+        NewPoint {
+            x: 16921,
+            y: 5516,
+        },
+        NewPoint {
+            x: 17166,
+            y: 5388,
+        },
+        NewPoint {
+            x: 17230,
+            y: 5297,
+        },
+        NewPoint {
+            x: 17512,
+            y: 5416,
+        },
+        NewPoint {
+            x: 17658,
+            y: 5370,
+        },
+        NewPoint {
+            x: 17649,
+            y: 5297,
+        },
+        NewPoint {
+            x: 17721,
+            y: 5179,
+        },
+        NewPoint {
+            x: 17530,
+            y: 5097,
+        },
+        NewPoint {
+            x: 17494,
+            y: 5015,
+        },
+        NewPoint {
+            x: 17640,
+            y: 4888,
+        },
+        NewPoint {
+            x: 17904,
+            y: 4951,
+        },
+        NewPoint {
+            x: 17849,
+            y: 4870,
+        },
+        NewPoint {
+            x: 17876,
+            y: 4751,
+        },
+        NewPoint {
+            x: 17776,
+            y: 4724,
+        },
+        NewPoint {
+            x: 18022,
+            y: 4505,
+        },
+        NewPoint {
+            x: 17940,
+            y: 4478,
+        },
+        NewPoint {
+            x: 17712,
+            y: 4651,
+        },
+        NewPoint {
+            x: 17685,
+            y: 4633,
+        },
+        NewPoint {
+            x: 17758,
+            y: 4578,
+        },
+        NewPoint {
+            x: 17512,
+            y: 4587,
+        },
+        NewPoint {
+            x: 17521,
+            y: 4615,
+        },
+        NewPoint {
+            x: 17394,
+            y: 4678,
+        },
+        NewPoint {
+            x: 17330,
+            y: 4597,
+        },
+        NewPoint {
+            x: 17257,
+            y: 4587,
+        },
+        NewPoint {
+            x: 17330,
+            y: 4542,
+        },
+        NewPoint {
+            x: 17312,
+            y: 4505,
+        },
+        NewPoint {
+            x: 17685,
+            y: 4542,
+        },
+        NewPoint {
+            x: 17794,
+            y: 4469,
+        },
+        NewPoint {
+            x: 17922,
+            y: 4251,
+        },
+        NewPoint {
+            x: 17776,
+            y: 4196,
+        },
+        NewPoint {
+            x: 17667,
+            y: 4278,
+        },
+        NewPoint {
+            x: 17558,
+            y: 4150,
+        },
+        NewPoint {
+            x: 17712,
+            y: 3932,
+        },
+        NewPoint {
+            x: 17549,
+            y: 3996,
+        },
+        NewPoint {
+            x: 17594,
+            y: 3923,
+        },
+        NewPoint {
+            x: 17503,
+            y: 3950,
+        },
+        NewPoint {
+            x: 17467,
+            y: 3868,
+        },
+        NewPoint {
+            x: 17412,
+            y: 3968,
+        },
+        NewPoint {
+            x: 17203,
+            y: 3923,
+        },
+        NewPoint {
+            x: 16902,
+            y: 3987,
+        },
+        NewPoint {
+            x: 16720,
+            y: 3978,
+        },
+        NewPoint {
+            x: 16629,
+            y: 3786,
+        },
+        NewPoint {
+            x: 16729,
+            y: 3768,
+        },
+        NewPoint {
+            x: 16666,
+            y: 3632,
+        },
+        NewPoint {
+            x: 16702,
+            y: 3559,
+        },
+        NewPoint {
+            x: 16875,
+            y: 3486,
+        },
+        NewPoint {
+            x: 16984,
+            y: 3568,
+        },
+        NewPoint {
+            x: 16984,
+            y: 3504,
+        },
+        NewPoint {
+            x: 17075,
+            y: 3541,
+        },
+        NewPoint {
+            x: 17157,
+            y: 3495,
+        },
+        NewPoint {
+            x: 17021,
+            y: 3477,
+        },
+        NewPoint {
+            x: 17002,
+            y: 3386,
+        },
+        NewPoint {
+            x: 17294,
+            y: 3331,
+        },
+        NewPoint {
+            x: 17439,
+            y: 3395,
+        },
+        NewPoint {
+            x: 17312,
+            y: 3258,
+        },
+        NewPoint {
+            x: 17103,
+            y: 3277,
+        },
+        NewPoint {
+            x: 17257,
+            y: 3140,
+        },
+        NewPoint {
+            x: 17194,
+            y: 3158,
+        },
+        NewPoint {
+            x: 17121,
+            y: 3067,
+        },
+        NewPoint {
+            x: 17066,
+            y: 3076,
+        },
+        NewPoint {
+            x: 16738,
+            y: 3231,
+        },
+        NewPoint {
+            x: 16502,
+            y: 3249,
+        },
+        NewPoint {
+            x: 16475,
+            y: 3204,
+        },
+        NewPoint {
+            x: 16611,
+            y: 3113,
+        },
+        NewPoint {
+            x: 16302,
+            y: 3076,
+        },
+        NewPoint {
+            x: 16183,
+            y: 2949,
+        },
+        NewPoint {
+            x: 16201,
+            y: 3067,
+        },
+        NewPoint {
+            x: 16311,
+            y: 3195,
+        },
+        NewPoint {
+            x: 16001,
+            y: 3231,
+        },
+        NewPoint {
+            x: 16010,
+            y: 3340,
+        },
+        NewPoint {
+            x: 16129,
+            y: 3422,
+        },
+        NewPoint {
+            x: 16265,
+            y: 3422,
+        },
+        NewPoint {
+            x: 16420,
+            y: 3495,
+        },
+        NewPoint {
+            x: 16529,
+            y: 3459,
+        },
+        NewPoint {
+            x: 16611,
+            y: 3513,
+        },
+        NewPoint {
+            x: 16502,
+            y: 3595,
+        },
+        NewPoint {
+            x: 16393,
+            y: 3532,
+        },
+        NewPoint {
+            x: 16320,
+            y: 3777,
+        },
+        NewPoint {
+            x: 16120,
+            y: 3723,
+        },
+        NewPoint {
+            x: 16038,
+            y: 3613,
+        },
+        NewPoint {
+            x: 15865,
+            y: 3522,
+        },
+        NewPoint {
+            x: 15792,
+            y: 3632,
+        },
+        NewPoint {
+            x: 15692,
+            y: 3541,
+        },
+        NewPoint {
+            x: 15646,
+            y: 3586,
+        },
+        NewPoint {
+            x: 15391,
+            y: 3231,
+        },
+        NewPoint {
+            x: 15246,
+            y: 3258,
+        },
+        NewPoint {
+            x: 15137,
+            y: 3422,
+        },
+        NewPoint {
+            x: 15419,
+            y: 3532,
+        },
+        NewPoint {
+            x: 15400,
+            y: 3623,
+        },
+        NewPoint {
+            x: 15191,
+            y: 3532,
+        },
+        NewPoint {
+            x: 15446,
+            y: 3714,
+        },
+        NewPoint {
+            x: 15382,
+            y: 3705,
+        },
+        NewPoint {
+            x: 15319,
+            y: 3659,
+        },
+        NewPoint {
+            x: 15519,
+            y: 3959,
+        },
+        NewPoint {
+            x: 15382,
+            y: 4096,
+        },
+        NewPoint {
+            x: 15382,
+            y: 4160,
+        },
+        NewPoint {
+            x: 15482,
+            y: 4232,
+        },
+        NewPoint {
+            x: 15446,
+            y: 4132,
+        },
+        NewPoint {
+            x: 15746,
+            y: 4205,
+        },
+        NewPoint {
+            x: 16056,
+            y: 4087,
+        },
+        NewPoint {
+            x: 16329,
+            y: 4205,
+        },
+        NewPoint {
+            x: 16156,
+            y: 4287,
+        },
+        NewPoint {
+            x: 16174,
+            y: 4323,
+        },
+        NewPoint {
+            x: 16311,
+            y: 4323,
+        },
+        NewPoint {
+            x: 16247,
+            y: 4442,
+        },
+        NewPoint {
+            x: 16302,
+            y: 4524,
+        },
+        NewPoint {
+            x: 16192,
+            y: 4478,
+        },
+        NewPoint {
+            x: 16029,
+            y: 4505,
+        },
+        NewPoint {
+            x: 16047,
+            y: 4606,
+        },
+        NewPoint {
+            x: 16238,
+            y: 4779,
+        },
+        NewPoint {
+            x: 16256,
+            y: 4851,
+        },
+        NewPoint {
+            x: 16010,
+            y: 4651,
+        },
+        NewPoint {
+            x: 15983,
+            y: 4524,
+        },
+        NewPoint {
+            x: 15783,
+            y: 4396,
+        },
+        NewPoint {
+            x: 15692,
+            y: 4433,
+        },
+        NewPoint {
+            x: 15710,
+            y: 4487,
+        },
+        NewPoint {
+            x: 15537,
+            y: 4542,
+        },
+        NewPoint {
+            x: 15346,
+            y: 4387,
+        },
+        NewPoint {
+            x: 15255,
+            y: 4487,
+        },
+        NewPoint {
+            x: 15364,
+            y: 4533,
+        },
+        NewPoint {
+            x: 15291,
+            y: 4615,
+        },
+        NewPoint {
+            x: 15228,
+            y: 4542,
+        },
+        NewPoint {
+            x: 15064,
+            y: 4615,
+        },
+        NewPoint {
+            x: 15182,
+            y: 4669,
+        },
+        NewPoint {
+            x: 15146,
+            y: 4724,
+        },
+        NewPoint {
+            x: 15237,
+            y: 4715,
+        },
+        NewPoint {
+            x: 15218,
+            y: 4678,
+        },
+        NewPoint {
+            x: 15328,
+            y: 4724,
+        },
+        NewPoint {
+            x: 15328,
+            y: 4870,
+        },
+        NewPoint {
+            x: 15410,
+            y: 5024,
+        },
+        NewPoint {
+            x: 15218,
+            y: 5106,
+        },
+        NewPoint {
+            x: 15018,
+            y: 5079,
+        },
+        NewPoint {
+            x: 15064,
+            y: 5006,
+        },
+        NewPoint {
+            x: 14827,
+            y: 5079,
+        },
+        NewPoint {
+            x: 14709,
+            y: 5042,
+        },
+        NewPoint {
+            x: 14636,
+            y: 4915,
+        },
+        NewPoint {
+            x: 14718,
+            y: 4815,
+        },
+        NewPoint {
+            x: 14590,
+            y: 4624,
+        },
+        NewPoint {
+            x: 14545,
+            y: 4460,
+        },
+        NewPoint {
+            x: 14627,
+            y: 4424,
+        },
+        NewPoint {
+            x: 14445,
+            y: 4178,
+        },
+        NewPoint {
+            x: 14463,
+            y: 4005,
+        },
+        NewPoint {
+            x: 14263,
+            y: 4014,
+        },
+        NewPoint {
+            x: 14336,
+            y: 4050,
+        },
+        NewPoint {
+            x: 14354,
+            y: 4205,
+        },
+        NewPoint {
+            x: 14154,
+            y: 3905,
+        },
+        NewPoint {
+            x: 14499,
+            y: 3868,
+        },
+        NewPoint {
+            x: 14763,
+            y: 3714,
+        },
+        NewPoint {
+            x: 14954,
+            y: 3777,
+        },
+        NewPoint {
+            x: 14800,
+            y: 3632,
+        },
+        NewPoint {
+            x: 14900,
+            y: 3559,
+        },
+        NewPoint {
+            x: 14299,
+            y: 3395,
+        },
+        NewPoint {
+            x: 14245,
+            y: 3322,
+        },
+        NewPoint {
+            x: 14372,
+            y: 3240,
+        },
+        NewPoint {
+            x: 14135,
+            y: 3258,
+        },
+        NewPoint {
+            x: 14181,
+            y: 3049,
+        },
+        NewPoint {
+            x: 14408,
+            y: 2913,
+        },
+        NewPoint {
+            x: 14281,
+            y: 2876,
+        },
+        NewPoint {
+            x: 14208,
+            y: 2913,
+        },
+        NewPoint {
+            x: 14245,
+            y: 2885,
+        },
+        NewPoint {
+            x: 14053,
+            y: 2803,
+        },
+        NewPoint {
+            x: 14144,
+            y: 2749,
+        },
+        NewPoint {
+            x: 14417,
+            y: 2758,
+        },
+        NewPoint {
+            x: 14445,
+            y: 2721,
+        },
+        NewPoint {
+            x: 14399,
+            y: 2658,
+        },
+        NewPoint {
+            x: 14490,
+            y: 2640,
+        },
+        NewPoint {
+            x: 14545,
+            y: 2558,
+        },
+        NewPoint {
+            x: 14609,
+            y: 2585,
+        },
+        NewPoint {
+            x: 14590,
+            y: 2530,
+        },
+        NewPoint {
+            x: 14681,
+            y: 2494,
+        },
+        NewPoint {
+            x: 14654,
+            y: 2476,
+        },
+        NewPoint {
+            x: 14718,
+            y: 2412,
+        },
+        NewPoint {
+            x: 15127,
+            y: 2303,
+        },
+        NewPoint {
+            x: 15501,
+            y: 2321,
+        },
+        NewPoint {
+            x: 15765,
+            y: 2166,
+        },
+        NewPoint {
+            x: 15774,
+            y: 2039,
+        },
+        NewPoint {
+            x: 15919,
+            y: 2021,
+        },
+        NewPoint {
+            x: 16074,
+            y: 1820,
+        },
+        NewPoint {
+            x: 16593,
+            y: 2048,
+        },
+        NewPoint {
+            x: 16775,
+            y: 1948,
+        },
+        NewPoint {
+            x: 16784,
+            y: 1875,
+        },
+        NewPoint {
+            x: 16839,
+            y: 1893,
+        },
+        NewPoint {
+            x: 16784,
+            y: 1748,
+        },
+        NewPoint {
+            x: 16848,
+            y: 1748,
+        },
+        NewPoint {
+            x: 16784,
+            y: 1702,
+        },
+        NewPoint {
+            x: 16829,
+            y: 1657,
+        },
+        NewPoint {
+            x: 16702,
+            y: 1575,
+        },
+        NewPoint {
+            x: 16711,
+            y: 1702,
+        },
+        NewPoint {
+            x: 16666,
+            y: 1711,
+        },
+        NewPoint {
+            x: 16629,
+            y: 1575,
+        },
+        NewPoint {
+            x: 16529,
+            y: 1502,
+        },
+        NewPoint {
+            x: 16702,
+            y: 1475,
+        },
+        NewPoint {
+            x: 16829,
+            y: 1374,
+        },
+        NewPoint {
+            x: 16784,
+            y: 1347,
+        },
+        NewPoint {
+            x: 16802,
+            y: 1283,
+        },
+        NewPoint {
+            x: 16566,
+            y: 1256,
+        },
+        NewPoint {
+            x: 16429,
+            y: 1110,
+        },
+        NewPoint {
+            x: 16374,
+            y: 1138,
+        },
+        NewPoint {
+            x: 16292,
+            y: 1019,
+        },
+        NewPoint {
+            x: 16129,
+            y: 947,
+        },
+        NewPoint {
+            x: 16174,
+            y: 947,
+        },
+        NewPoint {
+            x: 16220,
+            y: 965,
+        },
+        NewPoint {
+            x: 16229,
+            y: 956,
+        },
+        NewPoint {
+            x: 16138,
+            y: 938,
+        },
+        NewPoint {
+            x: 16201,
+            y: 828,
+        },
+        NewPoint {
+            x: 16229,
+            y: 865,
+        },
+        NewPoint {
+            x: 16220,
+            y: 792,
+        },
+        NewPoint {
+            x: 16247,
+            y: 865,
+        },
+        NewPoint {
+            x: 16402,
+            y: 719,
+        },
+        NewPoint {
+            x: 16292,
+            y: 828,
+        },
+        NewPoint {
+            x: 16302,
+            y: 910,
+        },
+        NewPoint {
+            x: 16502,
+            y: 856,
+        },
+        NewPoint {
+            x: 16748,
+            y: 947,
+        },
+        NewPoint {
+            x: 16811,
+            y: 919,
+        },
+        NewPoint {
+            x: 16802,
+            y: 1019,
+        },
+        NewPoint {
+            x: 16720,
+            y: 1056,
+        },
+        NewPoint {
+            x: 16748,
+            y: 1138,
+        },
+        NewPoint {
+            x: 16848,
+            y: 1120,
+        },
+        NewPoint {
+            x: 16911,
+            y: 965,
+        },
+        NewPoint {
+            x: 16984,
+            y: 910,
+        },
+        NewPoint {
+            x: 17075,
+            y: 1010,
+        },
+        NewPoint {
+            x: 17066,
+            y: 1056,
+        },
+        NewPoint {
+            x: 17157,
+            y: 1038,
+        },
+        NewPoint {
+            x: 17239,
+            y: 992,
+        },
+        NewPoint {
+            x: 17203,
+            y: 901,
+        },
+        NewPoint {
+            x: 17266,
+            y: 874,
+        },
+        NewPoint {
+            x: 17248,
+            y: 810,
+        },
+        NewPoint {
+            x: 17467,
+            y: 774,
+        },
+        NewPoint {
+            x: 17530,
+            y: 674,
+        },
+        NewPoint {
+            x: 17767,
+            y: 719,
+        },
+        NewPoint {
+            x: 17612,
+            y: 819,
+        },
+        NewPoint {
+            x: 17694,
+            y: 856,
+        },
+        NewPoint {
+            x: 17667,
+            y: 992,
+        },
+        NewPoint {
+            x: 17894,
+            y: 1038,
+        },
+        NewPoint {
+            x: 17803,
+            y: 1074,
+        },
+        NewPoint {
+            x: 17831,
+            y: 1147,
+        },
+        NewPoint {
+            x: 17676,
+            y: 1247,
+        },
+        NewPoint {
+            x: 17803,
+            y: 1302,
+        },
+        NewPoint {
+            x: 17858,
+            y: 1174,
+        },
+        NewPoint {
+            x: 17931,
+            y: 1220,
+        },
+        NewPoint {
+            x: 18022,
+            y: 1201,
+        },
+        NewPoint {
+            x: 18049,
+            y: 1283,
+        },
+        NewPoint {
+            x: 18022,
+            y: 1365,
+        },
+        NewPoint {
+            x: 18195,
+            y: 1374,
+        },
+        NewPoint {
+            x: 18140,
+            y: 1465,
+        },
+        NewPoint {
+            x: 17840,
+            y: 1566,
+        },
+        NewPoint {
+            x: 17894,
+            y: 1465,
+        },
+        NewPoint {
+            x: 17685,
+            y: 1538,
+        },
+        NewPoint {
+            x: 17640,
+            y: 1502,
+        },
+        NewPoint {
+            x: 17549,
+            y: 1647,
+        },
+        NewPoint {
+            x: 17385,
+            y: 1702,
+        },
+        NewPoint {
+            x: 17430,
+            y: 1739,
+        },
+        NewPoint {
+            x: 17366,
+            y: 1748,
+        },
+        NewPoint {
+            x: 17357,
+            y: 1848,
+        },
+        NewPoint {
+            x: 17412,
+            y: 1911,
+        },
+        NewPoint {
+            x: 17458,
+            y: 1848,
+        },
+        NewPoint {
+            x: 17603,
+            y: 1866,
+        },
+        NewPoint {
+            x: 17512,
+            y: 1911,
+        },
+        NewPoint {
+            x: 17539,
+            y: 2002,
+        },
+        NewPoint {
+            x: 17421,
+            y: 2039,
+        },
+        NewPoint {
+            x: 17357,
+            y: 2139,
+        },
+        NewPoint {
+            x: 17530,
+            y: 2175,
+        },
+        NewPoint {
+            x: 17321,
+            y: 2175,
+        },
+        NewPoint {
+            x: 17294,
+            y: 2121,
+        },
+        NewPoint {
+            x: 17285,
+            y: 2221,
+        },
+        NewPoint {
+            x: 17330,
+            y: 2248,
+        },
+        NewPoint {
+            x: 17294,
+            y: 2285,
+        },
+        NewPoint {
+            x: 17467,
+            y: 2285,
+        },
+        NewPoint {
+            x: 17448,
+            y: 2330,
+        },
+        NewPoint {
+            x: 17649,
+            y: 2485,
+        },
+        NewPoint {
+            x: 17867,
+            y: 2321,
+        },
+        NewPoint {
+            x: 17885,
+            y: 2230,
+        },
+        NewPoint {
+            x: 17904,
+            y: 2294,
+        },
+        NewPoint {
+            x: 18031,
+            y: 2367,
+        },
+        NewPoint {
+            x: 18004,
+            y: 2339,
+        },
+        NewPoint {
+            x: 18213,
+            y: 2357,
+        },
+        NewPoint {
+            x: 18340,
+            y: 2312,
+        },
+        NewPoint {
+            x: 18067,
+            y: 2276,
+        },
+        NewPoint {
+            x: 18095,
+            y: 2148,
+        },
+        NewPoint {
+            x: 18022,
+            y: 2148,
+        },
+        NewPoint {
+            x: 18195,
+            y: 2057,
+        },
+        NewPoint {
+            x: 18158,
+            y: 1966,
+        },
+        NewPoint {
+            x: 18541,
+            y: 1611,
+        },
+        NewPoint {
+            x: 18422,
+            y: 1475,
+        },
+        NewPoint {
+            x: 18468,
+            y: 1393,
+        },
+        NewPoint {
+            x: 18304,
+            y: 1411,
+        },
+        NewPoint {
+            x: 18413,
+            y: 1183,
+        },
+        NewPoint {
+            x: 18486,
+            y: 1211,
+        },
+        NewPoint {
+            x: 18704,
+            y: 1110,
+        },
+        NewPoint {
+            x: 18868,
+            y: 1147,
+        },
+        NewPoint {
+            x: 18850,
+            y: 1028,
+        },
+        NewPoint {
+            x: 19059,
+            y: 965,
+        },
+        NewPoint {
+            x: 18768,
+            y: 956,
+        },
+        NewPoint {
+            x: 18759,
+            y: 874,
+        },
+        NewPoint {
+            x: 19169,
+            y: 901,
+        },
+        NewPoint {
+            x: 19369,
+            y: 1265,
+        },
+        NewPoint {
+            x: 19360,
+            y: 1311,
+        },
+        NewPoint {
+            x: 19141,
+            y: 1374,
+        },
+        NewPoint {
+            x: 19487,
+            y: 1484,
+        },
+        NewPoint {
+            x: 19505,
+            y: 1647,
+        },
+        NewPoint {
+            x: 19542,
+            y: 1602,
+        },
+        NewPoint {
+            x: 19669,
+            y: 1666,
+        },
+        NewPoint {
+            x: 19633,
+            y: 1620,
+        },
+        NewPoint {
+            x: 19651,
+            y: 1502,
+        },
+        NewPoint {
+            x: 19678,
+            y: 1438,
+        },
+        NewPoint {
+            x: 19678,
+            y: 1502,
+        },
+        NewPoint {
+            x: 19706,
+            y: 1447,
+        },
+        NewPoint {
+            x: 19769,
+            y: 1475,
+        },
+        NewPoint {
+            x: 19724,
+            y: 1347,
+        },
+        NewPoint {
+            x: 19769,
+            y: 1320,
+        },
+        NewPoint {
+            x: 19788,
+            y: 1429,
+        },
+        NewPoint {
+            x: 20188,
+            y: 1647,
+        },
+        NewPoint {
+            x: 20161,
+            y: 1684,
+        },
+        NewPoint {
+            x: 19888,
+            y: 1638,
+        },
+        NewPoint {
+            x: 19788,
+            y: 1675,
+        },
+        NewPoint {
+            x: 19897,
+            y: 1657,
+        },
+        NewPoint {
+            x: 20015,
+            y: 1702,
+        },
+        NewPoint {
+            x: 19888,
+            y: 1675,
+        },
+        NewPoint {
+            x: 19760,
+            y: 1739,
+        },
+        NewPoint {
+            x: 19779,
+            y: 1802,
+        },
+        NewPoint {
+            x: 19879,
+            y: 1811,
+        },
+        NewPoint {
+            x: 19842,
+            y: 1829,
+        },
+        NewPoint {
+            x: 19851,
+            y: 1975,
+        },
+        NewPoint {
+            x: 19669,
+            y: 2012,
+        },
+        NewPoint {
+            x: 20370,
+            y: 2112,
+        },
+        NewPoint {
+            x: 20316,
+            y: 2175,
+        },
+        NewPoint {
+            x: 20352,
+            y: 2303,
+        },
+        NewPoint {
+            x: 20279,
+            y: 2394,
+        },
+        NewPoint {
+            x: 20416,
+            y: 2394,
+        },
+        NewPoint {
+            x: 20479,
+            y: 2339,
+        },
+        NewPoint {
+            x: 20561,
+            y: 2439,
+        },
+        NewPoint {
+            x: 20516,
+            y: 2485,
+        },
+        NewPoint {
+            x: 20589,
+            y: 2476,
+        },
+        NewPoint {
+            x: 20671,
+            y: 2549,
+        },
+        NewPoint {
+            x: 20652,
+            y: 2721,
+        },
+        NewPoint {
+            x: 20598,
+            y: 2767,
+        },
+        NewPoint {
+            x: 20661,
+            y: 2803,
+        },
+        NewPoint {
+            x: 20525,
+            y: 2840,
+        },
+        NewPoint {
+            x: 20762,
+            y: 3086,
+        },
+        NewPoint {
+            x: 20971,
+            y: 3513,
+        },
+        NewPoint {
+            x: 20907,
+            y: 3577,
+        },
+        NewPoint {
+            x: 20962,
+            y: 3650,
+        },
+        NewPoint {
+            x: 20843,
+            y: 3686,
+        },
+        NewPoint {
+            x: 20989,
+            y: 3732,
+        },
+        NewPoint {
+            x: 20953,
+            y: 3841,
+        },
+        NewPoint {
+            x: 20780,
+            y: 3859,
+        },
+        NewPoint {
+            x: 20762,
+            y: 3805,
+        },
+        NewPoint {
+            x: 20725,
+            y: 3896,
+        },
+        NewPoint {
+            x: 20643,
+            y: 3868,
+        },
+        NewPoint {
+            x: 20625,
+            y: 3914,
+        },
+        NewPoint {
+            x: 20388,
+            y: 3859,
+        },
+        NewPoint {
+            x: 20425,
+            y: 3932,
+        },
+        NewPoint {
+            x: 20643,
+            y: 4005,
+        },
+        NewPoint {
+            x: 20716,
+            y: 3968,
+        },
+        NewPoint {
+            x: 20798,
+            y: 4041,
+        },
+        NewPoint {
+            x: 20716,
+            y: 4160,
+        },
+        NewPoint {
+            x: 20643,
+            y: 4096,
+        },
+        NewPoint {
+            x: 20570,
+            y: 4169,
+        },
+        NewPoint {
+            x: 20534,
+            y: 4260,
+        },
+        NewPoint {
+            x: 20589,
+            y: 4369,
+        },
+        NewPoint {
+            x: 20370,
+            y: 4360,
+        },
+        NewPoint {
+            x: 20479,
+            y: 4396,
+        },
+        NewPoint {
+            x: 20306,
+            y: 4451,
+        },
+        NewPoint {
+            x: 20288,
+            y: 4533,
+        },
+        NewPoint {
+            x: 20534,
+            y: 4542,
+        },
+        NewPoint {
+            x: 20479,
+            y: 4615,
+        },
+        NewPoint {
+            x: 20871,
+            y: 4697,
+        },
+        NewPoint {
+            x: 20816,
+            y: 4779,
+        },
+        NewPoint {
+            x: 20916,
+            y: 4833,
+        },
+        NewPoint {
+            x: 20807,
+            y: 4824,
+        },
+        NewPoint {
+            x: 20789,
+            y: 4879,
+        },
+        NewPoint {
+            x: 20853,
+            y: 4951,
+        },
+        NewPoint {
+            x: 20971,
+            y: 4979,
+        },
+        NewPoint {
+            x: 20807,
+            y: 5106,
+        },
+        NewPoint {
+            x: 20707,
+            y: 5124,
+        },
+        NewPoint {
+            x: 20625,
+            y: 4979,
+        },
+        NewPoint {
+            x: 20243,
+            y: 4997,
+        },
+        NewPoint {
+            x: 20170,
+            y: 5088,
+        },
+        NewPoint {
+            x: 20215,
+            y: 5170,
+        },
+        NewPoint {
+            x: 20143,
+            y: 5215,
+        },
+        NewPoint {
+            x: 19961,
+            y: 5106,
+        },
+        NewPoint {
+            x: 19942,
+            y: 5188,
+        },
+        NewPoint {
+            x: 20152,
+            y: 5243,
+        },
+        NewPoint {
+            x: 19924,
+            y: 5279,
+        },
+        NewPoint {
+            x: 19733,
+            y: 5461,
+        },
+        NewPoint {
+            x: 19779,
+            y: 5525,
+        },
+        NewPoint {
+            x: 19979,
+            y: 5552,
+        },
+        NewPoint {
+            x: 19906,
+            y: 5579,
+        },
+        NewPoint {
+            x: 20042,
+            y: 5798,
+        },
+        NewPoint {
+            x: 19961,
+            y: 5834,
+        },
+        NewPoint {
+            x: 19870,
+            y: 6044,
+        },
+        NewPoint {
+            x: 19788,
+            y: 6098,
+        },
+        NewPoint {
+            x: 19469,
+            y: 6044,
+        },
+        NewPoint {
+            x: 19451,
+            y: 5989,
+        },
+        NewPoint {
+            x: 19606,
+            y: 5916,
+        },
+        NewPoint {
+            x: 19196,
+            y: 5925,
+        },
+        NewPoint {
+            x: 19333,
+            y: 5798,
+        },
+        NewPoint {
+            x: 19305,
+            y: 5661,
+        },
+        NewPoint {
+            x: 19123,
+            y: 5570,
+        },
+        NewPoint {
+            x: 19105,
+            y: 5488,
+        },
+        NewPoint {
+            x: 19323,
+            y: 5416,
+        },
+        NewPoint {
+            x: 19269,
+            y: 5398,
+        },
+        NewPoint {
+            x: 19314,
+            y: 5370,
+        },
+        NewPoint {
+            x: 19278,
+            y: 5316,
+        },
+        NewPoint {
+            x: 19469,
+            y: 5325,
+        },
+        NewPoint {
+            x: 19114,
+            y: 5261,
+        },
+        NewPoint {
+            x: 19123,
+            y: 5188,
+        },
+        NewPoint {
+            x: 19087,
+            y: 5152,
+        },
+        NewPoint {
+            x: 19160,
+            y: 5097,
+        },
+        NewPoint {
+            x: 18968,
+            y: 5106,
+        },
+        NewPoint {
+            x: 18950,
+            y: 4988,
+        },
+        NewPoint {
+            x: 19132,
+            y: 4924,
+        },
+        NewPoint {
+            x: 19005,
+            y: 4851,
+        },
+        NewPoint {
+            x: 19041,
+            y: 4788,
+        },
+        NewPoint {
+            x: 18868,
+            y: 4806,
+        },
+        NewPoint {
+            x: 18914,
+            y: 4788,
+        },
+        NewPoint {
+            x: 18868,
+            y: 4742,
+        },
+        NewPoint {
+            x: 18905,
+            y: 4651,
+        },
+        NewPoint {
+            x: 19023,
+            y: 4597,
+        },
+        NewPoint {
+            x: 18850,
+            y: 4633,
+        },
+        NewPoint {
+            x: 18932,
+            y: 4597,
+        },
+        NewPoint {
+            x: 18841,
+            y: 4542,
+        },
+        NewPoint {
+            x: 18841,
+            y: 4469,
+        },
+        NewPoint {
+            x: 18741,
+            y: 4460,
+        },
+        NewPoint {
+            x: 18777,
+            y: 4342,
+        },
+        NewPoint {
+            x: 18595,
+            y: 4360,
+        },
+        NewPoint {
+            x: 18295,
+            y: 4287,
+        },
+        NewPoint {
+            x: 18295,
+            y: 4442,
+        },
+        NewPoint {
+            x: 18368,
+            y: 4451,
+        },
+        NewPoint {
+            x: 18331,
+            y: 4633,
+        },
+        NewPoint {
+            x: 18258,
+            y: 4633,
+        },
+        NewPoint {
+            x: 18258,
+            y: 4706,
+        },
+        NewPoint {
+            x: 18067,
+            y: 4833,
+        },
+        NewPoint {
+            x: 18049,
+            y: 4870,
+        },
+        NewPoint {
+            x: 18104,
+            y: 4879,
+        },
+        NewPoint {
+            x: 17940,
+            y: 5179,
+        },
+        NewPoint {
+            x: 18049,
+            y: 5170,
+        },
+        NewPoint {
+            x: 18140,
+            y: 5088,
+        },
+        NewPoint {
+            x: 18131,
+            y: 5179,
+        },
+        NewPoint {
+            x: 17976,
+            y: 5306,
+        },
+        NewPoint {
+            x: 18076,
+            y: 5561,
+        },
+        NewPoint {
+            x: 18213,
+            y: 5661,
+        },
+        NewPoint {
+            x: 18213,
+            y: 5725,
+        },
+        NewPoint {
+            x: 18076,
+            y: 5771,
+        },
+        NewPoint {
+            x: 17922,
+            y: 5734,
+        },
+        NewPoint {
+            x: 17894,
+            y: 5671,
+        },
+        NewPoint {
+            x: 17949,
+            y: 5616,
+        },
+        NewPoint {
+            x: 17685,
+            y: 5607,
+        },
+        NewPoint {
+            x: 17630,
+            y: 5498,
+        },
+        NewPoint {
+            x: 17630,
+            y: 5652,
+        },
+        NewPoint {
+            x: 17503,
+            y: 5634,
+        },
+        NewPoint {
+            x: 17458,
+            y: 5771,
+        },
+        NewPoint {
+            x: 17366,
+            y: 5825,
+        },
+        NewPoint {
+            x: 17530,
+            y: 5889,
+        },
+        NewPoint {
+            x: 17512,
+            y: 5953,
+        },
+        NewPoint {
+            x: 17640,
+            y: 6071,
+        },
+        NewPoint {
+            x: 17603,
+            y: 6162,
+        },
+        NewPoint {
+            x: 17949,
+            y: 6198,
+        },
+        NewPoint {
+            x: 17949,
+            y: 6262,
+        },
+        NewPoint {
+            x: 17885,
+            y: 6299,
+        },
+        NewPoint {
+            x: 17430,
+            y: 6180,
+        },
+        NewPoint {
+            x: 17585,
+            y: 6353,
+        },
+        NewPoint {
+            x: 17530,
+            y: 6471,
+        },
+        NewPoint {
+            x: 17494,
+            y: 6390,
+        },
+        NewPoint {
+            x: 17421,
+            y: 6490,
+        },
+        NewPoint {
+            x: 17194,
+            y: 6362,
+        },
+        NewPoint {
+            x: 17221,
+            y: 6471,
+        },
+        NewPoint {
+            x: 17148,
+            y: 6481,
+        },
+        NewPoint {
+            x: 16857,
+            y: 6362,
+        },
+        NewPoint {
+            x: 16857,
+            y: 6289,
+        },
+        NewPoint {
+            x: 16811,
+            y: 6371,
+        },
+        NewPoint {
+            x: 16638,
+            y: 6344,
+        },
+        NewPoint {
+            x: 16775,
+            y: 6226,
+        },
+        NewPoint {
+            x: 16966,
+            y: 6235,
+        },
+        NewPoint {
+            x: 17157,
+            y: 6335,
+        },
+        NewPoint {
+            x: 17275,
+            y: 6253,
+        },
+        NewPoint {
+            x: 17194,
+            y: 6135,
+        },
+        NewPoint {
+            x: 16893,
+            y: 6171,
+        },
+        NewPoint {
+            x: 16784,
+            y: 6071,
+        },
+        NewPoint {
+            x: 16520,
+            y: 6162,
+        },
+        NewPoint {
+            x: 16402,
+            y: 6280,
+        },
+        NewPoint {
+            x: 16238,
+            y: 6244,
+        },
+        NewPoint {
+            x: 16092,
+            y: 6390,
+        },
+        NewPoint {
+            x: 16456,
+            y: 6517,
+        },
+        NewPoint {
+            x: 16511,
+            y: 6599,
+        },
+        NewPoint {
+            x: 16475,
+            y: 6635,
+        },
+        NewPoint {
+            x: 16566,
+            y: 6699,
+        },
+        NewPoint {
+            x: 16857,
+            y: 6763,
+        },
+        NewPoint {
+            x: 16921,
+            y: 6681,
+        },
+        NewPoint {
+            x: 16884,
+            y: 6653,
+        },
+        NewPoint {
+            x: 17166,
+            y: 6781,
+        },
+        NewPoint {
+            x: 17139,
+            y: 6863,
+        },
+        NewPoint {
+            x: 16884,
+            y: 6908,
+        },
+        NewPoint {
+            x: 16984,
+            y: 6990,
+        },
+        NewPoint {
+            x: 17030,
+            y: 7118,
+        },
+        NewPoint {
+            x: 16702,
+            y: 7100,
+        },
+        NewPoint {
+            x: 16602,
+            y: 7272,
+        },
+        NewPoint {
+            x: 16593,
+            y: 7209,
+        },
+        NewPoint {
+            x: 16647,
+            y: 7072,
+        },
+        NewPoint {
+            x: 16356,
+            y: 6872,
+        },
+        NewPoint {
+            x: 16311,
+            y: 6917,
+        },
+        NewPoint {
+            x: 16383,
+            y: 6972,
+        },
+        NewPoint {
+            x: 16256,
+            y: 7018,
+        },
+        NewPoint {
+            x: 16311,
+            y: 7109,
+        },
+        NewPoint {
+            x: 16174,
+            y: 7181,
+        },
+        NewPoint {
+            x: 16147,
+            y: 7227,
+        },
+        NewPoint {
+            x: 16211,
+            y: 7245,
+        },
+        NewPoint {
+            x: 16101,
+            y: 7327,
+        },
+        NewPoint {
+            x: 16019,
+            y: 7282,
+        },
+        NewPoint {
+            x: 15974,
+            y: 7327,
+        },
+        NewPoint {
+            x: 16083,
+            y: 7436,
+        },
+        NewPoint {
+            x: 15947,
+            y: 7509,
+        },
+        NewPoint {
+            x: 16192,
+            y: 7591,
+        },
+        NewPoint {
+            x: 16192,
+            y: 7545,
+        },
+        NewPoint {
+            x: 16374,
+            y: 7500,
+        },
+        NewPoint {
+            x: 16411,
+            y: 7409,
+        },
+        NewPoint {
+            x: 16511,
+            y: 7527,
+        },
+        NewPoint {
+            x: 16684,
+            y: 7454,
+        },
+        NewPoint {
+            x: 16620,
+            y: 7564,
+        },
+        NewPoint {
+            x: 16657,
+            y: 7591,
+        },
+        NewPoint {
+            x: 16465,
+            y: 7737,
+        },
+        NewPoint {
+            x: 16675,
+            y: 7700,
+        },
+        NewPoint {
+            x: 16811,
+            y: 7618,
+        },
+        NewPoint {
+            x: 17048,
+            y: 7791,
+        },
+        NewPoint {
+            x: 17048,
+            y: 7873,
+        },
+        NewPoint {
+            x: 17103,
+            y: 7864,
+        },
+        NewPoint {
+            x: 17112,
+            y: 7919,
+        },
+        NewPoint {
+            x: 17257,
+            y: 7992,
+        },
+        NewPoint {
+            x: 17266,
+            y: 8082,
+        },
+        NewPoint {
+            x: 17121,
+            y: 8164,
+        },
+        NewPoint {
+            x: 16921,
+            y: 8092,
+        },
+        NewPoint {
+            x: 16866,
+            y: 8146,
+        },
+        NewPoint {
+            x: 16939,
+            y: 8146,
+        },
+        NewPoint {
+            x: 17093,
+            y: 8265,
+        },
+        NewPoint {
+            x: 17066,
+            y: 8374,
+        },
+        NewPoint {
+            x: 16593,
+            y: 8529,
+        },
+        NewPoint {
+            x: 16675,
+            y: 8674,
+        },
+        NewPoint {
+            x: 16921,
+            y: 8665,
+        },
+        NewPoint {
+            x: 17048,
+            y: 8765,
+        },
+        NewPoint {
+            x: 17139,
+            y: 9011,
+        },
+        NewPoint {
+            x: 17093,
+            y: 9102,
+        },
+        NewPoint {
+            x: 17357,
+            y: 9238,
+        },
+        NewPoint {
+            x: 17303,
+            y: 9330,
+        },
+        NewPoint {
+            x: 17357,
+            y: 9348,
+        },
+        NewPoint {
+            x: 17485,
+            y: 9257,
+        },
+        NewPoint {
+            x: 17558,
+            y: 9275,
+        },
+        NewPoint {
+            x: 17685,
+            y: 9066,
+        },
+        NewPoint {
+            x: 17831,
+            y: 8947,
+        },
+        NewPoint {
+            x: 18058,
+            y: 8938,
+        },
+        NewPoint {
+            x: 18095,
+            y: 9020,
+        },
+        NewPoint {
+            x: 17985,
+            y: 9129,
+        },
+        NewPoint {
+            x: 17995,
+            y: 9284,
+        },
+        NewPoint {
+            x: 17822,
+            y: 9302,
+        },
+        NewPoint {
+            x: 17803,
+            y: 9402,
+        },
+        NewPoint {
+            x: 17867,
+            y: 9785,
+        },
+        NewPoint {
+            x: 17803,
+            y: 9958,
+        },
+        NewPoint {
+            x: 18031,
+            y: 10121,
+        },
+        NewPoint {
+            x: 17985,
+            y: 10158,
+        },
+        NewPoint {
+            x: 18049,
+            y: 10212,
+        },
+        NewPoint {
+            x: 18040,
+            y: 10231,
+        },
+        NewPoint {
+            x: 17649,
+            y: 10422,
+        },
+        NewPoint {
+            x: 17421,
+            y: 10376,
+        },
+        NewPoint {
+            x: 17376,
+            y: 10440,
+        },
+        NewPoint {
+            x: 17403,
+            y: 10504,
+        },
+        NewPoint {
+            x: 17275,
+            y: 10567,
+        },
+        NewPoint {
+            x: 16420,
+            y: 10413,
+        },
+        NewPoint {
+            x: 16365,
+            y: 10358,
+        },
+        NewPoint {
+            x: 15910,
+            y: 10513,
+        },
+        NewPoint {
+            x: 15837,
+            y: 10476,
+        },
+        NewPoint {
+            x: 15910,
+            y: 10540,
+        },
+        NewPoint {
+            x: 15910,
+            y: 10622,
+        },
+        NewPoint {
+            x: 16047,
+            y: 10649,
+        },
+        NewPoint {
+            x: 15792,
+            y: 10759,
+        },
+        NewPoint {
+            x: 15783,
+            y: 10886,
+        },
+        NewPoint {
+            x: 15883,
+            y: 10859,
+        },
+        NewPoint {
+            x: 16074,
+            y: 10913,
+        },
+        NewPoint {
+            x: 16101,
+            y: 10968,
+        },
+        NewPoint {
+            x: 15965,
+            y: 11032,
+        },
+        NewPoint {
+            x: 16010,
+            y: 11077,
+        },
+        NewPoint {
+            x: 15974,
+            y: 11132,
+        },
+        NewPoint {
+            x: 16065,
+            y: 11150,
+        },
+        NewPoint {
+            x: 16165,
+            y: 11305,
+        },
+        NewPoint {
+            x: 15573,
+            y: 11696,
+        },
+        NewPoint {
+            x: 14782,
+            y: 11669,
+        },
+        NewPoint {
+            x: 14053,
+            y: 11851,
+        },
+        NewPoint {
+            x: 13744,
+            y: 11760,
+        },
+        NewPoint {
+            x: 13808,
+            y: 11696,
+        },
+        NewPoint {
+            x: 13762,
+            y: 11560,
+        },
+        NewPoint {
+            x: 13544,
+            y: 11578,
+        },
+        NewPoint {
+            x: 13480,
+            y: 11532,
+        },
+        NewPoint {
+            x: 13380,
+            y: 11560,
+        },
+        NewPoint {
+            x: 13307,
+            y: 11505,
+        },
+        NewPoint {
+            x: 13052,
+            y: 11478,
+        },
+        NewPoint {
+            x: 12715,
+            y: 11587,
+        },
+        NewPoint {
+            x: 12734,
+            y: 11323,
+        },
+        NewPoint {
+            x: 12488,
+            y: 11141,
+        },
+        NewPoint {
+            x: 12260,
+            y: 11168,
+        },
+        NewPoint {
+            x: 12069,
+            y: 11068,
+        },
+        NewPoint {
+            x: 12051,
+            y: 11032,
+        },
+        NewPoint {
+            x: 12142,
+            y: 10950,
+        },
+        NewPoint {
+            x: 12078,
+            y: 10849,
+        },
+        NewPoint {
+            x: 12087,
+            y: 10777,
+        },
+        NewPoint {
+            x: 11924,
+            y: 10649,
+        },
+        NewPoint {
+            x: 12260,
+            y: 10513,
+        },
+        NewPoint {
+            x: 12561,
+            y: 10576,
+        },
+        NewPoint {
+            x: 12725,
+            y: 10540,
+        },
+        NewPoint {
+            x: 13043,
+            y: 10367,
+        },
+        NewPoint {
+            x: 12988,
+            y: 10349,
+        },
+        NewPoint {
+            x: 13398,
+            y: 10058,
+        },
+        NewPoint {
+            x: 13462,
+            y: 9903,
+        },
+        NewPoint {
+            x: 13735,
+            y: 10058,
+        },
+        NewPoint {
+            x: 13708,
+            y: 10103,
+        },
+        NewPoint {
+            x: 13762,
+            y: 10121,
+        },
+        NewPoint {
+            x: 13789,
+            y: 10076,
+        },
+        NewPoint {
+            x: 13908,
+            y: 10121,
+        },
+        NewPoint {
+            x: 13971,
+            y: 10085,
+        },
+        NewPoint {
+            x: 13607,
+            y: 9794,
+        },
+        NewPoint {
+            x: 13562,
+            y: 9493,
+        },
+        NewPoint {
+            x: 13671,
+            y: 9548,
+        },
+        NewPoint {
+            x: 13598,
+            y: 9484,
+        },
+        NewPoint {
+            x: 13689,
+            y: 9439,
+        },
+        NewPoint {
+            x: 13753,
+            y: 9539,
+        },
+        NewPoint {
+            x: 13808,
+            y: 9521,
+        },
+        NewPoint {
+            x: 14053,
+            y: 9721,
+        },
+        NewPoint {
+            x: 14217,
+            y: 9730,
+        },
+        NewPoint {
+            x: 14090,
+            y: 9803,
+        },
+        NewPoint {
+            x: 14135,
+            y: 9876,
+        },
+        NewPoint {
+            x: 13981,
+            y: 9848,
+        },
+        NewPoint {
+            x: 13962,
+            y: 9948,
+        },
+        NewPoint {
+            x: 14190,
+            y: 9939,
+        },
+        NewPoint {
+            x: 14217,
+            y: 10003,
+        },
+        NewPoint {
+            x: 14445,
+            y: 10012,
+        },
+        NewPoint {
+            x: 14272,
+            y: 9830,
+        },
+        NewPoint {
+            x: 14263,
+            y: 9748,
+        },
+        NewPoint {
+            x: 13999,
+            y: 9511,
+        },
+        NewPoint {
+            x: 14008,
+            y: 9466,
+        },
+        NewPoint {
+            x: 13862,
+            y: 9393,
+        },
+        NewPoint {
+            x: 13990,
+            y: 9402,
+        },
+        NewPoint {
+            x: 13926,
+            y: 9311,
+        },
+        NewPoint {
+            x: 14135,
+            y: 9220,
+        },
+        NewPoint {
+            x: 14372,
+            y: 9193,
+        },
+        NewPoint {
+            x: 14336,
+            y: 9157,
+        },
+        NewPoint {
+            x: 14235,
+            y: 9138,
+        },
+        NewPoint {
+            x: 14290,
+            y: 9075,
+        },
+        NewPoint {
+            x: 14472,
+            y: 9166,
+        },
+        NewPoint {
+            x: 14927,
+            y: 9175,
+        },
+        NewPoint {
+            x: 14754,
+            y: 9421,
+        },
+        NewPoint {
+            x: 14809,
+            y: 9530,
+        },
+        NewPoint {
+            x: 15127,
+            y: 9502,
+        },
+        NewPoint {
+            x: 15191,
+            y: 9430,
+        },
+        NewPoint {
+            x: 15337,
+            y: 9511,
+        },
+        NewPoint {
+            x: 15473,
+            y: 9484,
+        },
+        NewPoint {
+            x: 15555,
+            y: 9539,
+        },
+        NewPoint {
+            x: 15619,
+            y: 9484,
+        },
+        NewPoint {
+            x: 15774,
+            y: 9521,
+        },
+        NewPoint {
+            x: 15810,
+            y: 9457,
+        },
+        NewPoint {
+            x: 15901,
+            y: 9448,
+        },
+        NewPoint {
+            x: 15883,
+            y: 9384,
+        },
+        NewPoint {
+            x: 15819,
+            y: 9430,
+        },
+        NewPoint {
+            x: 15910,
+            y: 9266,
+        },
+        NewPoint {
+            x: 15828,
+            y: 9193,
+        },
+        NewPoint {
+            x: 15419,
+            y: 9166,
+        },
+        NewPoint {
+            x: 15446,
+            y: 9120,
+        },
+        NewPoint {
+            x: 15127,
+            y: 8956,
+        },
+        NewPoint {
+            x: 15182,
+            y: 8856,
+        },
+        NewPoint {
+            x: 15428,
+            y: 8838,
+        },
+        NewPoint {
+            x: 15564,
+            y: 8911,
+        },
+        NewPoint {
+            x: 15583,
+            y: 8874,
+        },
+        NewPoint {
+            x: 15501,
+            y: 8838,
+        },
+        NewPoint {
+            x: 15528,
+            y: 8774,
+        },
+        NewPoint {
+            x: 15482,
+            y: 8765,
+        },
+        NewPoint {
+            x: 15510,
+            y: 8720,
+        },
+        NewPoint {
+            x: 15455,
+            y: 8683,
+        },
+        NewPoint {
+            x: 15701,
+            y: 8574,
+        },
+        NewPoint {
+            x: 15464,
+            y: 8656,
+        },
+        NewPoint {
+            x: 15355,
+            y: 8629,
+        },
+        NewPoint {
+            x: 15309,
+            y: 8574,
+        },
+        NewPoint {
+            x: 15036,
+            y: 8565,
+        },
+        NewPoint {
+            x: 15064,
+            y: 8638,
+        },
+        NewPoint {
+            x: 14936,
+            y: 8529,
+        },
+        NewPoint {
+            x: 15046,
+            y: 8374,
+        },
+        NewPoint {
+            x: 15264,
+            y: 8328,
+        },
+        NewPoint {
+            x: 15373,
+            y: 8192,
+        },
+        NewPoint {
+            x: 15737,
+            y: 8092,
+        },
+        NewPoint {
+            x: 15391,
+            y: 8082,
+        },
+        NewPoint {
+            x: 15346,
+            y: 8073,
+        },
+        NewPoint {
+            x: 15382,
+            y: 8028,
+        },
+        NewPoint {
+            x: 15300,
+            y: 8037,
+        },
+        NewPoint {
+            x: 15373,
+            y: 7955,
+        },
+        NewPoint {
+            x: 15701,
+            y: 7891,
+        },
+        NewPoint {
+            x: 15728,
+            y: 7782,
+        },
+        NewPoint {
+            x: 15364,
+            y: 7673,
+        },
+        NewPoint {
+            x: 15300,
+            y: 7691,
+        },
+        NewPoint {
+            x: 15200,
+            y: 7809,
+        },
+        NewPoint {
+            x: 15300,
+            y: 7891,
+        },
+        NewPoint {
+            x: 15255,
+            y: 7946,
+        },
+        NewPoint {
+            x: 14945,
+            y: 8146,
+        },
+        NewPoint {
+            x: 14836,
+            y: 8028,
+        },
+        NewPoint {
+            x: 14654,
+            y: 8055,
+        },
+        NewPoint {
+            x: 14681,
+            y: 8146,
+        },
+        NewPoint {
+            x: 14572,
+            y: 8183,
+        },
+        NewPoint {
+            x: 14235,
+            y: 8082,
+        },
+        NewPoint {
+            x: 14154,
+            y: 8137,
+        },
+        NewPoint {
+            x: 13890,
+            y: 8128,
+        },
+        NewPoint {
+            x: 13844,
+            y: 8092,
+        },
+        NewPoint {
+            x: 13890,
+            y: 8064,
+        },
+        NewPoint {
+            x: 13744,
+            y: 8082,
+        },
+        NewPoint {
+            x: 13580,
+            y: 7901,
+        },
+        NewPoint {
+            x: 13571,
+            y: 7837,
+        },
+        NewPoint {
+            x: 13698,
+            y: 7764,
+        },
+        NewPoint {
+            x: 13617,
+            y: 7655,
+        },
+        NewPoint {
+            x: 13325,
+            y: 7664,
+        },
+        NewPoint {
+            x: 12998,
+            y: 7445,
+        },
+        NewPoint {
+            x: 13116,
+            y: 7391,
+        },
+        NewPoint {
+            x: 12852,
+            y: 7263,
+        },
+        NewPoint {
+            x: 12888,
+            y: 6981,
+        },
+        NewPoint {
+            x: 12834,
+            y: 6954,
+        },
+        NewPoint {
+            x: 12797,
+            y: 7036,
+        },
+        NewPoint {
+            x: 12788,
+            y: 6999,
+        },
+        NewPoint {
+            x: 12834,
+            y: 6899,
+        },
+        NewPoint {
+            x: 12725,
+            y: 7027,
+        },
+        NewPoint {
+            x: 12725,
+            y: 7209,
+        },
+        NewPoint {
+            x: 12552,
+            y: 7154,
+        },
+        NewPoint {
+            x: 12388,
+            y: 7382,
+        },
+        NewPoint {
+            x: 12206,
+            y: 7400,
+        },
+        NewPoint {
+            x: 11969,
+            y: 7527,
+        },
+        NewPoint {
+            x: 11987,
+            y: 7564,
+        },
+        NewPoint {
+            x: 11823,
+            y: 7555,
+        },
+        NewPoint {
+            x: 11796,
+            y: 7618,
+        },
+        NewPoint {
+            x: 11596,
+            y: 7728,
+        },
+        NewPoint {
+            x: 11678,
+            y: 7773,
+        },
+        NewPoint {
+            x: 11741,
+            y: 7755,
+        },
+        NewPoint {
+            x: 11632,
+            y: 7910,
+        },
+        NewPoint {
+            x: 11550,
+            y: 7910,
+        },
+        NewPoint {
+            x: 11587,
+            y: 7855,
+        },
+        NewPoint {
+            x: 11523,
+            y: 7764,
+        },
+        NewPoint {
+            x: 11432,
+            y: 7891,
+        },
+        NewPoint {
+            x: 11387,
+            y: 7828,
+        },
+        NewPoint {
+            x: 11396,
+            y: 7709,
+        },
+        NewPoint {
+            x: 11186,
+            y: 7318,
+        },
+        NewPoint {
+            x: 11223,
+            y: 7327,
+        },
+        NewPoint {
+            x: 11250,
+            y: 7209,
+        },
+        NewPoint {
+            x: 11314,
+            y: 7172,
+        },
+        NewPoint {
+            x: 11296,
+            y: 7118,
+        },
+        NewPoint {
+            x: 11350,
+            y: 7090,
+        },
+        NewPoint {
+            x: 11332,
+            y: 6972,
+        },
+        NewPoint {
+            x: 11159,
+            y: 6936,
+        },
+        NewPoint {
+            x: 11068,
+            y: 7054,
+        },
+        NewPoint {
+            x: 11050,
+            y: 6945,
+        },
+        NewPoint {
+            x: 11004,
+            y: 7081,
+        },
+        NewPoint {
+            x: 10886,
+            y: 7145,
+        },
+        NewPoint {
+            x: 10840,
+            y: 7127,
+        },
+        NewPoint {
+            x: 10868,
+            y: 6981,
+        },
+        NewPoint {
+            x: 10749,
+            y: 6899,
+        },
+        NewPoint {
+            x: 10567,
+            y: 7018,
+        },
+        NewPoint {
+            x: 10722,
+            y: 7191,
+        },
+        NewPoint {
+            x: 10385,
+            y: 7181,
+        },
+        NewPoint {
+            x: 10331,
+            y: 7272,
+        },
+        NewPoint {
+            x: 10531,
+            y: 7418,
+        },
+        NewPoint {
+            x: 10476,
+            y: 7445,
+        },
+        NewPoint {
+            x: 10522,
+            y: 7464,
+        },
+        NewPoint {
+            x: 10413,
+            y: 7600,
+        },
+        NewPoint {
+            x: 10440,
+            y: 7627,
+        },
+        NewPoint {
+            x: 10267,
+            y: 7700,
+        },
+        NewPoint {
+            x: 9730,
+            y: 7718,
+        },
+        NewPoint {
+            x: 9703,
+            y: 7782,
+        },
+        NewPoint {
+            x: 9593,
+            y: 7709,
+        },
+        NewPoint {
+            x: 9266,
+            y: 7755,
+        },
+        NewPoint {
+            x: 9075,
+            y: 7910,
+        },
+        NewPoint {
+            x: 9102,
+            y: 7928,
+        },
+        NewPoint {
+            x: 9084,
+            y: 8037,
+        },
+        NewPoint {
+            x: 9002,
+            y: 8201,
+        },
+        NewPoint {
+            x: 9056,
+            y: 7982,
+        },
+        NewPoint {
+            x: 8856,
+            y: 8019,
+        },
+        NewPoint {
+            x: 8811,
+            y: 7837,
+        },
+        NewPoint {
+            x: 8865,
+            y: 7691,
+        },
+        NewPoint {
+            x: 9002,
+            y: 7691,
+        },
+        NewPoint {
+            x: 8929,
+            y: 7600,
+        },
+        NewPoint {
+            x: 8956,
+            y: 7545,
+        },
+        NewPoint {
+            x: 8874,
+            y: 7527,
+        },
+        NewPoint {
+            x: 8701,
+            y: 7509,
+        },
+        NewPoint {
+            x: 8547,
+            y: 7800,
+        },
+        NewPoint {
+            x: 8337,
+            y: 7846,
+        },
+        NewPoint {
+            x: 8228,
+            y: 7928,
+        },
+        NewPoint {
+            x: 7800,
+            y: 7901,
+        },
+        NewPoint {
+            x: 7755,
+            y: 7846,
+        },
+        NewPoint {
+            x: 7637,
+            y: 7855,
+        },
+        NewPoint {
+            x: 7664,
+            y: 7901,
+        },
+        NewPoint {
+            x: 7482,
+            y: 7882,
+        },
+        NewPoint {
+            x: 7445,
+            y: 7737,
+        },
+        NewPoint {
+            x: 7746,
+            y: 7591,
+        },
+        NewPoint {
+            x: 7709,
+            y: 7482,
+        },
+        NewPoint {
+            x: 7955,
+            y: 7318,
+        },
+        NewPoint {
+            x: 7955,
+            y: 7272,
+        },
+        NewPoint {
+            x: 7682,
+            y: 7081,
+        },
+        NewPoint {
+            x: 7509,
+            y: 6754,
+        },
+        NewPoint {
+            x: 7382,
+            y: 6745,
+        },
+        NewPoint {
+            x: 7172,
+            y: 6563,
+        },
+        NewPoint {
+            x: 6945,
+            y: 6508,
+        },
+        NewPoint {
+            x: 6954,
+            y: 6426,
+        },
+        NewPoint {
+            x: 6881,
+            y: 6390,
+        },
+        NewPoint {
+            x: 6799,
+            y: 6462,
+        },
+        NewPoint {
+            x: 6745,
+            y: 6417,
+        },
+        NewPoint {
+            x: 6726,
+            y: 6462,
+        },
+        NewPoint {
+            x: 6553,
+            y: 6481,
+        },
+        NewPoint {
+            x: 6526,
+            y: 6399,
+        },
+        NewPoint {
+            x: 6735,
+            y: 5962,
+        },
+        NewPoint {
+            x: 6390,
+            y: 5916,
+        },
+        NewPoint {
+            x: 5780,
+            y: 5998,
+        },
+        NewPoint {
+            x: 5416,
+            y: 5798,
+        },
+        NewPoint {
+            x: 5206,
+            y: 5616,
+        },
+        NewPoint {
+            x: 4669,
+            y: 5379,
+        },
+        NewPoint {
+            x: 4824,
+            y: 5334,
+        },
+        NewPoint {
+            x: 4951,
+            y: 5361,
+        },
+        NewPoint {
+            x: 5033,
+            y: 5306,
+        },
+        NewPoint {
+            x: 5479,
+            y: 5370,
+        },
+        NewPoint {
+            x: 5579,
+            y: 5306,
+        },
+        NewPoint {
+            x: 5534,
+            y: 5179,
+        },
+        NewPoint {
+            x: 5752,
+            y: 5106,
+        },
+        NewPoint {
+            x: 5825,
+            y: 4942,
+        },
+        NewPoint {
+            x: 6226,
+            y: 4833,
+        },
+        NewPoint {
+            x: 6654,
+            y: 4897,
+        },
+        NewPoint {
+            x: 6644,
+            y: 4806,
+        },
+        NewPoint {
+            x: 6745,
+            y: 4760,
+        },
+        NewPoint {
+            x: 6845,
+            y: 4797,
+        },
+        NewPoint {
+            x: 6808,
+            y: 4687,
+        },
+        NewPoint {
+            x: 6881,
+            y: 4651,
+        },
+        NewPoint {
+            x: 7154,
+            y: 4642,
+        },
+        NewPoint {
+            x: 7163,
+            y: 4751,
+        },
+        NewPoint {
+            x: 7391,
+            y: 4742,
+        },
+        NewPoint {
+            x: 7227,
+            y: 4760,
+        },
+        NewPoint {
+            x: 7282,
+            y: 4879,
+        },
+        NewPoint {
+            x: 6972,
+            y: 4697,
+        },
+        NewPoint {
+            x: 6872,
+            y: 4760,
+        },
+        NewPoint {
+            x: 6872,
+            y: 4824,
+        },
+        NewPoint {
+            x: 6735,
+            y: 4833,
+        },
+        NewPoint {
+            x: 6808,
+            y: 4997,
+        },
+        NewPoint {
+            x: 6990,
+            y: 5161,
+        },
+        NewPoint {
+            x: 7081,
+            y: 5197,
+        },
+        NewPoint {
+            x: 7254,
+            y: 5152,
+        },
+        NewPoint {
+            x: 7400,
+            y: 5015,
+        },
+        NewPoint {
+            x: 7436,
+            y: 5088,
+        },
+        NewPoint {
+            x: 7627,
+            y: 5097,
+        },
+        NewPoint {
+            x: 7746,
+            y: 5188,
+        },
+        NewPoint {
+            x: 7855,
+            y: 5143,
+        },
+        NewPoint {
+            x: 7591,
+            y: 5052,
+        },
+        NewPoint {
+            x: 7882,
+            y: 5015,
+        },
+        NewPoint {
+            x: 7746,
+            y: 4915,
+        },
+        NewPoint {
+            x: 7718,
+            y: 4824,
+        },
+        NewPoint {
+            x: 7582,
+            y: 4842,
+        },
+        NewPoint {
+            x: 7564,
+            y: 4924,
+        },
+        NewPoint {
+            x: 7491,
+            y: 4942,
+        },
+        NewPoint {
+            x: 7473,
+            y: 4897,
+        },
+        NewPoint {
+            x: 7673,
+            y: 4687,
+        },
+        NewPoint {
+            x: 7700,
+            y: 4733,
+        },
+        NewPoint {
+            x: 7946,
+            y: 4806,
+        },
+        NewPoint {
+            x: 7937,
+            y: 4724,
+        },
+        NewPoint {
+            x: 7819,
+            y: 4633,
+        },
+        NewPoint {
+            x: 7910,
+            y: 4505,
+        },
+        NewPoint {
+            x: 7991,
+            y: 4478,
+        },
+        NewPoint {
+            x: 8055,
+            y: 4533,
+        },
+        NewPoint {
+            x: 8101,
+            y: 4515,
+        },
+        NewPoint {
+            x: 8137,
+            y: 4551,
+        },
+        NewPoint {
+            x: 8092,
+            y: 4569,
+        },
+        NewPoint {
+            x: 8228,
+            y: 4733,
+        },
+        NewPoint {
+            x: 8183,
+            y: 4606,
+        },
+        NewPoint {
+            x: 8219,
+            y: 4587,
+        },
+        NewPoint {
+            x: 8092,
+            y: 4414,
+        },
+        NewPoint {
+            x: 8310,
+            y: 4442,
+        },
+        NewPoint {
+            x: 8292,
+            y: 4305,
+        },
+        NewPoint {
+            x: 8456,
+            y: 4251,
+        },
+        NewPoint {
+            x: 8620,
+            y: 4269,
+        },
+        NewPoint {
+            x: 8547,
+            y: 4187,
+        },
+        NewPoint {
+            x: 8610,
+            y: 4160,
+        },
+        NewPoint {
+            x: 8565,
+            y: 4069,
+        },
+        NewPoint {
+            x: 8610,
+            y: 4014,
+        },
+        NewPoint {
+            x: 8592,
+            y: 3932,
+        },
+        NewPoint {
+            x: 8255,
+            y: 4005,
+        },
+        NewPoint {
+            x: 8210,
+            y: 3932,
+        },
+        NewPoint {
+            x: 8201,
+            y: 4096,
+        },
+        NewPoint {
+            x: 8073,
+            y: 4105,
+        },
+        NewPoint {
+            x: 8128,
+            y: 3914,
+        },
+        NewPoint {
+            x: 8083,
+            y: 3841,
+        },
+        NewPoint {
+            x: 8146,
+            y: 3768,
+        },
+        NewPoint {
+            x: 7955,
+            y: 3723,
+        },
+        NewPoint {
+            x: 7882,
+            y: 3750,
+        },
+        NewPoint {
+            x: 7882,
+            y: 3823,
+        },
+        NewPoint {
+            x: 7518,
+            y: 3732,
+        },
+        NewPoint {
+            x: 7700,
+            y: 3705,
+        },
+        NewPoint {
+            x: 7646,
+            y: 3659,
+        },
+        NewPoint {
+            x: 7728,
+            y: 3495,
+        },
+        NewPoint {
+            x: 7800,
+            y: 3459,
+        },
+        NewPoint {
+            x: 7655,
+            y: 3468,
+        },
+        NewPoint {
+            x: 7718,
+            y: 3359,
+        },
+        NewPoint {
+            x: 7682,
+            y: 3404,
+        },
+        NewPoint {
+            x: 7509,
+            y: 3395,
+        },
+        NewPoint {
+            x: 7345,
+            y: 3486,
+        },
+        NewPoint {
+            x: 7373,
+            y: 3541,
+        },
+        NewPoint {
+            x: 7318,
+            y: 3559,
+        },
+        NewPoint {
+            x: 7291,
+            y: 3677,
+        },
+        NewPoint {
+            x: 7373,
+            y: 3768,
+        },
+        NewPoint {
+            x: 7373,
+            y: 3832,
+        },
+        NewPoint {
+            x: 7309,
+            y: 3850,
+        },
+        NewPoint {
+            x: 7345,
+            y: 4069,
+        },
+        NewPoint {
+            x: 7218,
+            y: 4232,
+        },
+        NewPoint {
+            x: 7245,
+            y: 4269,
+        },
+        NewPoint {
+            x: 7181,
+            y: 4305,
+        },
+        NewPoint {
+            x: 6917,
+            y: 4232,
+        },
+        NewPoint {
+            x: 6899,
+            y: 4169,
+        },
+        NewPoint {
+            x: 6945,
+            y: 4150,
+        },
+        NewPoint {
+            x: 6908,
+            y: 4123,
+        },
+        NewPoint {
+            x: 6836,
+            y: 4169,
+        },
+        NewPoint {
+            x: 6890,
+            y: 4314,
+        },
+        NewPoint {
+            x: 6608,
+            y: 4351,
+        },
+        NewPoint {
+            x: 6271,
+            y: 4305,
+        },
+        NewPoint {
+            x: 6244,
+            y: 4396,
+        },
+        NewPoint {
+            x: 5743,
+            y: 4496,
+        },
+        NewPoint {
+            x: 5689,
+            y: 4405,
+        },
+        NewPoint {
+            x: 5443,
+            y: 4387,
+        },
+        NewPoint {
+            x: 5306,
+            y: 4305,
+        },
+        NewPoint {
+            x: 5306,
+            y: 4260,
+        },
+        NewPoint {
+            x: 5088,
+            y: 4378,
+        },
+        NewPoint {
+            x: 5061,
+            y: 4323,
+        },
+        NewPoint {
+            x: 4715,
+            y: 4214,
+        },
+        NewPoint {
+            x: 4596,
+            y: 4314,
+        },
+        NewPoint {
+            x: 4596,
+            y: 4396,
+        },
+        NewPoint {
+            x: 4460,
+            y: 4442,
+        },
+        NewPoint {
+            x: 4487,
+            y: 4487,
+        },
+        NewPoint {
+            x: 4451,
+            y: 4505,
+        },
+        NewPoint {
+            x: 4715,
+            y: 4560,
+        },
+        NewPoint {
+            x: 4769,
+            y: 4651,
+        },
+        NewPoint {
+            x: 4578,
+            y: 4706,
+        },
+        NewPoint {
+            x: 4678,
+            y: 4742,
+        },
+        NewPoint {
+            x: 4551,
+            y: 4742,
+        },
+        NewPoint {
+            x: 4505,
+            y: 4842,
+        },
+        NewPoint {
+            x: 4414,
+            y: 4879,
+        },
+        NewPoint {
+            x: 4460,
+            y: 4906,
+        },
+        NewPoint {
+            x: 4405,
+            y: 4942,
+        },
+        NewPoint {
+            x: 4305,
+            y: 4951,
+        },
+        NewPoint {
+            x: 4205,
+            y: 5042,
+        },
+        NewPoint {
+            x: 4078,
+            y: 4970,
+        },
+        NewPoint {
+            x: 3950,
+            y: 4997,
+        },
+        NewPoint {
+            x: 3932,
+            y: 4942,
+        },
+        NewPoint {
+            x: 3868,
+            y: 4942,
+        },
+        NewPoint {
+            x: 3850,
+            y: 5042,
+        },
+        NewPoint {
+            x: 3932,
+            y: 5124,
+        },
+        NewPoint {
+            x: 3905,
+            y: 5215,
+        },
+        NewPoint {
+            x: 3577,
+            y: 5052,
+        },
+        NewPoint {
+            x: 3613,
+            y: 5106,
+        },
+        NewPoint {
+            x: 3714,
+            y: 5179,
+        },
+        NewPoint {
+            x: 3704,
+            y: 5197,
+        },
+        NewPoint {
+            x: 3777,
+            y: 5243,
+        },
+        NewPoint {
+            x: 3750,
+            y: 5288,
+        },
+        NewPoint {
+            x: 3914,
+            y: 5388,
+        },
+        NewPoint {
+            x: 3877,
+            y: 5652,
+        },
+        NewPoint {
+            x: 3577,
+            y: 5507,
+        },
+        NewPoint {
+            x: 3249,
+            y: 5215,
+        },
+        NewPoint {
+            x: 2630,
+            y: 5234,
+        },
+        NewPoint {
+            x: 1839,
+            y: 5388,
+        },
+        NewPoint {
+            x: 1575,
+            y: 5252,
+        },
+        NewPoint {
+            x: 1702,
+            y: 5170,
+        },
+        NewPoint {
+            x: 1729,
+            y: 5070,
+        },
+        NewPoint {
+            x: 1984,
+            y: 5015,
+        },
+        NewPoint {
+            x: 1702,
+            y: 4788,
+        },
+        NewPoint {
+            x: 1629,
+            y: 4760,
+        },
+        NewPoint {
+            x: 1584,
+            y: 4815,
+        },
+        NewPoint {
+            x: 1265,
+            y: 4687,
+        },
+        NewPoint {
+            x: 1147,
+            y: 4724,
+        },
+        NewPoint {
+            x: 1010,
+            y: 4651,
+        },
+        NewPoint {
+            x: 992,
+            y: 4560,
+        },
+        NewPoint {
+            x: 1138,
+            y: 4360,
+        },
+        NewPoint {
+            x: 1183,
+            y: 4160,
+        },
+        NewPoint {
+            x: 1620,
+            y: 3932,
+        },
+        NewPoint {
+            x: 1447,
+            y: 3577,
+        },
+        NewPoint {
+            x: 1247,
+            y: 3559,
+        },
+        NewPoint {
+            x: 1302,
+            y: 3695,
+        },
+        NewPoint {
+            x: 1201,
+            y: 3723,
+        },
+        NewPoint {
+            x: 810,
+            y: 3786,
+        },
+        NewPoint {
+            x: 610,
+            y: 3777,
+        },
+        NewPoint {
+            x: 482,
+            y: 3714,
+        },
+        NewPoint {
+            x: 82,
+            y: 3886,
+        },
+        NewPoint {
+            x: 100,
+            y: 3850,
+        },
+        NewPoint {
+            x: 0,
+            y: 3741,
+        },
+    ],
+    name: Some(
+        [
+            80,
+            97,
+            114,
+            99,
+            32,
+            67,
+            104,
+            97,
+            109,
+            112,
+            97,
+            103,
+            110,
+            101,
+            32,
+            66,
+            111,
+            117,
+            114,
+            103,
+            111,
+            103,
+            110,
+            101,
+        ],
+    ),
+    frequency: None,
+    frequency_name: None,
+    icao_code: None,
+    secondary_frequency: None,
+    exception_rules: None,
+    notam_remarks: None,
+    notam_id: None,
+    notam_insert_time: None,
+}

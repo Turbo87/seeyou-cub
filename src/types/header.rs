@@ -1,4 +1,4 @@
-use crate::types::ByteOrder;
+use crate::ByteOrder;
 
 /// CUB file header (first 210 bytes)
 ///

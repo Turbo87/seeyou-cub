@@ -9,21 +9,19 @@
 //! use seeyou_cub::CubReader;
 //!
 //! let mut reader = CubReader::from_path("airspace.cub")?;
-//! let mut warnings = Vec::new();
 //!
-//! let header = reader.read_header(&mut warnings)?;
-//! let items: Vec<_> = reader
-//!     .read_items(&header, &mut warnings)
-//!     .collect::<Result<Vec<_>, _>>()?;
+//! for result in reader.read_airspaces() {
+//!     let (airspace, warnings) = result?;
 //!
-//! println!("Airspaces: {}", items.len());
+//!     if let Some(name) = &airspace.name {
+//!         println!("{}: {:?} {:?}", name, airspace.style, airspace.class);
+//!         println!("  Altitude: {} - {} meters", airspace.min_alt, airspace.max_alt);
+//!         println!("  Points: {}", airspace.points.len());
+//!     }
 //!
-//! for item in &items {
-//!     println!("{:?}: {} - {} meters",
-//!         item.style(),
-//!         item.min_alt,
-//!         item.max_alt
-//!     );
+//!     for warning in warnings {
+//!         eprintln!("Warning: {:?}", warning);
+//!     }
 //! }
 //! # Ok::<(), Box<dyn std::error::Error>>(())
 //! ```
@@ -32,12 +30,13 @@
 //!
 //! - `datetime`: Enable `jiff` integration for date/time decoding
 
-// Re-export public API
-pub use error::{Error, Warning};
-pub use read::CubReader;
-pub use types::*;
+pub use crate::error::{Error, Warning};
+pub use crate::reader::CubReader;
+pub use crate::types::*;
 
+mod convert;
+mod decode;
 mod error;
-pub mod new_api;
-mod read;
+pub mod raw;
+mod reader;
 mod types;

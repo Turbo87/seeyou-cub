@@ -1,4 +1,4 @@
-use crate::new_api::types::Point;
+use crate::Point;
 
 pub type Result<T> = std::result::Result<T, Error>;
 

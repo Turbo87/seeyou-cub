@@ -9,51 +9,50 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let mut reader = CubReader::from_path(&args[1])?;
-    let mut warnings = Vec::new();
 
-    let header = reader.read_header(&mut warnings)?;
+    let header = reader.header();
 
     println!("=== CUB File Info ===");
     println!("Header: {}", header.title);
 
     let (w, s, e, n) = header.bounding_box();
-    println!("Bounds: W={:.4} S={:.4} E={:.4} N={:.4}", w, s, e, n);
+    println!(
+        "Bounds: W={:.4} S={:.4} E={:.4} N={:.4}",
+        w.to_degrees(),
+        s.to_degrees(),
+        e.to_degrees(),
+        n.to_degrees()
+    );
 
-    let items: Vec<_> = reader
-        .read_items(&header, &mut warnings)
-        .collect::<Result<Vec<_>, _>>()?;
+    let results: Vec<_> = reader.read_airspaces().collect::<Result<Vec<_>, _>>()?;
 
-    println!("Airspaces: {}", items.len());
+    println!("Airspaces: {}", results.len());
 
     println!("\n=== First 10 Airspaces ===");
-    for (i, item) in items.iter().take(10).enumerate() {
-        println!("{}. {:?} {:?}", i + 1, item.style(), item.class());
+    for (i, (airspace, warnings)) in results.iter().take(10).enumerate() {
+        println!("{}. {:?} {:?}", i + 1, airspace.style, airspace.class);
         println!(
             "   Altitude: {} - {} meters ({:?} - {:?})",
-            item.min_alt,
-            item.max_alt,
-            item.min_alt_style(),
-            item.max_alt_style()
+            airspace.min_alt, airspace.max_alt, airspace.min_alt_style, airspace.max_alt_style
         );
 
-        // Parse item data (geometry + metadata)
-        let item_data = reader.read_item_data(&header, item, &mut warnings)?;
+        println!("   Points: {}", airspace.points.len());
 
-        println!("   Points: {}", item_data.points.len());
-
-        if let Some(name) = &item_data.name {
+        if let Some(name) = &airspace.name {
             println!("   Name: {}", name);
         }
-        if let Some(freq) = item_data.frequency {
+        if let Some(freq) = airspace.frequency {
             println!("   Frequency: {} Hz", freq);
+        }
+
+        if !warnings.is_empty() {
+            println!("   Warnings: {} for this airspace", warnings.len());
         }
     }
 
-    if !warnings.is_empty() {
-        println!("\n=== Warnings ({}) ===", warnings.len());
-        for warning in &warnings {
-            println!("  {:?}", warning);
-        }
+    let total_warnings: usize = results.iter().map(|(_a, w)| w.len()).sum();
+    if total_warnings > 0 {
+        println!("\n=== Total Warnings: {} ===", total_warnings);
     }
 
     Ok(())

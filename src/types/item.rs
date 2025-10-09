@@ -1,4 +1,4 @@
-use crate::types::{
+use crate::{
     AltStyle, CubClass, CubStyle, DaysActive, ExtendedType, NotamCodes, NotamScope, NotamTraffic,
     NotamType,
 };

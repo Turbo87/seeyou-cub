@@ -1,0 +1,19 @@
+---
+source: src/raw/item.rs
+expression: item
+---
+Item {
+    left: 0.033180647,
+    top: 0.83466476,
+    right: 0.033224326,
+    bottom: 0.8346504,
+    type_byte: 2,
+    alt_style_byte: 33,
+    min_alt: 0,
+    max_alt: 488,
+    points_offset: 0,
+    time_out: 0,
+    extra_data: 0,
+    active_time: 0,
+    extended_type_byte: 0,
+}

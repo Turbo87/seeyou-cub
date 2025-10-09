@@ -1,5 +1,5 @@
 ---
-source: tests/reader_test.rs
+source: src/reader.rs
 expression: header
 ---
 Header {
