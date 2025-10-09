@@ -6,7 +6,7 @@ use crate::types::{Header, Item, ItemData};
 use std::io::{Read, Seek};
 
 mod header;
-mod io;
+pub(crate) mod io;
 mod item;
 mod item_data;
 
