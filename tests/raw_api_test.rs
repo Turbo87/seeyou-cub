@@ -1,5 +1,5 @@
 use insta::assert_debug_snapshot;
-use seeyou_cub::raw;
+use seeyou_cub::{Header, Item, RawItemData};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{Seek, SeekFrom};
@@ -9,7 +9,7 @@ fn raw_api_read_all_items() {
     let mut file =
         File::open("tests/fixtures/france_2024.07.02.cub").expect("Failed to open fixture");
 
-    let header = raw::read_header(&mut file).unwrap();
+    let header = Header::read(&mut file).unwrap();
 
     // Read all items to verify we can parse the entire file
     let mut count = 0;
@@ -17,13 +17,13 @@ fn raw_api_read_all_items() {
         let offset = header.header_offset as u64 + (i as u64 * header.size_of_item as u64);
         file.seek(SeekFrom::Start(offset)).unwrap();
 
-        let item = raw::read_item(&mut file, &header)
-            .unwrap_or_else(|_| panic!("Failed to read item {}", i));
+        let item =
+            Item::read(&mut file, &header).unwrap_or_else(|_| panic!("Failed to read item {}", i));
 
         let offset = header.data_offset as u64 + item.points_offset as u64;
         file.seek(SeekFrom::Start(offset)).unwrap();
 
-        let _item_data = raw::read_item_data(&mut file, &header)
+        let _item_data = RawItemData::read(&mut file, &header)
             .unwrap_or_else(|_| panic!("Failed to read item data for item {}", i));
 
         count += 1;
@@ -37,7 +37,7 @@ fn parse_france_fixture_raw_api() {
     let mut file =
         File::open("tests/fixtures/france_2024.07.02.cub").expect("Failed to open fixture");
 
-    let header = raw::read_header(&mut file).expect("Failed to read header");
+    let header = Header::read(&mut file).expect("Failed to read header");
 
     assert_debug_snapshot!("raw_header", header);
 
@@ -47,8 +47,8 @@ fn parse_france_fixture_raw_api() {
         let offset = header.header_offset as u64 + (i as u64 * header.size_of_item as u64);
         file.seek(SeekFrom::Start(offset)).unwrap();
 
-        let item = raw::read_item(&mut file, &header)
-            .unwrap_or_else(|_| panic!("Failed to read item {}", i));
+        let item =
+            Item::read(&mut file, &header).unwrap_or_else(|_| panic!("Failed to read item {}", i));
 
         items.push(item);
     }
@@ -79,7 +79,7 @@ fn parse_france_fixture_raw_api() {
     let offset = header.data_offset as u64 + first_item.points_offset as u64;
     file.seek(SeekFrom::Start(offset)).unwrap();
     let first_item_data =
-        raw::read_item_data(&mut file, &header).expect("Failed to read first item data");
+        RawItemData::read(&mut file, &header).expect("Failed to read first item data");
     assert_debug_snapshot!("raw_first_item_data", first_item_data);
 
     // Last item complete data
@@ -87,7 +87,7 @@ fn parse_france_fixture_raw_api() {
     let offset = header.data_offset as u64 + last_item.points_offset as u64;
     file.seek(SeekFrom::Start(offset)).unwrap();
     let last_item_data =
-        raw::read_item_data(&mut file, &header).expect("Failed to read last item data");
+        RawItemData::read(&mut file, &header).expect("Failed to read last item data");
     assert_debug_snapshot!("raw_last_item_data", last_item_data);
 
     // Collect all names and auto-select representatives
@@ -99,7 +99,7 @@ fn parse_france_fixture_raw_api() {
         let offset = header.data_offset as u64 + item.points_offset as u64;
         file.seek(SeekFrom::Start(offset)).unwrap();
 
-        let item_data = raw::read_item_data(&mut file, &header)
+        let item_data = RawItemData::read(&mut file, &header)
             .unwrap_or_else(|_| panic!("Failed to read item data for item {}", i));
 
         // Decode name from raw bytes
@@ -128,7 +128,7 @@ fn parse_france_fixture_raw_api() {
     let offset = header.data_offset as u64 + item.points_offset as u64;
     file.seek(SeekFrom::Start(offset)).unwrap();
     let item_data =
-        raw::read_item_data(&mut file, &header).expect("Failed to read smallest item data");
+        RawItemData::read(&mut file, &header).expect("Failed to read smallest item data");
     assert_debug_snapshot!("raw_representative_smallest_by_points", item_data);
 
     // Snapshot largest airspace by point_ops count
@@ -136,6 +136,6 @@ fn parse_france_fixture_raw_api() {
     let offset = header.data_offset as u64 + item.points_offset as u64;
     file.seek(SeekFrom::Start(offset)).unwrap();
     let item_data =
-        raw::read_item_data(&mut file, &header).expect("Failed to read largest item data");
+        RawItemData::read(&mut file, &header).expect("Failed to read largest item data");
     assert_debug_snapshot!("raw_representative_largest_by_points", item_data);
 }

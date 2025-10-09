@@ -3,7 +3,6 @@
 use crate::convert::resolve_point_ops;
 use crate::decode::decode_string;
 use crate::error::Result;
-use crate::raw::{read_header, read_item, read_item_data};
 use crate::{Airspace, Header, Item, RawItemData};
 use std::fs::File;
 use std::io::{BufReader, Read, Seek, SeekFrom};
@@ -48,7 +47,7 @@ impl<R: Read + Seek> CubReader<R> {
     ///
     /// Reads the header immediately to validate the format and store metadata.
     pub fn new(mut reader: R) -> Result<Self> {
-        let header = read_header(&mut reader)?;
+        let header = Header::read(&mut reader)?;
         Ok(Self {
             reader: BufReader::new(reader),
             header,
@@ -90,12 +89,12 @@ impl<R: Read + Seek> AirspaceIterator<'_, R> {
             self.header.header_offset as u64 + (index as u64 * self.header.size_of_item as u64);
 
         self.reader.seek(SeekFrom::Start(item_offset))?;
-        let item = read_item(self.reader, self.header)?;
+        let item = Item::read(self.reader, self.header)?;
 
         let data_offset = self.header.data_offset as u64 + item.points_offset as u64;
         self.reader.seek(SeekFrom::Start(data_offset))?;
 
-        let raw_data = read_item_data(self.reader, self.header)?;
+        let raw_data = RawItemData::read(self.reader, self.header)?;
 
         // Convert to high-level Airspace
         convert_to_airspace(self.header, &item, raw_data)

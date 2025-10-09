@@ -3,65 +3,67 @@ use crate::raw::io::{read_bytes, read_i16, read_u8, read_u32};
 use crate::{CubDataId, Error, Header, PointOp, RawItemData};
 use std::io::Read;
 
-/// Read raw item data from the current position
-///
-/// Reads point operations and attributes without decoding strings or converting coordinates.
-///
-/// # Arguments
-///
-/// * `reader` - Must be positioned at the item's data section
-/// * `header` - Header containing byte order and scaling factor
-///
-/// # Returns
-///
-/// The parsed `RawItemData` or an error if reading fails
-pub fn read_item_data<R: Read>(reader: &mut R, header: &Header) -> Result<RawItemData> {
-    let byte_order = header.byte_order();
+impl RawItemData {
+    /// Read raw item data from the current position
+    ///
+    /// Reads point operations and attributes without decoding strings or converting coordinates.
+    ///
+    /// # Arguments
+    ///
+    /// * `reader` - Must be positioned at the item's data section
+    /// * `header` - Header containing byte order and scaling factor
+    ///
+    /// # Returns
+    ///
+    /// The parsed `RawItemData` or an error if reading fails
+    pub fn read<R: Read>(reader: &mut R, header: &Header) -> Result<Self> {
+        let byte_order = header.byte_order();
 
-    let mut item_data = RawItemData {
-        point_ops: Vec::with_capacity(4),
-        name: None,
-        frequency: None,
-        frequency_name: None,
-        icao_code: None,
-        secondary_frequency: None,
-        exception_rules: None,
-        notam_remarks: None,
-        notam_id: None,
-        notam_insert_time: None,
-    };
-
-    loop {
-        let flag = match read_u8(reader) {
-            Ok(flag) => flag,
-            Err(Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
-                return Ok(item_data);
-            }
-            Err(e) => return Err(e),
+        let mut item_data = Self {
+            point_ops: Vec::with_capacity(4),
+            name: None,
+            frequency: None,
+            frequency_name: None,
+            icao_code: None,
+            secondary_frequency: None,
+            exception_rules: None,
+            notam_remarks: None,
+            notam_id: None,
+            notam_insert_time: None,
         };
 
-        match flag {
-            0x81 => {
-                // Origin update
-                let x = read_i16(reader, byte_order)?;
-                let y = read_i16(reader, byte_order)?;
-                item_data.point_ops.push(PointOp::MoveOrigin { x, y });
-            }
+        loop {
+            let flag = match read_u8(reader) {
+                Ok(flag) => flag,
+                Err(Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+                    return Ok(item_data);
+                }
+                Err(e) => return Err(e),
+            };
 
-            0x01 => {
-                // Geometry point
-                let x = read_i16(reader, byte_order)?;
-                let y = read_i16(reader, byte_order)?;
-                item_data.point_ops.push(PointOp::NewPoint { x, y });
-            }
+            match flag {
+                0x81 => {
+                    // Origin update
+                    let x = read_i16(reader, byte_order)?;
+                    let y = read_i16(reader, byte_order)?;
+                    item_data.point_ops.push(PointOp::MoveOrigin { x, y });
+                }
 
-            flag if (flag & 0x40) != 0 => {
-                // Attributes section - parse and return
-                return parse_attributes(reader, header, flag, item_data);
-            }
+                0x01 => {
+                    // Geometry point
+                    let x = read_i16(reader, byte_order)?;
+                    let y = read_i16(reader, byte_order)?;
+                    item_data.point_ops.push(PointOp::NewPoint { x, y });
+                }
 
-            _ => {
-                return Err(Error::UnexpectedPointFlag(flag));
+                flag if (flag & 0x40) != 0 => {
+                    // Attributes section - parse and return
+                    return parse_attributes(reader, header, flag, item_data);
+                }
+
+                _ => {
+                    return Err(Error::UnexpectedPointFlag(flag));
+                }
             }
         }
     }
@@ -172,7 +174,7 @@ fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut RawItemDa
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::raw::{read_header, read_item};
+    use crate::Item;
     use std::fs::File;
     use std::io::{Cursor, Seek, SeekFrom};
 
@@ -182,18 +184,18 @@ mod tests {
             File::open("tests/fixtures/france_2024.07.02.cub").expect("Failed to open fixture");
 
         // Read header and first item
-        let header = read_header(&mut file).unwrap();
+        let header = Header::read(&mut file).unwrap();
 
         file.seek(SeekFrom::Start(header.header_offset as u64))
             .unwrap();
-        let item = read_item(&mut file, &header).unwrap();
+        let item = Item::read(&mut file, &header).unwrap();
 
         // Seek to item data
         let data_offset = header.data_offset + item.points_offset;
         file.seek(SeekFrom::Start(data_offset as u64)).unwrap();
 
         // Read item data
-        let item_data = read_item_data(&mut file, &header).expect("Failed to read item data");
+        let item_data = RawItemData::read(&mut file, &header).expect("Failed to read item data");
         insta::assert_debug_snapshot!(item_data);
 
         // Verify name field is raw bytes and can be decoded
@@ -315,7 +317,7 @@ mod tests {
         data.push((insert_time & 0xFF) as u8); // b4
 
         let mut cursor = Cursor::new(data);
-        let item_data = read_item_data(&mut cursor, &header).expect("Failed to read item data");
+        let item_data = RawItemData::read(&mut cursor, &header).expect("Failed to read item data");
 
         insta::assert_debug_snapshot!(item_data);
     }
