@@ -1,5 +1,6 @@
+use crate::decode::decode_string;
 use crate::error::{Error, Result};
-use crate::raw::io::{read_f32_le, read_i32, read_string, read_u8, read_u16, read_u32};
+use crate::raw::io::{read_bytes, read_f32_le, read_i32, read_u8, read_u16, read_u32};
 use crate::types::{ByteOrder, Header};
 use std::io::Read;
 
@@ -35,7 +36,8 @@ impl Header {
         }
 
         // Read title (offset 4-115, 112 bytes)
-        let title = read_string(reader, 112)?.trim_end_matches('\0').to_string();
+        let title = read_bytes(reader, 112)?;
+        let title = decode_string(&title).trim_end_matches('\0').to_string();
 
         // Read allowed serials (offset 116-131, 8 × u16, always LE)
         let mut allowed_serials = [0u16; 8];
