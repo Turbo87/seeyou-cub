@@ -21,10 +21,6 @@
 //! }
 //! # Ok::<(), Box<dyn std::error::Error>>(())
 //! ```
-//!
-//! # Features
-//!
-//! - `datetime`: Enable `jiff` integration for date/time decoding
 
 pub use crate::error::Error;
 pub use crate::reader::CubReader;

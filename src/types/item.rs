@@ -1,9 +1,7 @@
 use crate::{
-    AltStyle, CubClass, CubStyle, DaysActive, ExtendedType, NotamCodes, NotamScope, NotamTraffic,
-    NotamType,
+    AltStyle, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, NotamCodes, NotamScope,
+    NotamTraffic, NotamType,
 };
-#[cfg(feature = "datetime")]
-use jiff::civil::DateTime;
 
 /// Airspace item (42 bytes minimum, may be larger per Header.size_of_item)
 ///
@@ -66,19 +64,23 @@ impl Item {
         DaysActive::from_bits(bits)
     }
 
-    /// Get raw start date (encoded minutes)
-    pub fn start_date_raw(&self) -> Option<u32> {
+    /// Get start date as DateTime
+    pub fn start_date(&self) -> Option<DateTime> {
         let value = ((self.active_time >> 26) & 0x3FFFFFF) as u32;
-        if value == 0 { None } else { Some(value) }
+        if value == 0 {
+            None
+        } else {
+            Some(decode_notam_time(value))
+        }
     }
 
-    /// Get raw end date (encoded minutes)
-    pub fn end_date_raw(&self) -> Option<u32> {
+    /// Get end date as DateTime
+    pub fn end_date(&self) -> Option<DateTime> {
         let value = (self.active_time & 0x3FFFFFF) as u32;
         if value == 0x3FFFFFF {
             None
         } else {
-            Some(value)
+            Some(decode_notam_time(value))
         }
     }
 
@@ -125,57 +127,25 @@ impl Item {
     }
 }
 
-/// Decode NOTAM time from encoded minutes to datetime components
-/// Returns (year, month, day, hour, minute)
-pub fn decode_notam_time(encoded: u32) -> (u32, u32, u32, u32, u32) {
+/// Decode NOTAM time from encoded minutes to DateTime
+pub fn decode_notam_time(encoded: u32) -> DateTime {
     let mut time = encoded;
-    let minutes = time % 60;
+    let minute = (time % 60) as u8;
     time /= 60;
-    let hours = time % 24;
+    let hour = (time % 24) as u8;
     time /= 24;
-    let days = (time % 31) + 1;
+    let day = (time % 31) as u8 + 1;
     time /= 31;
-    let months = (time % 12) + 1;
+    let month = (time % 12) as u8 + 1;
     time /= 12;
-    let years = time + 2000;
+    let year = time + 2000;
 
-    (years, months, days, hours, minutes)
-}
-
-#[cfg(feature = "datetime")]
-impl Item {
-    /// Get start date as DateTime (requires "datetime" feature)
-    pub fn start_date(&self) -> Option<DateTime> {
-        self.start_date_raw().and_then(|raw| {
-            let (year, month, day, hour, minute) = decode_notam_time(raw);
-            DateTime::new(
-                year as i16,
-                month as i8,
-                day as i8,
-                hour as i8,
-                minute as i8,
-                0,
-                0,
-            )
-            .ok()
-        })
-    }
-
-    /// Get end date as DateTime (requires "datetime" feature)
-    pub fn end_date(&self) -> Option<DateTime> {
-        self.end_date_raw().and_then(|raw| {
-            let (year, month, day, hour, minute) = decode_notam_time(raw);
-            DateTime::new(
-                year as i16,
-                month as i8,
-                day as i8,
-                hour as i8,
-                minute as i8,
-                0,
-                0,
-            )
-            .ok()
-        })
+    DateTime {
+        day,
+        month,
+        year,
+        hour,
+        minute,
     }
 }
 
@@ -234,7 +204,11 @@ mod tests {
         // Example: 2024-07-15 14:30
         // Manually calculated encoded value
         let encoded = 30 + 60 * (14 + 24 * (14 + 31 * (6 + 12 * 24)));
-        let (y, m, d, h, min) = decode_notam_time(encoded);
-        assert_eq!((y, m, d, h, min), (2024, 7, 15, 14, 30));
+        let dt = decode_notam_time(encoded);
+        assert_eq!(dt.year, 2024);
+        assert_eq!(dt.month, 7);
+        assert_eq!(dt.day, 15);
+        assert_eq!(dt.hour, 14);
+        assert_eq!(dt.minute, 30);
     }
 }

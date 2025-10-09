@@ -15,7 +15,7 @@ expression: "&items[items.len() - 5..]"
         points_offset: 368529,
         time_out: 0,
         extra_data: 0,
-        active_time: 0,
+        active_time: 67108863,
         extended_type_byte: 0,
     },
     Item {
@@ -30,7 +30,7 @@ expression: "&items[items.len() - 5..]"
         points_offset: 368790,
         time_out: 0,
         extra_data: 0,
-        active_time: 0,
+        active_time: 67108863,
         extended_type_byte: 0,
     },
     Item {
@@ -45,7 +45,7 @@ expression: "&items[items.len() - 5..]"
         points_offset: 369014,
         time_out: 0,
         extra_data: 0,
-        active_time: 0,
+        active_time: 67108863,
         extended_type_byte: 0,
     },
     Item {
@@ -60,7 +60,7 @@ expression: "&items[items.len() - 5..]"
         points_offset: 369305,
         time_out: 0,
         extra_data: 0,
-        active_time: 0,
+        active_time: 67108863,
         extended_type_byte: 0,
     },
     Item {
@@ -75,7 +75,7 @@ expression: "&items[items.len() - 5..]"
         points_offset: 369431,
         time_out: 0,
         extra_data: 0,
-        active_time: 0,
+        active_time: 67108863,
         extended_type_byte: 0,
     },
 ]

@@ -88,20 +88,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-## Optional Features
-
-### `datetime`
-
-Enable `jiff` integration for convenient date/time handling:
-
-```toml
-[dependencies]
-seeyou-cub = { version = "0.1.0", features = ["datetime"] }
-```
-
-With this feature enabled, `Airspace::start_date()` and `Airspace::end_date()` return
-`jiff::civil::DateTime`.
-
 ## License
 
 Licensed under either of:

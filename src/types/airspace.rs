@@ -1,6 +1,4 @@
-use crate::{AltStyle, CubClass, CubStyle, DaysActive, ExtendedType, Point};
-#[cfg(feature = "datetime")]
-use jiff::civil::DateTime;
+use crate::{AltStyle, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, Point};
 
 /// High-level airspace representation with fully decoded data
 ///
@@ -28,7 +26,8 @@ pub struct Airspace {
 
     // Time-related fields
     pub time_out: i32,
-    pub active_time: u64,
+    pub start_date: Option<DateTime>,
+    pub end_date: Option<DateTime>,
     pub extra_data: u32,
 
     // Decoded temporal data
@@ -52,22 +51,6 @@ pub struct Airspace {
 }
 
 impl Airspace {
-    /// Get raw start date (encoded minutes)
-    pub fn start_date_raw(&self) -> Option<u32> {
-        let value = ((self.active_time >> 26) & 0x3FFFFFF) as u32;
-        if value == 0 { None } else { Some(value) }
-    }
-
-    /// Get raw end date (encoded minutes)
-    pub fn end_date_raw(&self) -> Option<u32> {
-        let value = (self.active_time & 0x3FFFFFF) as u32;
-        if value == 0x3FFFFFF {
-            None
-        } else {
-            Some(value)
-        }
-    }
-
     /// Check if ExtraData contains NOTAM data
     pub fn has_notam_data(&self) -> bool {
         (self.extra_data >> 30) == 0 && self.extra_data != 0
@@ -76,42 +59,5 @@ impl Airspace {
     /// Get bounding box as (west, south, east, north) in radians
     pub fn bounding_box(&self) -> (f64, f64, f64, f64) {
         (self.left, self.bottom, self.right, self.top)
-    }
-}
-
-#[cfg(feature = "datetime")]
-impl Airspace {
-    /// Get start date as DateTime (requires "datetime" feature)
-    pub fn start_date(&self) -> Option<DateTime> {
-        self.start_date_raw().and_then(|raw| {
-            let (year, month, day, hour, minute) = crate::types::decode_notam_time(raw);
-            DateTime::new(
-                year as i16,
-                month as i8,
-                day as i8,
-                hour as i8,
-                minute as i8,
-                0,
-                0,
-            )
-            .ok()
-        })
-    }
-
-    /// Get end date as DateTime (requires "datetime" feature)
-    pub fn end_date(&self) -> Option<DateTime> {
-        self.end_date_raw().and_then(|raw| {
-            let (year, month, day, hour, minute) = crate::types::decode_notam_time(raw);
-            DateTime::new(
-                year as i16,
-                month as i8,
-                day as i8,
-                hour as i8,
-                minute as i8,
-                0,
-                0,
-            )
-            .ok()
-        })
     }
 }

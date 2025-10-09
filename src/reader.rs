@@ -179,9 +179,10 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
         min_alt_style: item.min_alt_style(),
         max_alt_style: item.max_alt_style(),
 
-        // Time-related fields (raw for accessor methods)
+        // Time-related fields
         time_out: item.time_out,
-        active_time: item.active_time,
+        start_date: item.start_date(),
+        end_date: item.end_date(),
         extra_data: item.extra_data,
 
         // Decoded temporal data

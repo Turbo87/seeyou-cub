@@ -16,7 +16,8 @@ expression: "&airspaces[airspaces.len() - 5..]"
         min_alt_style: FlightLevel,
         max_alt_style: FlightLevel,
         time_out: 0,
-        active_time: 0,
+        start_date: None,
+        end_date: None,
         extra_data: 0,
         days_active: DaysActive {
             bits: 0,
@@ -232,7 +233,8 @@ expression: "&airspaces[airspaces.len() - 5..]"
         min_alt_style: FlightLevel,
         max_alt_style: FlightLevel,
         time_out: 0,
-        active_time: 0,
+        start_date: None,
+        end_date: None,
         extra_data: 0,
         days_active: DaysActive {
             bits: 0,
@@ -394,7 +396,8 @@ expression: "&airspaces[airspaces.len() - 5..]"
         min_alt_style: FlightLevel,
         max_alt_style: FlightLevel,
         time_out: 0,
-        active_time: 0,
+        start_date: None,
+        end_date: None,
         extra_data: 0,
         days_active: DaysActive {
             bits: 0,
@@ -626,7 +629,8 @@ expression: "&airspaces[airspaces.len() - 5..]"
         min_alt_style: MeanSeaLevel,
         max_alt_style: FlightLevel,
         time_out: 0,
-        active_time: 0,
+        start_date: None,
+        end_date: None,
         extra_data: 0,
         days_active: DaysActive {
             bits: 0,
@@ -726,7 +730,8 @@ expression: "&airspaces[airspaces.len() - 5..]"
         min_alt_style: FlightLevel,
         max_alt_style: FlightLevel,
         time_out: 0,
-        active_time: 0,
+        start_date: None,
+        end_date: None,
         extra_data: 0,
         days_active: DaysActive {
             bits: 0,

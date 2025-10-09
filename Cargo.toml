@@ -9,12 +9,7 @@ exclude = [".github/*", "benches/*", "docs/*", "examples/*", "tests/*", ".gitign
 
 [dependencies]
 encoding_rs = "0.8.35"
-jiff = { version = "0.2.15", optional = true }
 thiserror = "2.0.17"
-
-[features]
-default = []
-datetime = ["jiff"]
 
 [dev-dependencies]
 insta = "=1.43.2"

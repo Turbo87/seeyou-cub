@@ -14,6 +14,6 @@ Item {
     points_offset: 0,
     time_out: 0,
     extra_data: 0,
-    active_time: 0,
+    active_time: 67108863,
     extended_type_byte: 0,
 }

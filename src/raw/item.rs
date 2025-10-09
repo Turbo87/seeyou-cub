@@ -49,7 +49,12 @@ impl Item {
         let points_offset = read_i32(&mut cursor, byte_order)?;
         let time_out = read_i32(&mut cursor, byte_order)?;
         let extra_data = read_u32(&mut cursor, byte_order)?;
-        let active_time = read_u64(&mut cursor, byte_order)?;
+
+        let mut active_time = read_u64(&mut cursor, byte_order)?;
+        if active_time == 0 {
+            active_time = 0x3FFFFFF;
+        }
+
         let extended_type_byte = read_u8(&mut cursor)?;
 
         Ok(Self {
