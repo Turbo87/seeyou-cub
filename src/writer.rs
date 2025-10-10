@@ -30,6 +30,14 @@ impl CubWriter {
             airspaces: Vec::new(),
         }
     }
+
+    /// Add a single airspace to the writer
+    ///
+    /// Returns `&mut self` to allow method chaining.
+    pub fn add_airspace(&mut self, airspace: Airspace) -> &mut Self {
+        self.airspaces.push(airspace);
+        self
+    }
 }
 
 #[cfg(test)]
