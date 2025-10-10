@@ -1,8 +1,8 @@
 //! High-level CUB file reader with iterator-based API
 
-use crate::Airspace;
 use crate::error::Result;
 use crate::raw::{Header, Item, ItemData, PointOp};
+use crate::{Airspace, BoundingBox};
 use std::borrow::Cow;
 use std::fs::File;
 use std::io::{BufReader, Read, Seek, SeekFrom};
@@ -70,7 +70,7 @@ impl<R: Read + Seek> CubReader<R> {
     ///
     /// This value is read from the file header and represents the pre-calculated
     /// bounding box for all airspaces in the file.
-    pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
+    pub fn bounding_box(&self) -> &BoundingBox {
         self.header.bounding_box()
     }
 
