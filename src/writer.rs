@@ -1,4 +1,94 @@
 //! High-level CUB file writer with builder API
+//!
+//! Provides a convenient API for creating CUB files from airspace data. The writer
+//! follows a collect-then-write design: all airspaces are stored in memory, then
+//! coordinate scales, bounding boxes, and byte offsets are calculated automatically
+//! before writing the complete file.
+//!
+//! # Design
+//!
+//! The writer uses a mutable builder pattern with `&mut self` methods for chaining:
+//!
+//! ```no_run
+//! use seeyou_cub::writer::CubWriter;
+//! use seeyou_cub::{Airspace, Point, CubStyle, CubClass, AltStyle, DaysActive};
+//!
+//! let airspace = Airspace {
+//!     bounding_box: None,  // Calculated automatically
+//!     style: CubStyle::DangerArea,
+//!     class: CubClass::ClassD,
+//!     extended_type: None,
+//!     min_alt: 0,
+//!     max_alt: 5000,
+//!     min_alt_style: AltStyle::MeanSeaLevel,
+//!     max_alt_style: AltStyle::MeanSeaLevel,
+//!     time_out: 0,
+//!     start_date: None,
+//!     end_date: None,
+//!     extra_data: 0,
+//!     days_active: DaysActive::all(),
+//!     points: vec![
+//!         Point::new(0.8, 0.4),
+//!         Point::new(0.81, 0.41),
+//!         Point::new(0.82, 0.42),
+//!     ],
+//!     name: Some("My Airspace".to_string()),
+//!     frequency_name: None,
+//!     icao_code: None,
+//!     exception_rules: None,
+//!     notam_remarks: None,
+//!     notam_id: None,
+//!     frequency: None,
+//!     secondary_frequency: None,
+//!     notam_insert_time: None,
+//! };
+//!
+//! CubWriter::new("My Airspace Data")
+//!     .add_airspace(airspace)
+//!     .write_to_path("output.cub")?;
+//! # Ok::<(), seeyou_cub::Error>(())
+//! ```
+//!
+//! # Automatic Calculations
+//!
+//! The writer handles several complex tasks automatically:
+//!
+//! - **Bounding boxes**: Calculated from points if not provided in `Airspace::bounding_box`
+//! - **Coordinate conversion**: Points converted to i16 offsets with automatic `MoveOrigin` insertion
+//! - **Byte offsets**: All file offsets calculated during the write process
+//! - **Global metadata**: Header fields like `max_pts` and global bounding box computed from all airspaces
+//!
+//! # Configuration
+//!
+//! ## Defaults
+//!
+//! - **Byte order**: Little-endian
+//! - **Coordinate precision**: ~1 meter at the equator (`lo_la_scale = 1.5723687e-7` radians)
+//!
+//! ## Overrides
+//!
+//! Both settings can be customized:
+//!
+//! ```no_run
+//! use seeyou_cub::writer::CubWriter;
+//! use seeyou_cub::ByteOrder;
+//!
+//! CubWriter::new("Custom Settings")
+//!     .with_byte_order(ByteOrder::BE)
+//!     .with_lo_la_scale(0.0001)
+//!     .write_to_path("output.cub")?;
+//! # Ok::<(), seeyou_cub::Error>(())
+//! ```
+//!
+//! # Limitations
+//!
+//! ## Anti-meridian Handling
+//!
+//! The writer does **not** correctly handle airspaces that cross the ±180° longitude line
+//! (the anti-meridian). Bounding box calculation uses simple min/max logic, which produces
+//! incorrect results for such airspaces. If your data includes airspaces crossing the
+//! anti-meridian, you must calculate and provide the correct bounding box manually via
+//! `Airspace::bounding_box`.
 
 use crate::error::Result;
 use crate::raw::{Header, Item, ItemData, PointOp};
