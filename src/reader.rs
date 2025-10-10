@@ -146,8 +146,8 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
     let points = PointOp::resolve(
         &item_data.point_ops,
         header.lo_la_scale,
-        item.left,
-        item.bottom,
+        item.bounding_box.left,
+        item.bounding_box.bottom,
     )?;
 
     // Decode strings from raw bytes
@@ -175,12 +175,7 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
 
     Ok(Airspace {
         // Bounding box
-        bounding_box: BoundingBox {
-            left: item.left,
-            top: item.top,
-            right: item.right,
-            bottom: item.bottom,
-        },
+        bounding_box: item.bounding_box,
 
         // Decoded airspace classification
         style: item.style(),

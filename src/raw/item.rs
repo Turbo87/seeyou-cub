@@ -5,8 +5,8 @@ use crate::utils::io::{
     write_i32, write_u8, write_u32, write_u64,
 };
 use crate::{
-    AltStyle, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, NotamCodes, NotamScope,
-    NotamTraffic, NotamType,
+    AltStyle, BoundingBox, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, NotamCodes,
+    NotamScope, NotamTraffic, NotamType,
 };
 use std::io::{Cursor, Read, Write};
 
@@ -18,10 +18,7 @@ use std::io::{Cursor, Read, Write};
 #[derive(Debug, Clone, PartialEq)]
 pub struct Item {
     // Bounding box
-    pub left: f32,
-    pub top: f32,
-    pub right: f32,
-    pub bottom: f32,
+    pub bounding_box: BoundingBox,
 
     // Raw bit-packed fields
     pub type_byte: u8,
@@ -90,10 +87,12 @@ impl Item {
         let extended_type_byte = read_u8(&mut cursor)?;
 
         Ok(Self {
-            left,
-            top,
-            right,
-            bottom,
+            bounding_box: BoundingBox {
+                left,
+                top,
+                right,
+                bottom,
+            },
             type_byte,
             alt_style_byte,
             min_alt,
@@ -194,9 +193,9 @@ impl Item {
         NotamCodes::from_extra_data(self.extra_data)
     }
 
-    /// Get bounding box as (west, south, east, north) in radians
-    pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
-        (self.left, self.bottom, self.right, self.top)
+    /// Get bounding box
+    pub fn bounding_box(&self) -> &BoundingBox {
+        &self.bounding_box
     }
 
     /// Write airspace item to writer
@@ -219,10 +218,10 @@ impl Item {
         let mut buf = Vec::with_capacity(size_of_item.max(43));
 
         // Write bounding box (floats always LE)
-        write_f32_le(&mut buf, self.left)?;
-        write_f32_le(&mut buf, self.top)?;
-        write_f32_le(&mut buf, self.right)?;
-        write_f32_le(&mut buf, self.bottom)?;
+        write_f32_le(&mut buf, self.bounding_box.left)?;
+        write_f32_le(&mut buf, self.bounding_box.top)?;
+        write_f32_le(&mut buf, self.bounding_box.right)?;
+        write_f32_le(&mut buf, self.bounding_box.bottom)?;
 
         // Write bit-packed fields
         write_u8(&mut buf, self.type_byte)?;
@@ -286,10 +285,12 @@ mod tests {
         let item = Item {
             type_byte: 0b01000100, // Class D (0100) + Style 0x04 (DA)
             // ... other fields with defaults
-            left: 0.0,
-            top: 0.0,
-            right: 0.0,
-            bottom: 0.0,
+            bounding_box: BoundingBox {
+                left: 0.0,
+                top: 0.0,
+                right: 0.0,
+                bottom: 0.0,
+            },
             alt_style_byte: 0,
             min_alt: 0,
             max_alt: 0,
@@ -310,10 +311,12 @@ mod tests {
             alt_style_byte: 0x32, // Max=3 (FL), Min=2 (MSL)
             // ... other fields
             type_byte: 0,
-            left: 0.0,
-            top: 0.0,
-            right: 0.0,
-            bottom: 0.0,
+            bounding_box: BoundingBox {
+                left: 0.0,
+                top: 0.0,
+                right: 0.0,
+                bottom: 0.0,
+            },
             min_alt: 0,
             max_alt: 0,
             points_offset: 0,
@@ -384,10 +387,12 @@ mod tests {
 
         // Create an item with known values
         let original = Item {
-            left: -1.5,
-            top: 1.5,
-            right: 1.5,
-            bottom: -1.5,
+            bounding_box: BoundingBox {
+                left: -1.5,
+                top: 1.5,
+                right: 1.5,
+                bottom: -1.5,
+            },
             type_byte: 0b01000100, // Class D + Style DA
             alt_style_byte: 0x32,  // Max=FL, Min=MSL
             min_alt: 500,
@@ -439,10 +444,12 @@ mod tests {
         };
 
         let original = Item {
-            left: -1.0,
-            top: 1.0,
-            right: 1.0,
-            bottom: -1.0,
+            bounding_box: BoundingBox {
+                left: -1.0,
+                top: 1.0,
+                right: 1.0,
+                bottom: -1.0,
+            },
             type_byte: 0x12,
             alt_style_byte: 0x34,
             min_alt: -100,
@@ -489,10 +496,12 @@ mod tests {
         };
 
         let original = Item {
-            left: 0.5,
-            top: 0.5,
-            right: 0.5,
-            bottom: 0.5,
+            bounding_box: BoundingBox {
+                left: 0.5,
+                top: 0.5,
+                right: 0.5,
+                bottom: 0.5,
+            },
             type_byte: 0xFF,
             alt_style_byte: 0xFF,
             min_alt: i16::MIN,

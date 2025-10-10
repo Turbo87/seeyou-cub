@@ -4,10 +4,12 @@ expression: "&items[0..5]"
 ---
 [
     Item {
-        left: 0.033180647,
-        top: 0.83466476,
-        right: 0.033224326,
-        bottom: 0.8346504,
+        bounding_box: BoundingBox {
+            left: 0.033180647,
+            top: 0.83466476,
+            right: 0.033224326,
+            bottom: 0.8346504,
+        },
         type_byte: 2,
         alt_style_byte: 33,
         min_alt: 0,
@@ -19,10 +21,12 @@ expression: "&items[0..5]"
         extended_type_byte: 0,
     },
     Item {
-        left: 0.039682,
-        top: 0.85236555,
-        right: 0.039759766,
-        bottom: 0.85232186,
+        bounding_box: BoundingBox {
+            left: 0.039682,
+            top: 0.85236555,
+            right: 0.039759766,
+            bottom: 0.85232186,
+        },
         type_byte: 3,
         alt_style_byte: 33,
         min_alt: 0,
@@ -34,10 +38,12 @@ expression: "&items[0..5]"
         extended_type_byte: 0,
     },
     Item {
-        left: 0.099705316,
-        top: 0.7667715,
-        right: 0.099785745,
-        bottom: 0.76671344,
+        bounding_box: BoundingBox {
+            left: 0.099705316,
+            top: 0.7667715,
+            right: 0.099785745,
+            bottom: 0.76671344,
+        },
         type_byte: 3,
         alt_style_byte: 49,
         min_alt: 0,
@@ -49,10 +55,12 @@ expression: "&items[0..5]"
         extended_type_byte: 0,
     },
     Item {
-        left: 0.093006656,
-        top: 0.8027499,
-        right: 0.09311798,
-        bottom: 0.8026769,
+        bounding_box: BoundingBox {
+            left: 0.093006656,
+            top: 0.8027499,
+            right: 0.09311798,
+            bottom: 0.8026769,
+        },
         type_byte: 2,
         alt_style_byte: 33,
         min_alt: 0,
@@ -64,10 +72,12 @@ expression: "&items[0..5]"
         extended_type_byte: 0,
     },
     Item {
-        left: 0.03643375,
-        top: 0.851842,
-        right: 0.03662763,
-        bottom: 0.8517546,
+        bounding_box: BoundingBox {
+            left: 0.03643375,
+            top: 0.851842,
+            right: 0.03662763,
+            bottom: 0.8517546,
+        },
         type_byte: 2,
         alt_style_byte: 33,
         min_alt: 0,
