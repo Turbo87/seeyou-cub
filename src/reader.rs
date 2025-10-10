@@ -59,6 +59,11 @@ impl<R: Read + Seek> CubReader<R> {
         &self.header
     }
 
+    /// Get the CUB file title
+    pub fn title(&self) -> &str {
+        &self.header.title
+    }
+
     /// Create iterator over all airspaces in the file
     ///
     /// Returns an iterator that yields `Result<Airspace>` for each airspace.

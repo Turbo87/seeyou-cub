@@ -10,10 +10,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut reader = CubReader::from_path(&args[1])?;
 
-    let header = reader.header();
-
     println!("=== CUB File Info ===");
-    println!("Header: {}", header.title);
+    println!("Title: {}", reader.title());
+
+    let header = reader.header();
 
     let (w, s, e, n) = header.bounding_box();
     println!(
