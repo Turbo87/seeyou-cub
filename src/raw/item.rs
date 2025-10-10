@@ -1,8 +1,8 @@
 use crate::error::Result;
 use crate::raw::Header;
 use crate::utils::io::{
-    read_f32_le, read_i16, read_i32, read_u8, read_u32, read_u64, write_f32_le, write_i16,
-    write_i32, write_u8, write_u32, write_u64,
+    read_i16, read_i32, read_u8, read_u32, read_u64, write_f32_le, write_i16, write_i32,
+    write_u8, write_u32, write_u64,
 };
 use crate::{
     AltStyle, BoundingBox, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, NotamCodes,
@@ -64,10 +64,7 @@ impl Item {
         let mut cursor = Cursor::new(&item_buffer);
 
         // Read bounding box
-        let left = read_f32_le(&mut cursor)?;
-        let top = read_f32_le(&mut cursor)?;
-        let right = read_f32_le(&mut cursor)?;
-        let bottom = read_f32_le(&mut cursor)?;
+        let bounding_box = BoundingBox::read(&mut cursor)?;
 
         // Read bit-packed fields
         let byte_order = header.byte_order();
@@ -87,12 +84,7 @@ impl Item {
         let extended_type_byte = read_u8(&mut cursor)?;
 
         Ok(Self {
-            bounding_box: BoundingBox {
-                left,
-                top,
-                right,
-                bottom,
-            },
+            bounding_box,
             type_byte,
             alt_style_byte,
             min_alt,

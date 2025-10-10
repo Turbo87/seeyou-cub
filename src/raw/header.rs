@@ -103,10 +103,7 @@ impl Header {
         let hdr_items = read_i32(reader, byte_order)?;
         let max_pts = read_i32(reader, byte_order)?;
 
-        let left = read_f32_le(reader)?;
-        let top = read_f32_le(reader)?;
-        let right = read_f32_le(reader)?;
-        let bottom = read_f32_le(reader)?;
+        let bounding_box = BoundingBox::read(reader)?;
         let max_width = read_f32_le(reader)?;
         let max_height = read_f32_le(reader)?;
         let lo_la_scale = read_f32_le(reader)?;
@@ -132,12 +129,7 @@ impl Header {
             size_of_point,
             hdr_items,
             max_pts,
-            bounding_box: BoundingBox {
-                left,
-                top,
-                right,
-                bottom,
-            },
+            bounding_box,
             max_width,
             max_height,
             lo_la_scale,
