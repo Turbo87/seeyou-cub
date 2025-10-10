@@ -18,7 +18,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-seeyou-cub = "0.1.0"
+seeyou-cub = "0.2.0"
 ```
 
 ### High-Level API
