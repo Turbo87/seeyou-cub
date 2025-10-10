@@ -214,6 +214,18 @@ impl CubWriter {
         self.lo_la_scale = scale;
         self
     }
+
+    /// Write CUB file to a file path
+    ///
+    /// Convenience wrapper around `write()` that creates a file at the given path.
+    ///
+    /// # Returns
+    ///
+    /// Ok(()) on success or an error if file creation or writing fails
+    pub fn write_to_path<P: AsRef<std::path::Path>>(&mut self, path: P) -> Result<()> {
+        let file = std::fs::File::create(path)?;
+        self.write(file)
+    }
 }
 
 // Helper functions for encoding bit-packed fields
@@ -456,5 +468,52 @@ mod tests {
         let a2 = &airspaces[1];
         assert_eq!(a2.name, Some("Restricted 2".to_string()));
         assert_eq!(a2.points.len(), 2);
+    }
+
+    #[test]
+    fn write_to_path() {
+        let airspace = Airspace {
+            bounding_box: None,
+            style: CubStyle::Unknown,
+            class: CubClass::ClassE,
+            extended_type: None,
+            min_alt: 0,
+            max_alt: 5000,
+            min_alt_style: AltStyle::MeanSeaLevel,
+            max_alt_style: AltStyle::MeanSeaLevel,
+            time_out: 0,
+            start_date: None,
+            end_date: None,
+            extra_data: 0,
+            days_active: DaysActive::all(),
+            points: vec![Point::new(0.5, 0.5), Point::new(0.51, 0.51)],
+            name: Some("Path Test Airspace".to_string()),
+            frequency_name: None,
+            icao_code: None,
+            exception_rules: None,
+            notam_remarks: None,
+            notam_id: None,
+            frequency: None,
+            secondary_frequency: None,
+            notam_insert_time: None,
+        };
+
+        // Write to temporary file
+        let temp_path = std::env::temp_dir().join("test_write_to_path.cub");
+
+        CubWriter::new("Path Test")
+            .add_airspace(airspace)
+            .write_to_path(&temp_path)
+            .expect("Failed to write to path");
+
+        // Read back and verify
+        let airspaces: Vec<_> = CubReader::from_path(&temp_path)
+            .expect("Failed to read from path")
+            .read_airspaces()
+            .collect::<Result<_>>()
+            .expect("Failed to read airspaces");
+
+        assert_eq!(airspaces.len(), 1);
+        assert_eq!(airspaces[0].name, Some("Path Test Airspace".to_string()));
     }
 }
