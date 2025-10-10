@@ -1,6 +1,6 @@
 use crate::error::Result;
-use crate::utils::io::read_f32_le;
-use std::io::Read;
+use crate::utils::io::{read_f32_le, write_f32_le};
+use std::io::{Read, Write};
 
 /// Bounding box for geographic areas
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -31,6 +31,17 @@ impl BoundingBox {
             right,
             bottom,
         })
+    }
+
+    /// Write bounding box to writer
+    ///
+    /// Writes 4 f32 values (16 bytes total) in little-endian format.
+    pub fn write<W: Write>(&self, writer: &mut W) -> Result<()> {
+        write_f32_le(writer, self.left)?;
+        write_f32_le(writer, self.top)?;
+        write_f32_le(writer, self.right)?;
+        write_f32_le(writer, self.bottom)?;
+        Ok(())
     }
 }
 
@@ -71,5 +82,49 @@ mod tests {
         assert_eq!(bbox.top, 1.0);
         assert_eq!(bbox.right, 2.0);
         assert_eq!(bbox.bottom, -3.0);
+    }
+
+    #[test]
+    fn test_write() {
+        let bbox = BoundingBox {
+            left: -1.0,
+            top: 1.0,
+            right: 2.0,
+            bottom: -3.0,
+        };
+
+        let mut buf = Vec::new();
+        bbox.write(&mut buf).expect("Failed to write");
+
+        assert_eq!(buf.len(), 16);
+        assert_eq!(
+            buf,
+            vec![
+                0x00, 0x00, 0x80, 0xBF, // -1.0 (left)
+                0x00, 0x00, 0x80, 0x3F, // 1.0 (top)
+                0x00, 0x00, 0x00, 0x40, // 2.0 (right)
+                0x00, 0x00, 0x40, 0xC0, // -3.0 (bottom)
+            ]
+        );
+    }
+
+    #[test]
+    fn test_write_read_round_trip() {
+        let original = BoundingBox {
+            left: -0.5,
+            top: 0.9,
+            right: 0.3,
+            bottom: 0.1,
+        };
+
+        // Write
+        let mut buf = Vec::new();
+        original.write(&mut buf).expect("Failed to write");
+
+        // Read back
+        let mut cursor = Cursor::new(&buf);
+        let read_back = BoundingBox::read(&mut cursor).expect("Failed to read");
+
+        assert_eq!(read_back, original);
     }
 }

@@ -194,10 +194,7 @@ impl Header {
         write_i32(writer, self.max_pts, byte_order)?;
 
         // Floats are always LE
-        write_f32_le(writer, self.bounding_box.left)?;
-        write_f32_le(writer, self.bounding_box.top)?;
-        write_f32_le(writer, self.bounding_box.right)?;
-        write_f32_le(writer, self.bounding_box.bottom)?;
+        self.bounding_box.write(writer)?;
         write_f32_le(writer, self.max_width)?;
         write_f32_le(writer, self.max_height)?;
         write_f32_le(writer, self.lo_la_scale)?;

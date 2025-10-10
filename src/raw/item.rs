@@ -1,8 +1,8 @@
 use crate::error::Result;
 use crate::raw::Header;
 use crate::utils::io::{
-    read_i16, read_i32, read_u8, read_u32, read_u64, write_f32_le, write_i16, write_i32,
-    write_u8, write_u32, write_u64,
+    read_i16, read_i32, read_u8, read_u32, read_u64, write_i16, write_i32, write_u8, write_u32,
+    write_u64,
 };
 use crate::{
     AltStyle, BoundingBox, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, NotamCodes,
@@ -210,10 +210,7 @@ impl Item {
         let mut buf = Vec::with_capacity(size_of_item.max(43));
 
         // Write bounding box (floats always LE)
-        write_f32_le(&mut buf, self.bounding_box.left)?;
-        write_f32_le(&mut buf, self.bounding_box.top)?;
-        write_f32_le(&mut buf, self.bounding_box.right)?;
-        write_f32_le(&mut buf, self.bounding_box.bottom)?;
+        self.bounding_box.write(&mut buf)?;
 
         // Write bit-packed fields
         write_u8(&mut buf, self.type_byte)?;
