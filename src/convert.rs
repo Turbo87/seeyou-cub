@@ -1,5 +1,6 @@
+use crate::Point;
 use crate::error::Result;
-use crate::{Point, PointOp};
+use crate::raw::PointOp;
 
 /// Resolve point operations into geographic coordinates
 ///

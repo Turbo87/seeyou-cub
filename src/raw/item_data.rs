@@ -1,7 +1,40 @@
+use crate::ByteString;
 use crate::error::Result;
 use crate::raw::io::{read_bytes, read_i16, read_u8, read_u32};
-use crate::{CubDataId, Error, Header, ItemData, PointOp};
+use crate::raw::{Header, PointOp};
+use crate::{CubDataId, Error};
 use std::io::Read;
+
+/// Low-level item data with raw point operations and unprocessed attributes
+///
+/// This struct represents data as close to the file format as possible:
+/// - Point operations are raw i16 offsets (not yet converted to lat/lon)
+/// - Strings are raw bytes (not yet decoded from UTF-8/Extended ASCII)
+/// - Optional attributes remain as raw bytes for maximum flexibility
+#[derive(Debug, Clone, PartialEq)]
+pub struct ItemData {
+    /// Raw point operations (origin moves and new points with i16 x/y offsets)
+    pub point_ops: Vec<PointOp>,
+
+    /// Airspace name (raw bytes, not decoded)
+    pub name: Option<ByteString>,
+    /// Primary frequency in Hz
+    pub frequency: Option<u32>,
+    /// Primary frequency name/label (raw bytes, not decoded)
+    pub frequency_name: Option<ByteString>,
+    /// ICAO code (raw bytes, not decoded)
+    pub icao_code: Option<ByteString>,
+    /// Secondary frequency in Hz
+    pub secondary_frequency: Option<u32>,
+    /// Class exception rules (raw bytes, not decoded)
+    pub exception_rules: Option<ByteString>,
+    /// NOTAM remarks (raw bytes, not decoded)
+    pub notam_remarks: Option<ByteString>,
+    /// NOTAM identifier (raw bytes, not decoded)
+    pub notam_id: Option<ByteString>,
+    /// NOTAM insert time (raw encoded value)
+    pub notam_insert_time: Option<u32>,
+}
 
 impl ItemData {
     /// Read raw item data from the current position
@@ -174,7 +207,7 @@ fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut ItemData)
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::Item;
+    use crate::raw::Item;
     use std::fs::File;
     use std::io::{Cursor, Seek, SeekFrom};
 

@@ -8,3 +8,9 @@ mod header;
 mod io;
 mod item;
 mod item_data;
+mod point_op;
+
+pub use self::header::Header;
+pub use self::item::Item;
+pub use self::item_data::ItemData;
+pub use self::point_op::PointOp;

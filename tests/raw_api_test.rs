@@ -1,5 +1,5 @@
 use insta::assert_debug_snapshot;
-use seeyou_cub::{Header, Item, ItemData};
+use seeyou_cub::raw::{Header, Item, ItemData};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{Seek, SeekFrom};

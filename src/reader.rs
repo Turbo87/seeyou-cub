@@ -1,9 +1,10 @@
 //! High-level CUB file reader with iterator-based API
 
+use crate::Airspace;
 use crate::convert::resolve_point_ops;
 use crate::decode::decode_string;
 use crate::error::Result;
-use crate::{Airspace, Header, Item, ItemData};
+use crate::raw::{Header, Item, ItemData};
 use std::fs::File;
 use std::io::{BufReader, Read, Seek, SeekFrom};
 use std::path::Path;

@@ -1,7 +1,7 @@
+use crate::ByteOrder;
 use crate::decode::decode_string;
 use crate::error::{Error, Result};
 use crate::raw::io::{read_bytes, read_f32_le, read_i32, read_u8, read_u16, read_u32};
-use crate::types::{ByteOrder, Header};
 use std::io::Read;
 
 /// Minimum accepted `size_of_item`. Anything below that would not include the
@@ -10,6 +10,34 @@ const MIN_SIZE_OF_ITEM: i32 = 26;
 
 /// Minimum accepted `size_of_point` (defined by the spec).
 const MIN_SIZE_OF_POINT: i32 = 5;
+
+/// CUB file header (first 210 bytes)
+///
+/// Contains metadata about the airspace file including bounding box,
+/// item counts, and structural information needed for parsing.
+#[derive(Debug, Clone)]
+pub struct Header {
+    // Raw fields (public)
+    pub title: String,
+    pub allowed_serials: [u16; 8],
+    pub pc_byte_order: u8,
+    pub crc32: u32,
+    pub key: [u8; 16],
+    pub size_of_item: i32,
+    pub size_of_point: i32,
+    pub hdr_items: i32,
+    pub max_pts: i32,
+    pub left: f32,
+    pub top: f32,
+    pub right: f32,
+    pub bottom: f32,
+    pub max_width: f32,
+    pub max_height: f32,
+    pub lo_la_scale: f32,
+    pub header_offset: i32,
+    pub data_offset: i32,
+    pub alignment: i32,
+}
 
 impl Header {
     /// Read CUB file header from current position
@@ -116,6 +144,16 @@ impl Header {
         };
 
         Ok(header)
+    }
+
+    /// Get bounding box as (west, south, east, north) in radians
+    pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
+        (self.left, self.bottom, self.right, self.top)
+    }
+
+    /// Get byte order for integers
+    pub fn byte_order(&self) -> ByteOrder {
+        ByteOrder::from_pc_byte_order(self.pc_byte_order)
     }
 }
 

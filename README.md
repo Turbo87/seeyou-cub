@@ -50,7 +50,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 The low-level API provides direct access to raw file data with minimal transformation:
 
 ```rust,no_run
-use seeyou_cub::{Header, Item, ItemData};
+use seeyou_cub::raw::{Header, Item, ItemData};
 use std::fs::File;
 use std::io::{Seek, SeekFrom};
 
