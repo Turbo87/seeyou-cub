@@ -1,8 +1,10 @@
 /// Byte ordering for integer fields
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ByteOrder {
-    LE, // Little Endian
-    BE, // Big Endian
+    /// Little Endian
+    LE,
+    /// Big Endian
+    BE,
 }
 
 impl ByteOrder {
