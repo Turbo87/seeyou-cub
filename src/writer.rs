@@ -516,4 +516,71 @@ mod tests {
         assert_eq!(airspaces.len(), 1);
         assert_eq!(airspaces[0].name, Some("Path Test Airspace".to_string()));
     }
+
+    #[test]
+    fn round_trip_france_fixture() {
+        // Read France fixture
+        let original_airspaces: Vec<_> =
+            CubReader::from_path("tests/fixtures/france_2024.07.02.cub")
+                .expect("Failed to open")
+                .read_airspaces()
+                .collect::<Result<_>>()
+                .expect("Failed to read airspaces");
+
+        // Write out again
+        let mut cursor = Cursor::new(Vec::new());
+        CubWriter::new("Round-trip Test")
+            .add_airspaces(original_airspaces.clone())
+            .write(&mut cursor)
+            .expect("Failed to write temp file");
+
+        // Read back
+        cursor.set_position(0);
+        let read_back_airspaces: Vec<_> = CubReader::new(&mut cursor)
+            .expect("Failed to read temp file")
+            .read_airspaces()
+            .collect::<Result<_>>()
+            .expect("Failed to read airspaces from temp file");
+
+        // Compare counts
+        assert_eq!(
+            read_back_airspaces.len(),
+            original_airspaces.len(),
+            "Airspace count mismatch"
+        );
+
+        // Compare each airspace
+        for (i, (original, read_back)) in original_airspaces
+            .iter()
+            .zip(read_back_airspaces.iter())
+            .enumerate()
+        {
+            assert_eq!(original.name, read_back.name, "Airspace {i} name mismatch");
+            assert_eq!(
+                original.points.len(),
+                read_back.points.len(),
+                "Airspace {i} point count mismatch",
+            );
+
+            // Compare points with small floating-point tolerance
+            for (j, (orig_point, read_point)) in original
+                .points
+                .iter()
+                .zip(read_back.points.iter())
+                .enumerate()
+            {
+                let lat_diff = (orig_point.lat - read_point.lat).abs();
+                let lon_diff = (orig_point.lon - read_point.lon).abs();
+
+                assert!(
+                    lat_diff < 0.00001,
+                    "Airspace {i} point {j} latitude differs by {lat_diff}",
+                );
+                assert!(
+                    lon_diff < 0.00001,
+                    "Airspace {i} point {j} longitude differs by {lon_diff}",
+                );
+            }
+        }
+    }
 }
