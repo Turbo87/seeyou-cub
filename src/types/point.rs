@@ -38,15 +38,15 @@ mod tests {
     #[test]
     fn point_creation() {
         // Paris: 48.8566°N, 2.3522°E in radians
-        let point = Point::new(0.8529413854, 0.0410370585);
-        assert_eq!(point.lat, 0.8529413854);
-        assert_eq!(point.lon, 0.0410370585);
+        let point = Point::new(0.852_941_4, 0.041_037_06);
+        assert_eq!(point.lat, 0.852_941_4);
+        assert_eq!(point.lon, 0.041_037_06);
     }
 
     #[test]
     fn point_is_valid() {
         // Paris: 48.8566°N, 2.3522°E in radians
-        assert!(Point::new(0.8529413854, 0.0410370585).is_valid());
+        assert!(Point::new(0.852_941_4, 0.041_037_06).is_valid());
         assert!(Point::new(0.0, 0.0).is_valid()); // Null Island
         assert!(Point::new(std::f32::consts::FRAC_PI_2, std::f32::consts::PI).is_valid()); // Edge cases
         assert!(Point::new(-std::f32::consts::FRAC_PI_2, -std::f32::consts::PI).is_valid()); // Edge cases
