@@ -3,12 +3,14 @@ source: src/reader.rs
 expression: airspace
 ---
 Airspace {
-    bounding_box: BoundingBox {
-        left: 0.033180647,
-        top: 0.83466476,
-        right: 0.033224326,
-        bottom: 0.8346504,
-    },
+    bounding_box: Some(
+        BoundingBox {
+            left: 0.033180647,
+            top: 0.83466476,
+            right: 0.033224326,
+            bottom: 0.8346504,
+        },
+    ),
     style: RestrictedArea,
     class: Unknown,
     extended_type: None,

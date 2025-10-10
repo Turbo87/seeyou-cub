@@ -4,12 +4,14 @@ expression: "&airspaces[airspaces.len() - 5..]"
 ---
 [
     Airspace {
-        bounding_box: BoundingBox {
-            left: 0.020236123,
-            top: 0.8683303,
-            right: 0.06833907,
-            bottom: 0.83778715,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.020236123,
+                top: 0.8683303,
+                right: 0.06833907,
+                bottom: 0.83778715,
+            },
+        ),
         style: Unknown,
         class: ClassA,
         extended_type: None,
@@ -85,12 +87,14 @@ expression: "&airspaces[airspaces.len() - 5..]"
         notam_insert_time: None,
     },
     Airspace {
-        bounding_box: BoundingBox {
-            left: -0.0027585898,
-            top: 0.82174,
-            right: 0.05109963,
-            bottom: 0.7809961,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: -0.0027585898,
+                top: 0.82174,
+                right: 0.05109963,
+                bottom: 0.7809961,
+            },
+        ),
         style: Unknown,
         class: ClassD,
         extended_type: None,
@@ -154,12 +158,14 @@ expression: "&airspaces[airspaces.len() - 5..]"
         notam_insert_time: None,
     },
     Airspace {
-        bounding_box: BoundingBox {
-            left: 0.010631964,
-            top: 0.86980927,
-            right: 0.07419077,
-            bottom: 0.83511096,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.010631964,
+                top: 0.86980927,
+                right: 0.07419077,
+                bottom: 0.83511096,
+            },
+        ),
         style: Unknown,
         class: ClassA,
         extended_type: None,
@@ -239,12 +245,14 @@ expression: "&airspaces[airspaces.len() - 5..]"
         notam_insert_time: None,
     },
     Airspace {
-        bounding_box: BoundingBox {
-            left: 0.013671746,
-            top: 0.87266463,
-            right: 0.06952207,
-            bottom: 0.83775806,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.013671746,
+                top: 0.87266463,
+                right: 0.06952207,
+                bottom: 0.83775806,
+            },
+        ),
         style: Unknown,
         class: ClassE,
         extended_type: None,
@@ -291,12 +299,14 @@ expression: "&airspaces[airspaces.len() - 5..]"
         notam_insert_time: None,
     },
     Airspace {
-        bounding_box: BoundingBox {
-            left: 0.013671746,
-            top: 0.87266463,
-            right: 0.06952207,
-            bottom: 0.83775806,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.013671746,
+                top: 0.87266463,
+                right: 0.06952207,
+                bottom: 0.83775806,
+            },
+        ),
         style: Unknown,
         class: ClassD,
         extended_type: None,

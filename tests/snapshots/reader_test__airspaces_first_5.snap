@@ -4,12 +4,14 @@ expression: "&airspaces[0..5]"
 ---
 [
     Airspace {
-        bounding_box: BoundingBox {
-            left: 0.033180647,
-            top: 0.83466476,
-            right: 0.033224326,
-            bottom: 0.8346504,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.033180647,
+                top: 0.83466476,
+                right: 0.033224326,
+                bottom: 0.8346504,
+            },
+        ),
         style: RestrictedArea,
         class: Unknown,
         extended_type: None,
@@ -43,12 +45,14 @@ expression: "&airspaces[0..5]"
         notam_insert_time: None,
     },
     Airspace {
-        bounding_box: BoundingBox {
-            left: 0.039682,
-            top: 0.85236555,
-            right: 0.039759766,
-            bottom: 0.85232186,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.039682,
+                top: 0.85236555,
+                right: 0.039759766,
+                bottom: 0.85232186,
+            },
+        ),
         style: ProhibitedArea,
         class: Unknown,
         extended_type: None,
@@ -83,12 +87,14 @@ expression: "&airspaces[0..5]"
         notam_insert_time: None,
     },
     Airspace {
-        bounding_box: BoundingBox {
-            left: 0.099705316,
-            top: 0.7667715,
-            right: 0.099785745,
-            bottom: 0.76671344,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.099705316,
+                top: 0.7667715,
+                right: 0.099785745,
+                bottom: 0.76671344,
+            },
+        ),
         style: ProhibitedArea,
         class: Unknown,
         extended_type: None,
@@ -300,12 +306,14 @@ expression: "&airspaces[0..5]"
         notam_insert_time: None,
     },
     Airspace {
-        bounding_box: BoundingBox {
-            left: 0.093006656,
-            top: 0.8027499,
-            right: 0.09311798,
-            bottom: 0.8026769,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.093006656,
+                top: 0.8027499,
+                right: 0.09311798,
+                bottom: 0.8026769,
+            },
+        ),
         style: RestrictedArea,
         class: Unknown,
         extended_type: None,
@@ -340,12 +348,14 @@ expression: "&airspaces[0..5]"
         notam_insert_time: None,
     },
     Airspace {
-        bounding_box: BoundingBox {
-            left: 0.03643375,
-            top: 0.851842,
-            right: 0.03662763,
-            bottom: 0.8517546,
-        },
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.03643375,
+                top: 0.851842,
+                right: 0.03662763,
+                bottom: 0.8517546,
+            },
+        ),
         style: RestrictedArea,
         class: Unknown,
         extended_type: None,

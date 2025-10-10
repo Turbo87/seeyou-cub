@@ -7,8 +7,8 @@ use crate::{AltStyle, BoundingBox, CubClass, CubStyle, DateTime, DaysActive, Ext
 /// and coordinates are converted from raw i16 offsets to f32 lat/lon.
 #[derive(Debug, Clone)]
 pub struct Airspace {
-    // Bounding box in radians
-    pub bounding_box: BoundingBox,
+    // Bounding box in radians (None if not yet calculated)
+    pub bounding_box: Option<BoundingBox>,
 
     // Decoded airspace classification
     pub style: CubStyle,
@@ -54,7 +54,7 @@ impl Airspace {
     }
 
     /// Get bounding box
-    pub fn bounding_box(&self) -> &BoundingBox {
-        &self.bounding_box
+    pub fn bounding_box(&self) -> Option<&BoundingBox> {
+        self.bounding_box.as_ref()
     }
 }
