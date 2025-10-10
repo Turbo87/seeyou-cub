@@ -4,6 +4,17 @@ use crate::utils::io::{read_f32_le, write_f32_le};
 use std::io::{Read, Write};
 
 /// Bounding box for geographic areas
+///
+/// Represents a rectangular geographic area defined by longitude and latitude bounds.
+/// All coordinates are stored in radians.
+///
+/// # Limitations
+///
+/// **Anti-meridian handling**: This implementation does not correctly handle areas
+/// crossing the ±180° longitude line (anti-meridian). Simple min/max logic is used,
+/// which will produce incorrect results for such regions. If an airspace crosses the
+/// anti-meridian, the bounding box will incorrectly span nearly the entire globe
+/// instead of the actual smaller region.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct BoundingBox {
     pub left: f32,   // west longitude (radians)
