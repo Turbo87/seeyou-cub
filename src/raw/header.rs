@@ -21,7 +21,6 @@ pub struct Header {
     pub title: ByteString,
     pub allowed_serials: [u16; 8],
     pub pc_byte_order: u8,
-    pub crc32: u32,
     pub key: [u8; 16],
     pub size_of_item: i32,
     pub size_of_point: i32,
@@ -36,7 +35,6 @@ pub struct Header {
     pub lo_la_scale: f32,
     pub header_offset: i32,
     pub data_offset: i32,
-    pub alignment: i32,
 }
 
 impl Header {
@@ -92,7 +90,7 @@ impl Header {
         }
 
         // Read Crc32 (offset 134-137)
-        let crc32 = read_u32(reader, byte_order)?;
+        let _crc32 = read_u32(reader, byte_order)?;
 
         // Read Key (offset 138-153, 16 bytes)
         let key = {
@@ -117,7 +115,7 @@ impl Header {
 
         let header_offset = read_i32(reader, byte_order)?;
         let data_offset = read_i32(reader, byte_order)?;
-        let alignment = read_i32(reader, byte_order)?;
+        let _alignment = read_i32(reader, byte_order)?;
 
         if size_of_item < MIN_SIZE_OF_ITEM {
             return Err(Error::UndersizedItems { size_of_item });
@@ -131,7 +129,6 @@ impl Header {
             title,
             allowed_serials,
             pc_byte_order,
-            crc32,
             key,
             size_of_item,
             size_of_point,
@@ -146,7 +143,6 @@ impl Header {
             lo_la_scale,
             header_offset,
             data_offset,
-            alignment,
         };
 
         Ok(header)

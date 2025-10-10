@@ -245,7 +245,6 @@ mod tests {
             title: ByteString::from(b"Test".to_vec()),
             allowed_serials: [0; 8],
             pc_byte_order: 1, // LE
-            crc32: 0,
             key: [0; 16],
             size_of_item: 42,
             size_of_point: 5,
@@ -260,7 +259,6 @@ mod tests {
             lo_la_scale: 0.0001,
             header_offset: 0,
             data_offset: 0,
-            alignment: 0,
         };
 
         // Build byte stream with all optional fields

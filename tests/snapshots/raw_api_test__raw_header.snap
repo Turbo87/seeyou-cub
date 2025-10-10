@@ -15,7 +15,6 @@ Header {
         0,
     ],
     pc_byte_order: 1,
-    crc32: 0,
     key: [
         142,
         73,
@@ -47,5 +46,4 @@ Header {
     lo_la_scale: 5.3264847e-7,
     header_offset: 210,
     data_offset: 41250,
-    alignment: 0,
 }
