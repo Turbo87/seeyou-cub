@@ -1,6 +1,6 @@
 //! High-level CUB file writer with builder API
 
-use crate::Airspace;
+use crate::{Airspace, ByteOrder};
 
 /// High-level CUB file writer with builder API
 ///
@@ -18,16 +18,19 @@ use crate::Airspace;
 pub struct CubWriter {
     title: String,
     airspaces: Vec<Airspace>,
+    byte_order: ByteOrder,
 }
 
 impl CubWriter {
     /// Create a new writer with the given title
     ///
     /// The title will be stored in the CUB file header.
+    /// Default byte order is little-endian.
     pub fn new(title: impl Into<String>) -> Self {
         Self {
             title: title.into(),
             airspaces: Vec::new(),
+            byte_order: ByteOrder::LE,
         }
     }
 
@@ -44,6 +47,14 @@ impl CubWriter {
     /// Returns `&mut self` to allow method chaining.
     pub fn add_airspaces<I: IntoIterator<Item = Airspace>>(&mut self, airspaces: I) -> &mut Self {
         self.airspaces.extend(airspaces);
+        self
+    }
+
+    /// Configure byte order for the output file
+    ///
+    /// Default is little-endian. Returns `&mut self` to allow method chaining.
+    pub fn with_byte_order(&mut self, byte_order: ByteOrder) -> &mut Self {
+        self.byte_order = byte_order;
         self
     }
 }
