@@ -1,5 +1,5 @@
-use crate::byte_string::ByteString;
 use crate::ByteOrder;
+use crate::byte_string::ByteString;
 use crate::error::{Error, Result};
 use crate::raw::io::{read_f32_le, read_i32, read_u8, read_u16, read_u32};
 use std::io::Read;
