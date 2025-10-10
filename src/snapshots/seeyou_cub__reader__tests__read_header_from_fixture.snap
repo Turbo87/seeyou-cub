@@ -3,7 +3,7 @@ source: src/reader.rs
 expression: header
 ---
 Header {
-    title: "SeeYou Airspace © Naviter 2011",
+    title: b"SeeYou Airspace \xa9 Naviter 2011",
     allowed_serials: [
         0,
         0,

@@ -59,7 +59,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Read header
     let header = Header::read(&mut file)?;
-    println!("CUB file: {}", header.title);
+    println!("CUB file: {:?}", header.title);
 
     // Read items (airspace metadata)
     for i in 0..header.hdr_items {

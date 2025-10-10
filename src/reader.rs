@@ -4,6 +4,7 @@ use crate::Airspace;
 use crate::decode::decode_string;
 use crate::error::Result;
 use crate::raw::{Header, Item, ItemData, PointOp};
+use std::borrow::Cow;
 use std::fs::File;
 use std::io::{BufReader, Read, Seek, SeekFrom};
 use std::path::Path;
@@ -60,8 +61,8 @@ impl<R: Read + Seek> CubReader<R> {
     }
 
     /// Get the CUB file title
-    pub fn title(&self) -> &str {
-        &self.header.title
+    pub fn title(&self) -> Cow<'_, str> {
+        decode_string(self.header.title.as_bytes())
     }
 
     /// Get bounding box covering all airspaces

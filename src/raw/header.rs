@@ -1,5 +1,5 @@
+use crate::byte_string::ByteString;
 use crate::ByteOrder;
-use crate::decode::decode_string;
 use crate::error::{Error, Result};
 use crate::raw::io::{read_bytes, read_f32_le, read_i32, read_u8, read_u16, read_u32};
 use std::io::Read;
@@ -18,7 +18,7 @@ const MIN_SIZE_OF_POINT: i32 = 5;
 #[derive(Debug, Clone)]
 pub struct Header {
     // Raw fields (public)
-    pub title: String,
+    pub title: ByteString,
     pub allowed_serials: [u16; 8],
     pub pc_byte_order: u8,
     pub crc32: u32,
@@ -64,8 +64,14 @@ impl Header {
         }
 
         // Read title (offset 4-115, 112 bytes)
-        let title = read_bytes(reader, 112)?;
-        let title = decode_string(&title).trim_end_matches('\0').to_string();
+        let mut title = read_bytes(reader, 112)?;
+        // Trim null padding
+        if let Some(pos) = title.iter().rposition(|&b| b != 0) {
+            title.truncate(pos + 1);
+        } else {
+            title.clear();
+        }
+        let title = ByteString::from(title);
 
         // Read allowed serials (offset 116-131, 8 × u16, always LE)
         let mut allowed_serials = [0u16; 8];
