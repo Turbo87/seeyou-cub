@@ -44,6 +44,17 @@ impl BoundingBox {
         write_f32_le(writer, self.bottom)?;
         Ok(())
     }
+
+    /// Extend bounding box to include a point
+    ///
+    /// Grows the bounding box if necessary to encompass the given point.
+    /// If the point is already inside the bbox, no change is made.
+    pub fn extend(&mut self, point: Point) {
+        self.left = self.left.min(point.lon);
+        self.right = self.right.max(point.lon);
+        self.top = self.top.max(point.lat);
+        self.bottom = self.bottom.min(point.lat);
+    }
 }
 
 impl From<Point> for BoundingBox {
@@ -76,6 +87,101 @@ mod tests {
         assert_eq!(bbox.top, 0.852_941_4); // lat
         assert_eq!(bbox.right, 0.041_037_06); // lon
         assert_eq!(bbox.bottom, 0.852_941_4); // lat
+    }
+
+    #[test]
+    fn test_extend_north() {
+        // Start with a bbox from single point
+        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+
+        // Extend north (higher latitude)
+        let north_point = Point::new(0.8, 0.5);
+        bbox.extend(north_point);
+
+        assert_eq!(bbox.left, 0.5);
+        assert_eq!(bbox.top, 0.8); // Extended north
+        assert_eq!(bbox.right, 0.5);
+        assert_eq!(bbox.bottom, 0.5);
+    }
+
+    #[test]
+    fn test_extend_south() {
+        // Start with a bbox from single point
+        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+
+        // Extend south (lower latitude)
+        let south_point = Point::new(0.2, 0.5);
+        bbox.extend(south_point);
+
+        assert_eq!(bbox.left, 0.5);
+        assert_eq!(bbox.top, 0.5);
+        assert_eq!(bbox.right, 0.5);
+        assert_eq!(bbox.bottom, 0.2); // Extended south
+    }
+
+    #[test]
+    fn test_extend_east() {
+        // Start with a bbox from single point
+        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+
+        // Extend east (higher longitude)
+        let east_point = Point::new(0.5, 0.8);
+        bbox.extend(east_point);
+
+        assert_eq!(bbox.left, 0.5);
+        assert_eq!(bbox.top, 0.5);
+        assert_eq!(bbox.right, 0.8); // Extended east
+        assert_eq!(bbox.bottom, 0.5);
+    }
+
+    #[test]
+    fn test_extend_west() {
+        // Start with a bbox from single point
+        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+
+        // Extend west (lower longitude)
+        let west_point = Point::new(0.5, 0.2);
+        bbox.extend(west_point);
+
+        assert_eq!(bbox.left, 0.2); // Extended west
+        assert_eq!(bbox.top, 0.5);
+        assert_eq!(bbox.right, 0.5);
+        assert_eq!(bbox.bottom, 0.5);
+    }
+
+    #[test]
+    fn test_extend_multiple_directions() {
+        // Start with a bbox from single point
+        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+
+        // Extend in multiple directions
+        bbox.extend(Point::new(0.8, 0.8)); // NE
+        bbox.extend(Point::new(0.2, 0.2)); // SW
+        bbox.extend(Point::new(0.9, 0.1)); // SE
+
+        assert_eq!(bbox.left, 0.1); // Westmost
+        assert_eq!(bbox.top, 0.9); // Northmost
+        assert_eq!(bbox.right, 0.8); // Eastmost
+        assert_eq!(bbox.bottom, 0.2); // Southmost
+    }
+
+    #[test]
+    fn test_extend_with_point_inside_bbox() {
+        // Start with a bbox
+        let mut bbox = BoundingBox {
+            left: 0.0,
+            top: 1.0,
+            right: 1.0,
+            bottom: 0.0,
+        };
+
+        // Extend with point inside - should not change bounds
+        bbox.extend(Point::new(0.5, 0.5));
+
+        assert_eq!(bbox.left, 0.0);
+        assert_eq!(bbox.top, 1.0);
+        assert_eq!(bbox.right, 1.0);
+        assert_eq!(bbox.bottom, 0.0);
     }
 
     #[test]
