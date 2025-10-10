@@ -2,7 +2,8 @@ use crate::ByteOrder;
 use crate::error::{Error, Result};
 use crate::utils::ByteString;
 use crate::utils::io::{read_f32_le, read_i32, read_u8, read_u16, read_u32};
-use std::io::Read;
+use crate::utils::io::{write_f32_le, write_i32, write_u8, write_u16, write_u32};
+use std::io::{Read, Write};
 
 /// Minimum accepted `size_of_item`. Anything below that would not include the
 /// `points_offset` field, which is a hard requirement.
@@ -157,12 +158,74 @@ impl Header {
     pub fn byte_order(&self) -> ByteOrder {
         ByteOrder::from_pc_byte_order(self.pc_byte_order)
     }
+
+    /// Write CUB file header to writer
+    ///
+    /// Writes exactly 210 bytes to the writer.
+    ///
+    /// # Returns
+    ///
+    /// Number of bytes written (always 210) or an error
+    pub fn write<W: Write>(&self, writer: &mut W) -> Result<usize> {
+        let byte_order = self.byte_order();
+
+        // Write magic bytes (offset 0-3, always LE)
+        writer.write_all(&0x425543C2u32.to_le_bytes())?;
+
+        // Write title (offset 4-115, 112 bytes, null-padded)
+        let mut title_buf = [0u8; 112];
+        let title_bytes = self.title.as_bytes();
+        let copy_len = title_bytes.len().min(112);
+        title_buf[..copy_len].copy_from_slice(&title_bytes[..copy_len]);
+        writer.write_all(&title_buf)?;
+
+        // Write allowed serials (offset 116-131, 8 × u16, always LE)
+        for &serial in &self.allowed_serials {
+            write_u16(writer, serial, ByteOrder::LE)?;
+        }
+
+        // Write PcByteOrder (offset 132)
+        write_u8(writer, self.pc_byte_order)?;
+
+        // Write IsSecured (offset 133)
+        write_u8(writer, 0)?; // Always 0 (not encrypted)
+
+        // Write Crc32 (offset 134-137)
+        write_u32(writer, 0, byte_order)?; // CRC not implemented
+
+        // Write Key (offset 138-153, 16 bytes)
+        writer.write_all(&self.key)?;
+
+        // Write remaining header fields (offset 154-209)
+        write_i32(writer, self.size_of_item, byte_order)?;
+        write_i32(writer, self.size_of_point, byte_order)?;
+        write_i32(writer, self.hdr_items, byte_order)?;
+        write_i32(writer, self.max_pts, byte_order)?;
+
+        // Floats are always LE
+        write_f32_le(writer, self.left)?;
+        write_f32_le(writer, self.top)?;
+        write_f32_le(writer, self.right)?;
+        write_f32_le(writer, self.bottom)?;
+        write_f32_le(writer, self.max_width)?;
+        write_f32_le(writer, self.max_height)?;
+        write_f32_le(writer, self.lo_la_scale)?;
+
+        write_i32(writer, self.header_offset, byte_order)?;
+        write_i32(writer, self.data_offset, byte_order)?;
+
+        // Write alignment (offset 206-209)
+        write_i32(writer, 0, byte_order)?; // Alignment field (ignored)
+
+        Ok(210)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use std::fs::File;
+    use std::io::Cursor;
 
     #[test]
     fn read_header_from_fixture() {
@@ -171,5 +234,40 @@ mod tests {
 
         let header = Header::read(&mut file).expect("Failed to read header");
         insta::assert_debug_snapshot!(header);
+    }
+
+    #[test]
+    fn write_header_round_trip() {
+        // Create a header with known values
+        let original = Header {
+            title: ByteString::from(b"Test Airspace".to_vec()),
+            allowed_serials: [1, 2, 3, 4, 5, 6, 7, 8],
+            pc_byte_order: 0, // LE
+            key: [0; 16],
+            size_of_item: 42,
+            size_of_point: 5,
+            hdr_items: 10,
+            max_pts: 100,
+            left: -1.0,
+            top: 1.0,
+            right: 1.0,
+            bottom: -1.0,
+            max_width: 2.0,
+            max_height: 2.0,
+            lo_la_scale: 1000.0,
+            header_offset: 210,
+            data_offset: 630,
+        };
+
+        // Write to buffer
+        let mut buf = Vec::new();
+        let written = original.write(&mut buf).expect("Failed to write header");
+        assert_eq!(written, 210, "Header should be exactly 210 bytes");
+
+        // Read back
+        let mut cursor = Cursor::new(buf);
+        let read_back = Header::read(&mut cursor).expect("Failed to read header");
+
+        assert_eq!(read_back, original);
     }
 }
