@@ -38,6 +38,14 @@ impl CubWriter {
         self.airspaces.push(airspace);
         self
     }
+
+    /// Add multiple airspaces from an iterator
+    ///
+    /// Returns `&mut self` to allow method chaining.
+    pub fn add_airspaces<I: IntoIterator<Item = Airspace>>(&mut self, airspaces: I) -> &mut Self {
+        self.airspaces.extend(airspaces);
+        self
+    }
 }
 
 #[cfg(test)]
