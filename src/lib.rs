@@ -6,7 +6,6 @@ pub use crate::reader::CubReader;
 pub use crate::types::*;
 
 mod byte_string;
-mod convert;
 mod decode;
 mod error;
 pub mod raw;

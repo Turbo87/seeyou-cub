@@ -1,10 +1,9 @@
 //! High-level CUB file reader with iterator-based API
 
 use crate::Airspace;
-use crate::convert::resolve_point_ops;
 use crate::decode::decode_string;
 use crate::error::Result;
-use crate::raw::{Header, Item, ItemData};
+use crate::raw::{Header, Item, ItemData, PointOp};
 use std::fs::File;
 use std::io::{BufReader, Read, Seek, SeekFrom};
 use std::path::Path;
@@ -129,7 +128,7 @@ impl<'a, R: Read + Seek> ExactSizeIterator for AirspaceIterator<'a, R> {}
 /// Convert raw item + item data to high-level Airspace
 fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Result<Airspace> {
     // Convert coordinates from raw i16 offsets to f64 lat/lon radians
-    let points = resolve_point_ops(
+    let points = PointOp::resolve(
         &item_data.point_ops,
         header.lo_la_scale,
         item.left,
