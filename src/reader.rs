@@ -64,6 +64,16 @@ impl<R: Read + Seek> CubReader<R> {
         &self.header.title
     }
 
+    /// Get bounding box covering all airspaces
+    ///
+    /// Returns `(west, south, east, north)` in radians.
+    ///
+    /// This value is read from the file header and represents the pre-calculated
+    /// bounding box for all airspaces in the file.
+    pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
+        self.header.bounding_box()
+    }
+
     /// Create iterator over all airspaces in the file
     ///
     /// Returns an iterator that yields `Result<Airspace>` for each airspace.

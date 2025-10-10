@@ -13,9 +13,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("=== CUB File Info ===");
     println!("Title: {}", reader.title());
 
-    let header = reader.header();
-
-    let (w, s, e, n) = header.bounding_box();
+    let (w, s, e, n) = reader.bounding_box();
     println!(
         "Bounds: W={:.4} S={:.4} E={:.4} N={:.4}",
         w.to_degrees(),
