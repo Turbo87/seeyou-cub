@@ -1,8 +1,8 @@
 //! High-level CUB file reader with iterator-based API
 
-use crate::Airspace;
 use crate::error::Result;
 use crate::raw::{Header, Item, ItemData, PointOp};
+use crate::{Airspace, BoundingBox};
 use std::borrow::Cow;
 use std::fs::File;
 use std::io::{BufReader, Read, Seek, SeekFrom};
@@ -70,7 +70,7 @@ impl<R: Read + Seek> CubReader<R> {
     ///
     /// This value is read from the file header and represents the pre-calculated
     /// bounding box for all airspaces in the file.
-    pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
+    pub fn bounding_box(&self) -> &BoundingBox {
         self.header.bounding_box()
     }
 
@@ -146,8 +146,8 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
     let points = PointOp::resolve(
         &item_data.point_ops,
         header.lo_la_scale,
-        item.left,
-        item.bottom,
+        item.bounding_box.left,
+        item.bounding_box.bottom,
     )?;
 
     // Decode strings from raw bytes
@@ -175,10 +175,7 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
 
     Ok(Airspace {
         // Bounding box
-        left: item.left,
-        top: item.top,
-        right: item.right,
-        bottom: item.bottom,
+        bounding_box: item.bounding_box,
 
         // Decoded airspace classification
         style: item.style(),

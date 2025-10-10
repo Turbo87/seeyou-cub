@@ -3,10 +3,12 @@ source: tests/reader_test.rs
 expression: last_airspace
 ---
 Airspace {
-    left: 0.013671746,
-    top: 0.87266463,
-    right: 0.06952207,
-    bottom: 0.83775806,
+    bounding_box: BoundingBox {
+        left: 0.013671746,
+        top: 0.87266463,
+        right: 0.06952207,
+        bottom: 0.83775806,
+    },
     style: Unknown,
     class: ClassD,
     extended_type: None,

@@ -13,13 +13,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("=== CUB File Info ===");
     println!("Title: {}", reader.title());
 
-    let (w, s, e, n) = reader.bounding_box();
+    let bbox = reader.bounding_box();
     println!(
         "Bounds: W={:.4} S={:.4} E={:.4} N={:.4}",
-        w.to_degrees(),
-        s.to_degrees(),
-        e.to_degrees(),
-        n.to_degrees()
+        bbox.left.to_degrees(),
+        bbox.bottom.to_degrees(),
+        bbox.right.to_degrees(),
+        bbox.top.to_degrees()
     );
 
     let results: Vec<_> = reader.read_airspaces().collect::<Result<Vec<_>, _>>()?;

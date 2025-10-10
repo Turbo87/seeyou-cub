@@ -3,10 +3,12 @@ source: tests/reader_test.rs
 expression: largest_airspace
 ---
 Airspace {
-    left: 0.079514295,
-    top: 0.83852905,
-    right: 0.090694055,
-    bottom: 0.8322166,
+    bounding_box: BoundingBox {
+        left: 0.079514295,
+        top: 0.83852905,
+        right: 0.090694055,
+        bottom: 0.8322166,
+    },
     style: ProhibitedArea,
     class: Unknown,
     extended_type: None,

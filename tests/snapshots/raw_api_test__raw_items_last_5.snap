@@ -4,10 +4,12 @@ expression: "&items[items.len() - 5..]"
 ---
 [
     Item {
-        left: 0.020236123,
-        top: 0.8683303,
-        right: 0.06833907,
-        bottom: 0.83778715,
+        bounding_box: BoundingBox {
+            left: 0.020236123,
+            top: 0.8683303,
+            right: 0.06833907,
+            bottom: 0.83778715,
+        },
         type_byte: 16,
         alt_style_byte: 51,
         min_alt: 1981,
@@ -19,10 +21,12 @@ expression: "&items[items.len() - 5..]"
         extended_type_byte: 0,
     },
     Item {
-        left: -0.0027585898,
-        top: 0.82174,
-        right: 0.05109963,
-        bottom: 0.7809961,
+        bounding_box: BoundingBox {
+            left: -0.0027585898,
+            top: 0.82174,
+            right: 0.05109963,
+            bottom: 0.7809961,
+        },
         type_byte: 64,
         alt_style_byte: 51,
         min_alt: 3505,
@@ -34,10 +38,12 @@ expression: "&items[items.len() - 5..]"
         extended_type_byte: 0,
     },
     Item {
-        left: 0.010631964,
-        top: 0.86980927,
-        right: 0.07419077,
-        bottom: 0.83511096,
+        bounding_box: BoundingBox {
+            left: 0.010631964,
+            top: 0.86980927,
+            right: 0.07419077,
+            bottom: 0.83511096,
+        },
         type_byte: 16,
         alt_style_byte: 51,
         min_alt: 2591,
@@ -49,10 +55,12 @@ expression: "&items[items.len() - 5..]"
         extended_type_byte: 0,
     },
     Item {
-        left: 0.013671746,
-        top: 0.87266463,
-        right: 0.06952207,
-        bottom: 0.83775806,
+        bounding_box: BoundingBox {
+            left: 0.013671746,
+            top: 0.87266463,
+            right: 0.06952207,
+            bottom: 0.83775806,
+        },
         type_byte: 80,
         alt_style_byte: 50,
         min_alt: 1067,
@@ -64,10 +72,12 @@ expression: "&items[items.len() - 5..]"
         extended_type_byte: 0,
     },
     Item {
-        left: 0.013671746,
-        top: 0.87266463,
-        right: 0.06952207,
-        bottom: 0.83775806,
+        bounding_box: BoundingBox {
+            left: 0.013671746,
+            top: 0.87266463,
+            right: 0.06952207,
+            bottom: 0.83775806,
+        },
         type_byte: 64,
         alt_style_byte: 51,
         min_alt: 3505,

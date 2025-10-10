@@ -1,8 +1,8 @@
-use crate::ByteOrder;
 use crate::error::{Error, Result};
 use crate::utils::ByteString;
 use crate::utils::io::{read_f32_le, read_i32, read_u8, read_u16, read_u32};
 use crate::utils::io::{write_f32_le, write_i32, write_u8, write_u16, write_u32};
+use crate::{BoundingBox, ByteOrder};
 use std::io::{Read, Write};
 
 /// Minimum accepted `size_of_item`. Anything below that would not include the
@@ -27,10 +27,7 @@ pub struct Header {
     pub size_of_point: i32,
     pub hdr_items: i32,
     pub max_pts: i32,
-    pub left: f32,
-    pub top: f32,
-    pub right: f32,
-    pub bottom: f32,
+    pub bounding_box: BoundingBox,
     pub max_width: f32,
     pub max_height: f32,
     pub lo_la_scale: f32,
@@ -106,10 +103,7 @@ impl Header {
         let hdr_items = read_i32(reader, byte_order)?;
         let max_pts = read_i32(reader, byte_order)?;
 
-        let left = read_f32_le(reader)?;
-        let top = read_f32_le(reader)?;
-        let right = read_f32_le(reader)?;
-        let bottom = read_f32_le(reader)?;
+        let bounding_box = BoundingBox::read(reader)?;
         let max_width = read_f32_le(reader)?;
         let max_height = read_f32_le(reader)?;
         let lo_la_scale = read_f32_le(reader)?;
@@ -135,10 +129,7 @@ impl Header {
             size_of_point,
             hdr_items,
             max_pts,
-            left,
-            top,
-            right,
-            bottom,
+            bounding_box,
             max_width,
             max_height,
             lo_la_scale,
@@ -149,9 +140,9 @@ impl Header {
         Ok(header)
     }
 
-    /// Get bounding box as (west, south, east, north) in radians
-    pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
-        (self.left, self.bottom, self.right, self.top)
+    /// Get bounding box
+    pub fn bounding_box(&self) -> &BoundingBox {
+        &self.bounding_box
     }
 
     /// Get byte order for integers
@@ -203,10 +194,7 @@ impl Header {
         write_i32(writer, self.max_pts, byte_order)?;
 
         // Floats are always LE
-        write_f32_le(writer, self.left)?;
-        write_f32_le(writer, self.top)?;
-        write_f32_le(writer, self.right)?;
-        write_f32_le(writer, self.bottom)?;
+        self.bounding_box.write(writer)?;
         write_f32_le(writer, self.max_width)?;
         write_f32_le(writer, self.max_height)?;
         write_f32_le(writer, self.lo_la_scale)?;
@@ -248,10 +236,12 @@ mod tests {
             size_of_point: 5,
             hdr_items: 10,
             max_pts: 100,
-            left: -1.0,
-            top: 1.0,
-            right: 1.0,
-            bottom: -1.0,
+            bounding_box: BoundingBox {
+                left: -1.0,
+                top: 1.0,
+                right: 1.0,
+                bottom: -1.0,
+            },
             max_width: 2.0,
             max_height: 2.0,
             lo_la_scale: 1000.0,
@@ -283,10 +273,12 @@ mod tests {
             size_of_point: 5,
             hdr_items: 100,
             max_pts: 1000,
-            left: -2.5,
-            top: 2.5,
-            right: 2.5,
-            bottom: -2.5,
+            bounding_box: BoundingBox {
+                left: -2.5,
+                top: 2.5,
+                right: 2.5,
+                bottom: -2.5,
+            },
             max_width: 5.0,
             max_height: 5.0,
             lo_la_scale: 2000.0,
@@ -315,10 +307,12 @@ mod tests {
             size_of_point: 5,
             hdr_items: 0,
             max_pts: 0,
-            left: 0.0,
-            top: 0.0,
-            right: 0.0,
-            bottom: 0.0,
+            bounding_box: BoundingBox {
+                left: 0.0,
+                top: 0.0,
+                right: 0.0,
+                bottom: 0.0,
+            },
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1.0,
@@ -348,10 +342,12 @@ mod tests {
             size_of_point: 5,
             hdr_items: 1,
             max_pts: 10,
-            left: 0.0,
-            top: 0.0,
-            right: 0.0,
-            bottom: 0.0,
+            bounding_box: BoundingBox {
+                left: 0.0,
+                top: 0.0,
+                right: 0.0,
+                bottom: 0.0,
+            },
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1.0,

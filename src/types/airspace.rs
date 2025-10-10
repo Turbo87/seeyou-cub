@@ -1,4 +1,4 @@
-use crate::{AltStyle, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, Point};
+use crate::{AltStyle, BoundingBox, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, Point};
 
 /// High-level airspace representation with fully decoded data
 ///
@@ -8,10 +8,7 @@ use crate::{AltStyle, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, Po
 #[derive(Debug, Clone)]
 pub struct Airspace {
     // Bounding box in radians
-    pub left: f32,
-    pub top: f32,
-    pub right: f32,
-    pub bottom: f32,
+    pub bounding_box: BoundingBox,
 
     // Decoded airspace classification
     pub style: CubStyle,
@@ -56,8 +53,8 @@ impl Airspace {
         (self.extra_data >> 30) == 0 && self.extra_data != 0
     }
 
-    /// Get bounding box as (west, south, east, north) in radians
-    pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
-        (self.left, self.bottom, self.right, self.top)
+    /// Get bounding box
+    pub fn bounding_box(&self) -> &BoundingBox {
+        &self.bounding_box
     }
 }
