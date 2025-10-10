@@ -1,6 +1,6 @@
 use crate::error::Result;
 use crate::raw::Header;
-use crate::raw::io::{read_f32_le, read_i16, read_i32, read_u8, read_u32, read_u64};
+use crate::utils::io::{read_f32_le, read_i16, read_i32, read_u8, read_u32, read_u64};
 use crate::{
     AltStyle, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, NotamCodes, NotamScope,
     NotamTraffic, NotamType,

@@ -1,7 +1,7 @@
 use crate::ByteOrder;
-use crate::byte_string::ByteString;
 use crate::error::{Error, Result};
-use crate::raw::io::{read_f32_le, read_i32, read_u8, read_u16, read_u32};
+use crate::utils::ByteString;
+use crate::utils::io::{read_f32_le, read_i32, read_u8, read_u16, read_u32};
 use std::io::Read;
 
 /// Minimum accepted `size_of_item`. Anything below that would not include the

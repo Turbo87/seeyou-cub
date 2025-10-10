@@ -5,7 +5,6 @@
 //! without seeking. Users must manage file positioning themselves.
 
 mod header;
-mod io;
 mod item;
 mod item_data;
 mod point_op;
