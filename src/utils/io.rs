@@ -1,5 +1,5 @@
 use crate::types::ByteOrder;
-use std::io::{Read, Result};
+use std::io::{Read, Result, Write};
 
 /// Read i16 with specified byte order
 pub fn read_i16<R: Read>(reader: &mut R, order: ByteOrder) -> Result<i16> {
@@ -65,6 +65,11 @@ pub fn read_u8<R: Read>(reader: &mut R) -> Result<u8> {
     Ok(buf[0])
 }
 
+/// Write u8
+pub fn write_u8<W: Write>(writer: &mut W, value: u8) -> Result<()> {
+    writer.write_all(&[value])
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -98,5 +103,12 @@ mod tests {
         let mut cursor = Cursor::new(bytes);
         let result = read_f32_le(&mut cursor).unwrap();
         assert!((result - value).abs() < 0.0001);
+    }
+
+    #[test]
+    fn test_write_u8() {
+        let mut buf = Vec::new();
+        write_u8(&mut buf, 0x42).unwrap();
+        assert_eq!(buf, vec![0x42]);
     }
 }
