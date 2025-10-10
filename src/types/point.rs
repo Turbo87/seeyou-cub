@@ -2,7 +2,7 @@
 ///
 /// Represents a single point in an airspace boundary with lat/lon coordinates in radians.
 /// This is the high-level representation after converting raw i16 x/y offsets.
-#[derive(Clone, PartialEq)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct Point {
     /// Latitude in radians (positive = North)
     pub lat: f32,

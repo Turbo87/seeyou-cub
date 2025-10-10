@@ -17,6 +17,15 @@ impl ByteOrder {
             ByteOrder::LE
         }
     }
+
+    /// Convert to PcByteOrder byte value
+    /// BE = 0, LE = 1
+    pub fn as_pc_byte_order(&self) -> u8 {
+        match self {
+            ByteOrder::BE => 0,
+            ByteOrder::LE => 1,
+        }
+    }
 }
 
 /// Airspace style/type (extracted from Item.Type field)
@@ -97,6 +106,46 @@ impl CubStyle {
             _ => CubStyle::Unknown,
         }
     }
+
+    /// Convert to nibble value (inverse of from_type_byte)
+    ///
+    /// Returns the combined value (lowest 4 bits + highest bit) that can be
+    /// packed into a type byte.
+    pub fn as_nibble(&self) -> u8 {
+        match self {
+            CubStyle::Unknown => 0x00,
+            CubStyle::ControlZone => 0x01,
+            CubStyle::RestrictedArea => 0x02,
+            CubStyle::ProhibitedArea => 0x03,
+            CubStyle::DangerArea => 0x04,
+            CubStyle::TemporaryReservedArea => 0x05,
+            CubStyle::TerminalControlArea => 0x06,
+            CubStyle::TrafficInformationZone => 0x07,
+            CubStyle::Airway => 0x08,
+            CubStyle::ControlArea => 0x09,
+            CubStyle::GliderSector => 0x0a,
+            CubStyle::TransponderMandatoryZone => 0x0b,
+            CubStyle::MilitaryAerodromeTrafficZone => 0x0c,
+            CubStyle::RadioMandatoryZone => 0x0d,
+            CubStyle::Notam => 0x0f,
+            CubStyle::Advisory => 0x80,
+            CubStyle::AirDefenceIdentificationZone => 0x81,
+            CubStyle::FlightInformationRegion => 0x82,
+            CubStyle::DelegatedFir => 0x83,
+            CubStyle::TrafficInformationArea => 0x84,
+            CubStyle::SpecialRulesZone => 0x85,
+            CubStyle::TemporaryFlightRestriction => 0x86,
+            CubStyle::AerodromeTrafficZone => 0x87,
+            CubStyle::FlightInformationServiceArea => 0x88,
+            CubStyle::LegacyRmz => 0x89,
+            CubStyle::AerialSportingAndRecreationArea => 0x8a,
+            CubStyle::TransponderRecommendedZone => 0x8b,
+            CubStyle::VfrRoute => 0x8c,
+            CubStyle::Alert => 0x8d,
+            CubStyle::TemporarySegregatedArea => 0x8e,
+            CubStyle::Warning => 0x8f,
+        }
+    }
 }
 
 /// Airspace class (extracted from Item.Type field, bits 5-7)
@@ -131,6 +180,22 @@ impl CubClass {
             _ => CubClass::Unknown,
         }
     }
+
+    /// Convert to nibble value (inverse of from_type_byte)
+    ///
+    /// Returns the 3-bit value that can be packed into bits 5-7 of a type byte.
+    pub fn as_nibble(&self) -> u8 {
+        match self {
+            CubClass::Unknown => 0,
+            CubClass::ClassA => 1,
+            CubClass::ClassB => 2,
+            CubClass::ClassC => 3,
+            CubClass::ClassD => 4,
+            CubClass::ClassE => 5,
+            CubClass::ClassF => 6,
+            CubClass::ClassG => 7,
+        }
+    }
 }
 
 /// Altitude reference style
@@ -158,6 +223,18 @@ impl AltStyle {
             4 => AltStyle::Unlimited,
             5 => AltStyle::Notam,
             _ => AltStyle::Unknown,
+        }
+    }
+
+    /// Convert to 4-bit value (inverse of from_nibble)
+    pub fn as_nibble(&self) -> u8 {
+        match self {
+            AltStyle::Unknown => 0,
+            AltStyle::AboveGroundLevel => 1,
+            AltStyle::MeanSeaLevel => 2,
+            AltStyle::FlightLevel => 3,
+            AltStyle::Unlimited => 4,
+            AltStyle::Notam => 5,
         }
     }
 }
@@ -191,6 +268,21 @@ impl ExtendedType {
             0x09 => Some(ExtendedType::TraTsaFeedingRoute),
             0x0a => Some(ExtendedType::VfrSector),
             _ => None,
+        }
+    }
+
+    pub fn as_byte(&self) -> u8 {
+        match self {
+            ExtendedType::UpperInfoRegion => 0x01,
+            ExtendedType::MilitaryTrainingRoute => 0x02,
+            ExtendedType::HelicopterTrafficZone => 0x03,
+            ExtendedType::AreaControlCenterSector => 0x04,
+            ExtendedType::LowerTrafficArea => 0x05,
+            ExtendedType::UpperTrafficArea => 0x06,
+            ExtendedType::MilitaryTrainingArea => 0x07,
+            ExtendedType::OverflightRestriction => 0x08,
+            ExtendedType::TraTsaFeedingRoute => 0x09,
+            ExtendedType::VfrSector => 0x0a,
         }
     }
 }
@@ -275,6 +367,14 @@ pub struct DaysActive {
 impl DaysActive {
     pub fn from_bits(bits: u16) -> Self {
         Self { bits }
+    }
+
+    pub fn as_bits(&self) -> u64 {
+        self.bits as u64
+    }
+
+    pub fn all() -> Self {
+        Self { bits: 0x7F } // All days active
     }
 
     pub fn sunday(&self) -> bool {

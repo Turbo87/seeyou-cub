@@ -174,8 +174,8 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
         .map(|bs| bs.decode().into_owned());
 
     Ok(Airspace {
-        // Bounding box
-        bounding_box: item.bounding_box,
+        // Bounding box (always populated by reader)
+        bounding_box: Some(item.bounding_box),
 
         // Decoded airspace classification
         style: item.style(),

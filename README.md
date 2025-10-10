@@ -5,10 +5,12 @@ which stores airspace data for flight navigation software.
 
 ## Features
 
-- **Two-tier API**: High-level iterator for convenience, low-level functions for control
+- **Read and write**: Full support for reading and writing CUB files
+- **Two-tier API**: High-level reader/writer for convenience, low-level functions for control
 - **Memory efficient**: Lazy parsing with no internal caching
 - **UTF-8 with fallback**: Decodes strings as UTF-8 with Extended ASCII fallback
-- **Coordinate conversion**: Automatic conversion from raw i16 offsets to lat/lon
+- **Coordinate conversion**: Automatic conversion between raw i16 offsets and lat/lon
+- **Builder pattern**: Ergonomic writer API with automatic calculations
 
 ## Usage
 
@@ -20,6 +22,8 @@ seeyou-cub = "0.1.0"
 ```
 
 ### High-Level API
+
+#### Reading
 
 The high-level API provides an iterator that yields fully-decoded `Airspace` structs:
 
@@ -40,6 +44,53 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             println!("  Points: {}", airspace.points.len());
         }
     }
+
+    Ok(())
+}
+```
+
+#### Writing
+
+The high-level writer uses a builder pattern with automatic calculations:
+
+```rust,no_run
+use seeyou_cub::writer::CubWriter;
+use seeyou_cub::{Airspace, Point, CubStyle, CubClass, AltStyle, DaysActive};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let airspace = Airspace {
+        bounding_box: None,  // Calculated automatically
+        style: CubStyle::DangerArea,
+        class: CubClass::ClassD,
+        extended_type: None,
+        min_alt: 0,
+        max_alt: 5000,
+        min_alt_style: AltStyle::MeanSeaLevel,
+        max_alt_style: AltStyle::MeanSeaLevel,
+        time_out: 0,
+        start_date: None,
+        end_date: None,
+        extra_data: 0,
+        days_active: DaysActive::all(),
+        points: vec![
+            Point::new(0.8, 0.4),
+            Point::new(0.81, 0.41),
+            Point::new(0.82, 0.42),
+        ],
+        name: Some("My Airspace".to_string()),
+        frequency_name: None,
+        icao_code: None,
+        exception_rules: None,
+        notam_remarks: None,
+        notam_id: None,
+        frequency: None,
+        secondary_frequency: None,
+        notam_insert_time: None,
+    };
+
+    CubWriter::new("My Airspace Data")
+        .add_airspace(airspace)
+        .write_to_path("output.cub")?;
 
     Ok(())
 }
