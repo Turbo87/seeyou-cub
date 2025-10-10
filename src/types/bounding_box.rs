@@ -55,6 +55,17 @@ impl BoundingBox {
         self.top = self.top.max(point.lat);
         self.bottom = self.bottom.min(point.lat);
     }
+
+    /// Merge another bounding box into this one
+    ///
+    /// Grows the bounding box if necessary to encompass the other bounding box.
+    /// If the other bbox is already contained, no change is made.
+    pub fn merge(&mut self, other: BoundingBox) {
+        self.left = self.left.min(other.left);
+        self.right = self.right.max(other.right);
+        self.top = self.top.max(other.top);
+        self.bottom = self.bottom.min(other.bottom);
+    }
 }
 
 impl From<Point> for BoundingBox {
@@ -182,6 +193,129 @@ mod tests {
         assert_eq!(bbox.top, 1.0);
         assert_eq!(bbox.right, 1.0);
         assert_eq!(bbox.bottom, 0.0);
+    }
+
+    #[test]
+    fn test_merge_non_overlapping() {
+        // Two non-overlapping bboxes
+        let mut bbox1 = BoundingBox {
+            left: 0.0,
+            top: 0.5,
+            right: 0.5,
+            bottom: 0.0,
+        };
+
+        let bbox2 = BoundingBox {
+            left: 0.6,
+            top: 1.0,
+            right: 1.0,
+            bottom: 0.6,
+        };
+
+        bbox1.merge(bbox2);
+
+        // Should encompass both boxes
+        assert_eq!(bbox1.left, 0.0);
+        assert_eq!(bbox1.top, 1.0);
+        assert_eq!(bbox1.right, 1.0);
+        assert_eq!(bbox1.bottom, 0.0);
+    }
+
+    #[test]
+    fn test_merge_overlapping() {
+        // Two overlapping bboxes
+        let mut bbox1 = BoundingBox {
+            left: 0.0,
+            top: 0.6,
+            right: 0.6,
+            bottom: 0.0,
+        };
+
+        let bbox2 = BoundingBox {
+            left: 0.4,
+            top: 1.0,
+            right: 1.0,
+            bottom: 0.4,
+        };
+
+        bbox1.merge(bbox2);
+
+        // Should encompass both boxes
+        assert_eq!(bbox1.left, 0.0);
+        assert_eq!(bbox1.top, 1.0);
+        assert_eq!(bbox1.right, 1.0);
+        assert_eq!(bbox1.bottom, 0.0);
+    }
+
+    #[test]
+    fn test_merge_contained() {
+        // bbox2 is completely inside bbox1
+        let mut bbox1 = BoundingBox {
+            left: 0.0,
+            top: 1.0,
+            right: 1.0,
+            bottom: 0.0,
+        };
+
+        let bbox2 = BoundingBox {
+            left: 0.2,
+            top: 0.8,
+            right: 0.8,
+            bottom: 0.2,
+        };
+
+        bbox1.merge(bbox2);
+
+        // Should not change since bbox2 is inside
+        assert_eq!(bbox1.left, 0.0);
+        assert_eq!(bbox1.top, 1.0);
+        assert_eq!(bbox1.right, 1.0);
+        assert_eq!(bbox1.bottom, 0.0);
+    }
+
+    #[test]
+    fn test_merge_extends_in_all_directions() {
+        // bbox2 extends bbox1 in all directions
+        let mut bbox1 = BoundingBox {
+            left: 0.3,
+            top: 0.7,
+            right: 0.7,
+            bottom: 0.3,
+        };
+
+        let bbox2 = BoundingBox {
+            left: 0.1,
+            top: 0.9,
+            right: 0.9,
+            bottom: 0.1,
+        };
+
+        bbox1.merge(bbox2);
+
+        assert_eq!(bbox1.left, 0.1);
+        assert_eq!(bbox1.top, 0.9);
+        assert_eq!(bbox1.right, 0.9);
+        assert_eq!(bbox1.bottom, 0.1);
+    }
+
+    #[test]
+    fn test_merge_from_point() {
+        // Merge a point-based bbox with another bbox
+        let mut bbox1 = BoundingBox::from(Point::new(0.5, 0.5));
+
+        let bbox2 = BoundingBox {
+            left: 0.0,
+            top: 1.0,
+            right: 1.0,
+            bottom: 0.0,
+        };
+
+        bbox1.merge(bbox2);
+
+        assert_eq!(bbox1.left, 0.0);
+        assert_eq!(bbox1.top, 1.0);
+        assert_eq!(bbox1.right, 1.0);
+        assert_eq!(bbox1.bottom, 0.0);
     }
 
     #[test]
