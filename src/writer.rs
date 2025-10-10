@@ -1,6 +1,10 @@
 //! High-level CUB file writer with builder API
 
-use crate::{Airspace, ByteOrder};
+use crate::error::Result;
+use crate::raw::{Header, Item, ItemData, PointOp};
+use crate::utils::ByteString;
+use crate::{Airspace, AltStyle, BoundingBox, ByteOrder, CubClass, CubStyle, DaysActive, Point};
+use std::io::Cursor;
 
 /// Default coordinate scale factor
 ///
@@ -44,6 +48,139 @@ impl CubWriter {
         }
     }
 
+    /// Write CUB file to a writer
+    ///
+    /// Processes all airspaces in memory, calculates bounding boxes and offsets,
+    /// then writes the complete file.
+    ///
+    /// # Returns
+    ///
+    /// Ok(()) on success or an error if writing fails
+    pub fn write<W: std::io::Write + std::io::Seek>(&mut self, mut writer: W) -> Result<()> {
+        // Create header with known values (will update counts and offsets later)
+        let mut header = Header {
+            title: ByteString::from(self.title.as_bytes().to_vec()),
+            allowed_serials: [0; 8],
+            pc_byte_order: self.byte_order.as_pc_byte_order(),
+            key: [0; 16],
+            size_of_item: 43,
+            size_of_point: 5,
+            hdr_items: 0, // Will be updated later
+            max_pts: 0,   // Will be updated later
+            bounding_box: BoundingBox {
+                left: 0.0,
+                top: 0.0,
+                right: 0.0,
+                bottom: 0.0,
+            }, // Will be updated later
+            max_width: 0.0, // Will be updated later
+            max_height: 0.0, // Will be updated later
+            lo_la_scale: self.lo_la_scale,
+            header_offset: 210,
+            data_offset: 0, // Will be updated later
+        };
+
+        let mut global_bbox: Option<BoundingBox> = None;
+        let mut items_buffer = Cursor::new(Vec::new());
+        let mut item_data_buffer = Cursor::new(Vec::new());
+
+        for airspace in &self.airspaces {
+            // Calculate bbox if missing
+            let bbox = airspace
+                .bounding_box
+                .or_else(|| BoundingBox::from_points(&airspace.points))
+                .unwrap_or_else(|| BoundingBox::from(Point::new(0., 0.)));
+
+            // Accumulate into global bbox
+            match global_bbox {
+                None => global_bbox = Some(bbox),
+                Some(ref mut global) => global.merge(bbox),
+            }
+
+            // Convert points to PointOps
+            let point_ops =
+                PointOp::from_points(&airspace.points, self.lo_la_scale, bbox.left, bbox.bottom)?;
+
+            // Record current data offset (for `Item::points_offset` field)
+            let data_offset = item_data_buffer.position() as i32;
+
+            // Create `ItemData` and write to data buffer
+            let item_data = ItemData {
+                point_ops,
+                name: airspace
+                    .name
+                    .as_ref()
+                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
+                frequency: airspace.frequency,
+                frequency_name: airspace
+                    .frequency_name
+                    .as_ref()
+                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
+                icao_code: airspace
+                    .icao_code
+                    .as_ref()
+                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
+                secondary_frequency: airspace.secondary_frequency,
+                exception_rules: airspace
+                    .exception_rules
+                    .as_ref()
+                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
+                notam_remarks: airspace
+                    .notam_remarks
+                    .as_ref()
+                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
+                notam_id: airspace
+                    .notam_id
+                    .as_ref()
+                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
+                notam_insert_time: airspace.notam_insert_time,
+            };
+            item_data.write(&mut item_data_buffer, &header)?;
+
+            // Create and write Item
+            let item = Item {
+                bounding_box: bbox,
+                type_byte: encode_type_byte(airspace.style, airspace.class),
+                alt_style_byte: encode_alt_style_byte(
+                    airspace.min_alt_style,
+                    airspace.max_alt_style,
+                ),
+                min_alt: airspace.min_alt,
+                max_alt: airspace.max_alt,
+                points_offset: data_offset,
+                time_out: airspace.time_out,
+                extra_data: airspace.extra_data,
+                active_time: encode_active_time(
+                    airspace.start_date.as_ref(),
+                    airspace.end_date.as_ref(),
+                    &airspace.days_active,
+                ),
+                extended_type_byte: airspace.extended_type.map(|t| t.as_byte()).unwrap_or(0),
+            };
+            item.write(&mut items_buffer, &header)?;
+        }
+
+        // Update header with calculated values
+        let items_size = items_buffer.position() as i32;
+        header.data_offset = header.header_offset + items_size;
+        header.hdr_items = self.airspaces.len() as i32;
+
+        let max_pts = self.airspaces.iter().map(|a| a.points.len()).max();
+        header.max_pts = max_pts.unwrap_or(0) as i32;
+
+        if let Some(bbox) = global_bbox {
+            header.bounding_box = bbox;
+        }
+        header.max_width = header.bounding_box.right - header.bounding_box.left;
+        header.max_height = header.bounding_box.top - header.bounding_box.bottom;
+
+        header.write(&mut writer)?;
+        writer.write_all(&items_buffer.into_inner())?;
+        writer.write_all(&item_data_buffer.into_inner())?;
+
+        Ok(())
+    }
+
     /// Add a single airspace to the writer
     ///
     /// Returns `&mut self` to allow method chaining.
@@ -79,10 +216,57 @@ impl CubWriter {
     }
 }
 
+// Helper functions for encoding bit-packed fields
+fn encode_type_byte(style: CubStyle, class: CubClass) -> u8 {
+    let style_nibble = style.as_nibble();
+    let class_nibble = class.as_nibble();
+    (style_nibble << 4) | class_nibble
+}
+
+fn encode_alt_style_byte(min: AltStyle, max: AltStyle) -> u8 {
+    let min_nibble = min.as_nibble();
+    let max_nibble = max.as_nibble();
+    (min_nibble << 4) | max_nibble
+}
+
+fn encode_notam_time(dt: &crate::DateTime) -> u32 {
+    let year = dt.year - 2000;
+    let month = (dt.month - 1) as u32;
+    let day = (dt.day - 1) as u32;
+    let hour = dt.hour as u32;
+    let minute = dt.minute as u32;
+
+    minute + 60 * (hour + 24 * (day + 31 * (month + 12 * year)))
+}
+
+fn encode_active_time(
+    start_date: Option<&crate::DateTime>,
+    end_date: Option<&crate::DateTime>,
+    days: &DaysActive,
+) -> u64 {
+    let days_bits = (days.as_bits() & 0xFFF) << 52;
+
+    let start_bits = if let Some(dt) = start_date {
+        (encode_notam_time(dt) as u64) << 26
+    } else {
+        0
+    };
+
+    let end_bits = if let Some(dt) = end_date {
+        encode_notam_time(dt) as u64
+    } else {
+        0x3FFFFFF // Max value indicates no end date
+    };
+
+    days_bits | start_bits | end_bits
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::{AltStyle, CubClass, CubReader, CubStyle, DaysActive, Point};
     use insta::assert_debug_snapshot;
+    use std::io::Cursor;
 
     #[test]
     fn new_accepts_string_types() {
@@ -99,5 +283,178 @@ mod tests {
         let precision_meters = precision_degrees * 111_000.0;
 
         assert_debug_snapshot!(precision_meters, @"1.0");
+    }
+
+    #[test]
+    fn write_empty_cub_file() {
+        let mut writer = CubWriter::new("Empty Test");
+        let mut buf = Cursor::new(Vec::new());
+
+        writer.write(&mut buf).expect("Failed to write");
+
+        // Verify file is exactly 210 bytes (header only)
+        let bytes = buf.into_inner();
+        assert_eq!(bytes.len(), 210);
+
+        // Read back and verify
+        let mut cursor = Cursor::new(&bytes[..]);
+        let mut reader = CubReader::new(&mut cursor).expect("Failed to read");
+
+        // Should have no airspaces
+        let count = reader.read_airspaces().count();
+        assert_eq!(count, 0);
+    }
+
+    #[test]
+    fn write_single_airspace_with_points() {
+        let mut writer = CubWriter::new("Single Airspace Test");
+
+        // Create simple airspace with a few points
+        let airspace = Airspace {
+            bounding_box: None, // Should be calculated automatically
+            style: CubStyle::Unknown,
+            class: CubClass::ClassE,
+            extended_type: None,
+            min_alt: 0,
+            max_alt: 5000,
+            min_alt_style: AltStyle::MeanSeaLevel,
+            max_alt_style: AltStyle::MeanSeaLevel,
+            time_out: 0,
+            start_date: None,
+            end_date: None,
+            extra_data: 0,
+            days_active: DaysActive::all(),
+            points: vec![
+                Point::new(0.8, 0.4),
+                Point::new(0.81, 0.41),
+                Point::new(0.82, 0.42),
+            ],
+            name: Some("Test Airspace".to_string()),
+            frequency_name: None,
+            icao_code: None,
+            exception_rules: None,
+            notam_remarks: None,
+            notam_id: None,
+            frequency: None,
+            secondary_frequency: None,
+            notam_insert_time: None,
+        };
+
+        writer.add_airspace(airspace);
+
+        let mut buf = Cursor::new(Vec::new());
+        writer.write(&mut buf).expect("Failed to write");
+
+        // Read back and verify
+        let bytes = buf.into_inner();
+        let mut cursor = Cursor::new(&bytes[..]);
+        let mut reader = CubReader::new(&mut cursor).expect("Failed to read");
+
+        let airspaces: Vec<_> = reader
+            .read_airspaces()
+            .collect::<Result<_>>()
+            .expect("Failed to read airspaces");
+
+        assert_eq!(airspaces.len(), 1);
+        let airspace = &airspaces[0];
+        assert_eq!(airspace.name, Some("Test Airspace".to_string()));
+        assert_eq!(airspace.points.len(), 3);
+
+        // Verify bounding box was calculated
+        assert!(airspace.bounding_box.is_some());
+    }
+
+    #[test]
+    fn write_multiple_airspaces() {
+        let mut writer = CubWriter::new("Multiple Airspaces Test");
+
+        // Create first airspace
+        let airspace1 = Airspace {
+            bounding_box: None,
+            style: CubStyle::DangerArea,
+            class: CubClass::ClassD,
+            extended_type: None,
+            min_alt: 0,
+            max_alt: 3000,
+            min_alt_style: AltStyle::MeanSeaLevel,
+            max_alt_style: AltStyle::MeanSeaLevel,
+            time_out: 0,
+            start_date: None,
+            end_date: None,
+            extra_data: 0,
+            days_active: DaysActive::all(),
+            points: vec![
+                Point::new(0.5, 0.2),
+                Point::new(0.51, 0.21),
+                Point::new(0.52, 0.22),
+                Point::new(0.53, 0.23),
+            ],
+            name: Some("Danger Area 1".to_string()),
+            frequency_name: None,
+            icao_code: Some("DA1".to_string()),
+            exception_rules: None,
+            notam_remarks: None,
+            notam_id: None,
+            frequency: Some(123450000),
+            secondary_frequency: None,
+            notam_insert_time: None,
+        };
+
+        // Create second airspace
+        let airspace2 = Airspace {
+            bounding_box: None,
+            style: CubStyle::RestrictedArea,
+            class: CubClass::ClassC,
+            extended_type: None,
+            min_alt: 1000,
+            max_alt: 5000,
+            min_alt_style: AltStyle::AboveGroundLevel,
+            max_alt_style: AltStyle::FlightLevel,
+            time_out: 0,
+            start_date: None,
+            end_date: None,
+            extra_data: 0,
+            days_active: DaysActive::all(),
+            points: vec![Point::new(0.6, 0.3), Point::new(0.61, 0.31)],
+            name: Some("Restricted 2".to_string()),
+            frequency_name: None,
+            icao_code: None,
+            exception_rules: None,
+            notam_remarks: None,
+            notam_id: None,
+            frequency: None,
+            secondary_frequency: None,
+            notam_insert_time: None,
+        };
+
+        writer.add_airspace(airspace1);
+        writer.add_airspace(airspace2);
+
+        let mut buf = Cursor::new(Vec::new());
+        writer.write(&mut buf).expect("Failed to write");
+
+        // Read back and verify
+        let bytes = buf.into_inner();
+        let mut cursor = Cursor::new(&bytes[..]);
+        let mut reader = CubReader::new(&mut cursor).expect("Failed to read");
+
+        let airspaces: Vec<_> = reader
+            .read_airspaces()
+            .collect::<Result<_>>()
+            .expect("Failed to read airspaces");
+
+        assert_eq!(airspaces.len(), 2);
+
+        // Verify first airspace
+        let a1 = &airspaces[0];
+        assert_eq!(a1.name, Some("Danger Area 1".to_string()));
+        assert_eq!(a1.points.len(), 4);
+        assert_eq!(a1.icao_code, Some("DA1".to_string()));
+        assert_eq!(a1.frequency, Some(123450000));
+
+        // Verify second airspace
+        let a2 = &airspaces[1];
+        assert_eq!(a2.name, Some("Restricted 2".to_string()));
+        assert_eq!(a2.points.len(), 2);
     }
 }
