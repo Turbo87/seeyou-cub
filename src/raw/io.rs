@@ -66,13 +66,6 @@ pub fn read_u8<R: Read>(reader: &mut R) -> Result<u8> {
     Ok(buf[0])
 }
 
-/// Read fixed-length byte array
-pub fn read_bytes<R: Read>(reader: &mut R, len: usize) -> Result<Vec<u8>> {
-    let mut buf = vec![0u8; len];
-    reader.read_exact(&mut buf)?;
-    Ok(buf)
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;

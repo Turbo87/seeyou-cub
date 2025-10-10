@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 use std::fmt;
+use std::io::Read;
 
 /// Wrapper around `Vec<u8>` that provides human-readable debug output
 ///
@@ -13,6 +14,13 @@ impl ByteString {
     /// Create a new `ByteString` from a byte vector
     pub fn new(bytes: Vec<u8>) -> Self {
         Self(bytes)
+    }
+
+    /// Read `len` bytes from reader and return as `ByteString`
+    pub fn read<R: Read>(reader: &mut R, len: usize) -> std::io::Result<Self> {
+        let mut buf = vec![0u8; len];
+        reader.read_exact(&mut buf)?;
+        Ok(Self(buf))
     }
 
     /// Get a reference to the underlying bytes
@@ -77,6 +85,23 @@ impl fmt::Debug for ByteString {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::io::Cursor;
+
+    #[test]
+    fn read_from_reader() {
+        let data = b"Hello World";
+        let mut cursor = Cursor::new(data);
+        let bs = ByteString::read(&mut cursor, data.len()).unwrap();
+        assert_eq!(bs.as_bytes(), b"Hello World");
+    }
+
+    #[test]
+    fn read_zero_length() {
+        let data = b"Hello";
+        let mut cursor = Cursor::new(data);
+        let bs = ByteString::read(&mut cursor, 0).unwrap();
+        assert_eq!(bs.as_bytes(), b"");
+    }
 
     #[test]
     fn debug_valid_utf8() {

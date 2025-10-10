@@ -1,6 +1,6 @@
 use crate::ByteString;
 use crate::error::Result;
-use crate::raw::io::{read_bytes, read_i16, read_u8, read_u32};
+use crate::raw::io::{read_i16, read_u8, read_u32};
 use crate::raw::{Header, PointOp};
 use crate::{CubDataId, Error};
 use std::io::Read;
@@ -120,7 +120,7 @@ fn parse_attributes<R: Read>(
 
         let name_len = (first_flag & 0x3F) as usize;
         if name_len > 0 {
-            item_data.name = Some(read_bytes(reader, name_len)?.into());
+            item_data.name = Some(ByteString::read(reader, name_len)?);
         }
     }
 
@@ -141,7 +141,7 @@ fn parse_attributes<R: Read>(
                 item_data.frequency = Some(read_u32(reader, byte_order)?);
 
                 if freq_name_len > 0 {
-                    item_data.frequency_name = Some(read_bytes(reader, freq_name_len)?.into());
+                    item_data.frequency_name = Some(ByteString::read(reader, freq_name_len)?);
                 }
             }
 
@@ -167,7 +167,7 @@ fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut ItemData)
     match CubDataId::from_byte(data_id) {
         Some(CubDataId::IcaoCode) => {
             let len = b3 as usize;
-            item_data.icao_code = Some(read_bytes(reader, len)?.into());
+            item_data.icao_code = Some(ByteString::read(reader, len)?);
         }
 
         Some(CubDataId::SecondaryFrequency) => {
@@ -177,17 +177,17 @@ fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut ItemData)
 
         Some(CubDataId::ExceptionRules) => {
             let len = (((b2 as u16) << 8) | (b3 as u16)) as usize;
-            item_data.exception_rules = Some(read_bytes(reader, len)?.into());
+            item_data.exception_rules = Some(ByteString::read(reader, len)?);
         }
 
         Some(CubDataId::NotamRemarks) => {
             let len = (((b2 as u16) << 8) | (b3 as u16)) as usize;
-            item_data.notam_remarks = Some(read_bytes(reader, len)?.into());
+            item_data.notam_remarks = Some(ByteString::read(reader, len)?);
         }
 
         Some(CubDataId::NotamId) => {
             let len = b3 as usize;
-            item_data.notam_id = Some(read_bytes(reader, len)?.into());
+            item_data.notam_id = Some(ByteString::read(reader, len)?);
         }
 
         Some(CubDataId::NotamInsertTime) => {
