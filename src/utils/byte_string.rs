@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 use std::fmt;
-use std::io::Read;
+use std::io::{Read, Write};
 
 /// Wrapper around `Vec<u8>` that provides human-readable debug output
 ///
@@ -21,6 +21,12 @@ impl ByteString {
         let mut buf = vec![0u8; len];
         reader.read_exact(&mut buf)?;
         Ok(Self(buf))
+    }
+
+    /// Write the bytes to the writer and return number of bytes written
+    pub fn write<W: Write>(&self, writer: &mut W) -> std::io::Result<usize> {
+        writer.write_all(&self.0)?;
+        Ok(self.0.len())
     }
 
     /// Get a reference to the underlying bytes
@@ -183,5 +189,23 @@ mod tests {
         // Mix of ASCII and CP1252 characters
         let bs = ByteString::new(vec![0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0xE9]); // "Hello é"
         assert_eq!(bs.decode(), "Hello é");
+    }
+
+    #[test]
+    fn write_to_writer() {
+        let bs = ByteString::new(b"Hello World".to_vec());
+        let mut buf = Vec::new();
+        let written = bs.write(&mut buf).unwrap();
+        assert_eq!(written, 11);
+        assert_eq!(buf, b"Hello World");
+    }
+
+    #[test]
+    fn write_empty() {
+        let bs = ByteString::new(vec![]);
+        let mut buf = Vec::new();
+        let written = bs.write(&mut buf).unwrap();
+        assert_eq!(written, 0);
+        assert_eq!(buf, b"");
     }
 }

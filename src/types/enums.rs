@@ -338,6 +338,17 @@ impl CubDataId {
             _ => None,
         }
     }
+
+    pub fn as_byte(&self) -> u8 {
+        match self {
+            CubDataId::IcaoCode => 0,
+            CubDataId::SecondaryFrequency => 1,
+            CubDataId::ExceptionRules => 2,
+            CubDataId::NotamRemarks => 3,
+            CubDataId::NotamId => 4,
+            CubDataId::NotamInsertTime => 5,
+        }
+    }
 }
 
 /// NOTAM subject and action codes (decoded from ExtraData)
