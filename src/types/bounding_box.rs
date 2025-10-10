@@ -56,6 +56,21 @@ impl BoundingBox {
         Ok(())
     }
 
+    /// Create a bounding box from a slice of points
+    ///
+    /// Returns `None` if the slice is empty.
+    pub fn from_points(points: &[Point]) -> Option<Self> {
+        if points.is_empty() {
+            return None;
+        }
+
+        let mut bbox = Self::from(points[0]);
+        for &point in &points[1..] {
+            bbox.extend(point);
+        }
+        Some(bbox)
+    }
+
     /// Extend bounding box to include a point
     ///
     /// Grows the bounding box if necessary to encompass the given point.
@@ -109,6 +124,40 @@ mod tests {
         assert_eq!(bbox.top, 0.852_941_4); // lat
         assert_eq!(bbox.right, 0.041_037_06); // lon
         assert_eq!(bbox.bottom, 0.852_941_4); // lat
+    }
+
+    #[test]
+    fn test_from_points_empty() {
+        let points: Vec<Point> = vec![];
+        let bbox = BoundingBox::from_points(&points);
+        assert!(bbox.is_none());
+    }
+
+    #[test]
+    fn test_from_points_single() {
+        let points = vec![Point::new(0.5, 0.5)];
+        let bbox = BoundingBox::from_points(&points).unwrap();
+
+        assert_eq!(bbox.left, 0.5);
+        assert_eq!(bbox.top, 0.5);
+        assert_eq!(bbox.right, 0.5);
+        assert_eq!(bbox.bottom, 0.5);
+    }
+
+    #[test]
+    fn test_from_points_multiple() {
+        let points = vec![
+            Point::new(0.5, 0.5), // Center (lat, lon)
+            Point::new(0.8, 0.2), // North + West
+            Point::new(0.2, 0.9), // South + East
+            Point::new(0.9, 0.1), // North + West
+        ];
+        let bbox = BoundingBox::from_points(&points).unwrap();
+
+        assert_eq!(bbox.left, 0.1); // Westmost
+        assert_eq!(bbox.top, 0.9); // Northmost
+        assert_eq!(bbox.right, 0.9); // Eastmost
+        assert_eq!(bbox.bottom, 0.2); // Southmost
     }
 
     #[test]
