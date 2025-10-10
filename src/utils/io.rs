@@ -1,6 +1,5 @@
-use crate::error::Result;
 use crate::types::ByteOrder;
-use std::io::Read;
+use std::io::{Read, Result};
 
 /// Read i16 with specified byte order
 pub fn read_i16<R: Read>(reader: &mut R, order: ByteOrder) -> Result<i16> {

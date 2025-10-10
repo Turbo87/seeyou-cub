@@ -68,10 +68,10 @@ impl ItemData {
         loop {
             let flag = match read_u8(reader) {
                 Ok(flag) => flag,
-                Err(Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+                Err(e) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
                     return Ok(item_data);
                 }
-                Err(e) => return Err(e),
+                Err(e) => return Err(e.into()),
             };
 
             match flag {
@@ -128,10 +128,10 @@ fn parse_attributes<R: Read>(
     loop {
         let flag = match read_u8(reader) {
             Ok(flag) => flag,
-            Err(Error::IoError(ref e)) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+            Err(e) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
                 return Ok(item_data);
             }
-            Err(e) => return Err(e),
+            Err(e) => return Err(e.into()),
         };
 
         match flag {
