@@ -15,7 +15,7 @@ const MIN_SIZE_OF_POINT: i32 = 5;
 ///
 /// Contains metadata about the airspace file including bounding box,
 /// item counts, and structural information needed for parsing.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Header {
     // Raw fields (public)
     pub title: ByteString,

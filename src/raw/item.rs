@@ -12,7 +12,7 @@ use std::io::{Cursor, Read};
 /// Represents a single airspace with its bounding box, altitude limits,
 /// classification, and metadata. Contains bit-packed fields that are
 /// decoded through accessor methods.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Item {
     // Bounding box
     pub left: f32,

@@ -11,7 +11,7 @@ use std::io::Read;
 /// - Point operations are raw i16 offsets (not yet converted to lat/lon)
 /// - Strings are raw bytes (not yet decoded from UTF-8/Extended ASCII)
 /// - Optional attributes remain as raw bytes for maximum flexibility
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ItemData {
     /// Raw point operations (origin moves and new points with i16 x/y offsets)
     pub point_ops: Vec<PointOp>,
