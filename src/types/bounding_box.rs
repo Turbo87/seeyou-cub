@@ -1,4 +1,5 @@
 use crate::error::Result;
+use crate::types::Point;
 use crate::utils::io::{read_f32_le, write_f32_le};
 use std::io::{Read, Write};
 
@@ -45,10 +46,37 @@ impl BoundingBox {
     }
 }
 
+impl From<Point> for BoundingBox {
+    fn from(point: Point) -> Self {
+        Self {
+            left: point.lon,
+            top: point.lat,
+            right: point.lon,
+            bottom: point.lat,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::types::Point;
     use std::io::Cursor;
+
+    #[test]
+    fn test_from_point() {
+        // Create a point (Paris: 48.8566°N, 2.3522°E in radians)
+        let point = Point::new(0.852_941_4, 0.041_037_06);
+
+        // Create bounding box from single point
+        let bbox = BoundingBox::from(point);
+
+        // All bounds should equal the point's coordinates
+        assert_eq!(bbox.left, 0.041_037_06); // lon
+        assert_eq!(bbox.top, 0.852_941_4); // lat
+        assert_eq!(bbox.right, 0.041_037_06); // lon
+        assert_eq!(bbox.bottom, 0.852_941_4); // lat
+    }
 
     #[test]
     fn test_basic_construction() {
