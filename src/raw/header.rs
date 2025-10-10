@@ -1,7 +1,7 @@
 use crate::byte_string::ByteString;
 use crate::ByteOrder;
 use crate::error::{Error, Result};
-use crate::raw::io::{read_bytes, read_f32_le, read_i32, read_u8, read_u16, read_u32};
+use crate::raw::io::{read_f32_le, read_i32, read_u8, read_u16, read_u32};
 use std::io::Read;
 
 /// Minimum accepted `size_of_item`. Anything below that would not include the
@@ -64,14 +64,14 @@ impl Header {
         }
 
         // Read title (offset 4-115, 112 bytes)
-        let mut title = read_bytes(reader, 112)?;
-        // Trim null padding
-        if let Some(pos) = title.iter().rposition(|&b| b != 0) {
-            title.truncate(pos + 1);
+        let mut title_buf = [0u8; 112];
+        reader.read_exact(&mut title_buf)?;
+        // Trim null padding and convert to Vec only for non-null bytes
+        let title = if let Some(pos) = title_buf.iter().rposition(|&b| b != 0) {
+            ByteString::from(title_buf[..=pos].to_vec())
         } else {
-            title.clear();
-        }
-        let title = ByteString::from(title);
+            ByteString::from(vec![])
+        };
 
         // Read allowed serials (offset 116-131, 8 × u16, always LE)
         let mut allowed_serials = [0u16; 8];
