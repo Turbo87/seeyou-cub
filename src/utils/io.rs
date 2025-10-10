@@ -70,6 +70,15 @@ pub fn write_u8<W: Write>(writer: &mut W, value: u8) -> Result<()> {
     writer.write_all(&[value])
 }
 
+/// Write i16 with specified byte order
+pub fn write_i16<W: Write>(writer: &mut W, value: i16, order: ByteOrder) -> Result<()> {
+    let buf = match order {
+        ByteOrder::LE => value.to_le_bytes(),
+        ByteOrder::BE => value.to_be_bytes(),
+    };
+    writer.write_all(&buf)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -110,5 +119,19 @@ mod tests {
         let mut buf = Vec::new();
         write_u8(&mut buf, 0x42).unwrap();
         assert_eq!(buf, vec![0x42]);
+    }
+
+    #[test]
+    fn test_write_i16_le() {
+        let mut buf = Vec::new();
+        write_i16(&mut buf, 0x1234, ByteOrder::LE).unwrap();
+        assert_eq!(buf, vec![0x34, 0x12]);
+    }
+
+    #[test]
+    fn test_write_i16_be() {
+        let mut buf = Vec::new();
+        write_i16(&mut buf, 0x1234, ByteOrder::BE).unwrap();
+        assert_eq!(buf, vec![0x12, 0x34]);
     }
 }
