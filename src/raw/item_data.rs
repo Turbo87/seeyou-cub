@@ -1,9 +1,9 @@
 use crate::error::Result;
 use crate::raw::{Header, PointOp};
 use crate::utils::ByteString;
-use crate::utils::io::{read_i16, read_u8, read_u32};
+use crate::utils::io::{read_i16, read_u8, read_u32, write_i16, write_u8, write_u32};
 use crate::{CubDataId, Error};
-use std::io::Read;
+use std::io::{Read, Write};
 
 /// Low-level item data with raw point operations and unprocessed attributes
 ///
@@ -99,6 +99,156 @@ impl ItemData {
                 }
             }
         }
+    }
+
+    /// Write item data to writer
+    ///
+    /// Writes point operations and all optional attributes.
+    ///
+    /// # Arguments
+    ///
+    /// * `writer` - Writer to write to
+    /// * `header` - Header containing byte order and size_of_point
+    ///
+    /// # Returns
+    ///
+    /// Number of bytes written or an error
+    pub fn write<W: Write>(&self, writer: &mut W, header: &Header) -> Result<usize> {
+        let byte_order = header.byte_order();
+        let mut bytes_written = 0;
+
+        // Write point operations
+        for point_op in &self.point_ops {
+            match point_op {
+                PointOp::MoveOrigin { x, y } => {
+                    write_u8(writer, 0x81)?;
+                    write_i16(writer, *x, byte_order)?;
+                    write_i16(writer, *y, byte_order)?;
+                    bytes_written += 5;
+                }
+                PointOp::NewPoint { x, y } => {
+                    write_u8(writer, 0x01)?;
+                    write_i16(writer, *x, byte_order)?;
+                    write_i16(writer, *y, byte_order)?;
+                    bytes_written += 5;
+                }
+            }
+        }
+
+        // Write name attribute if present
+        if let Some(ref name) = self.name {
+            let name_len = name.as_bytes().len().min(63); // Max 6 bits
+            let flag = 0x40 | (name_len as u8);
+            write_u8(writer, flag)?;
+            bytes_written += 1;
+
+            // Write remaining bytes of point structure (size_of_point - 1)
+            let padding_len = (header.size_of_point - 1) as usize;
+            let padding = vec![0u8; padding_len];
+            writer.write_all(&padding)?;
+            bytes_written += padding_len;
+
+            // Write name bytes
+            if name_len > 0 {
+                writer.write_all(&name.as_bytes()[..name_len])?;
+                bytes_written += name_len;
+            }
+        }
+
+        // Write frequency attribute if present
+        if let Some(freq) = self.frequency {
+            let freq_name_len = self
+                .frequency_name
+                .as_ref()
+                .map(|n| n.as_bytes().len().min(63))
+                .unwrap_or(0);
+            let flag = 0xC0 | (freq_name_len as u8);
+            write_u8(writer, flag)?;
+            bytes_written += 1;
+
+            write_u32(writer, freq, byte_order)?;
+            bytes_written += 4;
+
+            if let Some(ref freq_name) = self.frequency_name
+                && freq_name_len > 0
+            {
+                writer.write_all(&freq_name.as_bytes()[..freq_name_len])?;
+                bytes_written += freq_name_len;
+            }
+        }
+
+        // Write optional data records (all start with 0xA0 flag)
+
+        // ICAO Code
+        if let Some(ref icao_code) = self.icao_code {
+            let len = icao_code.as_bytes().len().min(255) as u8;
+            write_u8(writer, 0xA0)?;
+            write_u8(writer, CubDataId::IcaoCode.as_byte())?;
+            write_u8(writer, 0)?; // b1 (unused)
+            write_u8(writer, 0)?; // b2 (unused)
+            write_u8(writer, len)?; // b3 = length
+            writer.write_all(icao_code.as_bytes())?;
+            bytes_written += 5 + len as usize;
+        }
+
+        // Secondary Frequency
+        if let Some(freq) = self.secondary_frequency {
+            write_u8(writer, 0xA0)?;
+            write_u8(writer, CubDataId::SecondaryFrequency.as_byte())?;
+            write_u8(writer, ((freq >> 16) & 0xFF) as u8)?; // b1
+            write_u8(writer, ((freq >> 8) & 0xFF) as u8)?; // b2
+            write_u8(writer, (freq & 0xFF) as u8)?; // b3
+            bytes_written += 5;
+        }
+
+        // Exception Rules
+        if let Some(ref rules) = self.exception_rules {
+            let len = rules.as_bytes().len().min(65535) as u16;
+            write_u8(writer, 0xA0)?;
+            write_u8(writer, CubDataId::ExceptionRules.as_byte())?;
+            write_u8(writer, 0)?; // b1 (unused)
+            write_u8(writer, ((len >> 8) & 0xFF) as u8)?; // b2
+            write_u8(writer, (len & 0xFF) as u8)?; // b3
+            writer.write_all(rules.as_bytes())?;
+            bytes_written += 5 + len as usize;
+        }
+
+        // NOTAM Remarks
+        if let Some(ref remarks) = self.notam_remarks {
+            let len = remarks.as_bytes().len().min(65535) as u16;
+            write_u8(writer, 0xA0)?;
+            write_u8(writer, CubDataId::NotamRemarks.as_byte())?;
+            write_u8(writer, 0)?; // b1 (unused)
+            write_u8(writer, ((len >> 8) & 0xFF) as u8)?; // b2
+            write_u8(writer, (len & 0xFF) as u8)?; // b3
+            writer.write_all(remarks.as_bytes())?;
+            bytes_written += 5 + len as usize;
+        }
+
+        // NOTAM ID
+        if let Some(ref notam_id) = self.notam_id {
+            let len = notam_id.as_bytes().len().min(255) as u8;
+            write_u8(writer, 0xA0)?;
+            write_u8(writer, CubDataId::NotamId.as_byte())?;
+            write_u8(writer, 0)?; // b1 (unused)
+            write_u8(writer, 0)?; // b2 (unused)
+            write_u8(writer, len)?; // b3 = length
+            writer.write_all(notam_id.as_bytes())?;
+            bytes_written += 5 + len as usize;
+        }
+
+        // NOTAM Insert Time
+        if let Some(time) = self.notam_insert_time {
+            write_u8(writer, 0xA0)?;
+            write_u8(writer, CubDataId::NotamInsertTime.as_byte())?;
+            write_u8(writer, ((time >> 24) & 0xFF) as u8)?; // b1
+            write_u8(writer, ((time >> 16) & 0xFF) as u8)?; // b2
+            write_u8(writer, ((time >> 8) & 0xFF) as u8)?; // b3
+            write_u8(writer, (time & 0xFF) as u8)?; // b4
+            bytes_written += 6;
+        }
+
+        Ok(bytes_written)
     }
 }
 
@@ -350,5 +500,61 @@ mod tests {
         let item_data = ItemData::read(&mut cursor, &header).expect("Failed to read item data");
 
         insta::assert_debug_snapshot!(item_data);
+    }
+
+    #[test]
+    fn write_item_data_round_trip() {
+        // Create a minimal header
+        let header = Header {
+            title: ByteString::from(vec![]),
+            allowed_serials: [0; 8],
+            pc_byte_order: 0, // LE
+            key: [0; 16],
+            size_of_item: 43,
+            size_of_point: 5,
+            hdr_items: 1,
+            max_pts: 10,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1000.0,
+            header_offset: 210,
+            data_offset: 253,
+        };
+
+        // Create item data with all fields populated
+        let original = ItemData {
+            point_ops: vec![
+                PointOp::MoveOrigin { x: 100, y: 200 },
+                PointOp::NewPoint { x: 10, y: 20 },
+                PointOp::NewPoint { x: 30, y: 40 },
+            ],
+            name: Some(ByteString::from(b"Test Airspace".to_vec())),
+            frequency: Some(123450),
+            frequency_name: Some(ByteString::from(b"Tower".to_vec())),
+            icao_code: Some(ByteString::from(b"LFPG".to_vec())),
+            secondary_frequency: Some(128500),
+            exception_rules: Some(ByteString::from(b"Class D when tower active".to_vec())),
+            notam_remarks: Some(ByteString::from(b"Active during airshow".to_vec())),
+            notam_id: Some(ByteString::from(b"A1234/25".to_vec())),
+            notam_insert_time: Some(0x12345678),
+        };
+
+        // Write to buffer
+        let mut buf = Vec::new();
+        let written = original
+            .write(&mut buf, &header)
+            .expect("Failed to write item data");
+        assert!(written > 0);
+
+        // Read back
+        let mut cursor = Cursor::new(buf);
+        let read_back = ItemData::read(&mut cursor, &header).expect("Failed to read item data");
+
+        // Verify all fields match
+        assert_eq!(read_back, original);
     }
 }
