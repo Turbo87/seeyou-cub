@@ -175,10 +175,12 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
 
     Ok(Airspace {
         // Bounding box
-        left: item.left,
-        top: item.top,
-        right: item.right,
-        bottom: item.bottom,
+        bounding_box: BoundingBox {
+            left: item.left,
+            top: item.top,
+            right: item.right,
+            bottom: item.bottom,
+        },
 
         // Decoded airspace classification
         style: item.style(),
