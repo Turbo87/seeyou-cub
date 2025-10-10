@@ -4,14 +4,14 @@ use crate::{AltStyle, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, Po
 ///
 /// Combines metadata from `Item` and geometry/attributes from `ItemData`.
 /// All bit-packed fields are decoded into enums, strings are decoded from bytes,
-/// and coordinates are converted from raw i16 offsets to f64 lat/lon.
+/// and coordinates are converted from raw i16 offsets to f32 lat/lon.
 #[derive(Debug, Clone)]
 pub struct Airspace {
-    // Bounding box in radians (converted to f64 for consistency)
-    pub left: f64,
-    pub top: f64,
-    pub right: f64,
-    pub bottom: f64,
+    // Bounding box in radians
+    pub left: f32,
+    pub top: f32,
+    pub right: f32,
+    pub bottom: f32,
 
     // Decoded airspace classification
     pub style: CubStyle,
@@ -33,7 +33,7 @@ pub struct Airspace {
     // Decoded temporal data
     pub days_active: DaysActive,
 
-    // Geometry (converted from raw i16 to f64 lat/lon radians)
+    // Geometry (converted from raw i16 to f32 lat/lon radians)
     pub points: Vec<Point>,
 
     // Decoded string attributes
@@ -57,7 +57,7 @@ impl Airspace {
     }
 
     /// Get bounding box as (west, south, east, north) in radians
-    pub fn bounding_box(&self) -> (f64, f64, f64, f64) {
+    pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
         (self.left, self.bottom, self.right, self.top)
     }
 }

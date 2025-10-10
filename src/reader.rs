@@ -12,7 +12,7 @@ use std::path::Path;
 ///
 /// Provides convenient access to CUB file contents with automatic decoding of:
 /// - Strings (UTF-8 with Extended ASCII fallback)
-/// - Coordinates (raw i16 offsets → f64 lat/lon radians)
+/// - Coordinates (raw i16 offsets → f32 lat/lon radians)
 /// - Bit-packed fields (enums and flags)
 ///
 /// # Example
@@ -127,7 +127,7 @@ impl<'a, R: Read + Seek> ExactSizeIterator for AirspaceIterator<'a, R> {}
 
 /// Convert raw item + item data to high-level Airspace
 fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Result<Airspace> {
-    // Convert coordinates from raw i16 offsets to f64 lat/lon radians
+    // Convert coordinates from raw i16 offsets to f32 lat/lon radians
     let points = PointOp::resolve(
         &item_data.point_ops,
         header.lo_la_scale,
@@ -162,11 +162,11 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
         .map(|bs| decode_string(bs.as_bytes()).into_owned());
 
     Ok(Airspace {
-        // Bounding box (convert to f64 for consistency)
-        left: item.left as f64,
-        top: item.top as f64,
-        right: item.right as f64,
-        bottom: item.bottom as f64,
+        // Bounding box
+        left: item.left,
+        top: item.top,
+        right: item.right,
+        bottom: item.bottom,
 
         // Decoded airspace classification
         style: item.style(),
@@ -188,7 +188,7 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
         // Decoded temporal data
         days_active: item.days_active(),
 
-        // Geometry (converted from raw i16 to f64 lat/lon radians)
+        // Geometry (converted from raw i16 to f32 lat/lon radians)
         points,
 
         // Decoded string attributes

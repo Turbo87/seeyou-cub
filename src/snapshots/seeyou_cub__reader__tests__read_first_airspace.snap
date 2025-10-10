@@ -3,10 +3,10 @@ source: src/reader.rs
 expression: airspace
 ---
 Airspace {
-    left: 0.03318064659833908,
-    top: 0.8346647620201111,
-    right: 0.03322432562708855,
-    bottom: 0.8346503973007202,
+    left: 0.033180647,
+    top: 0.83466476,
+    right: 0.033224326,
+    bottom: 0.8346504,
     style: RestrictedArea,
     class: Unknown,
     extended_type: None,
@@ -22,10 +22,10 @@ Airspace {
         bits: 0,
     },
     points: [
-        Point { lat: 0.8346551656723022, lon: 0.03318064659833908 },
-        Point { lat: 0.8346503973007202, lon: 0.03322432562708855 },
-        Point { lat: 0.8346647620201111, lon: 0.033199820667505264 },
-        Point { lat: 0.8346551656723022, lon: 0.03318064659833908 },
+        Point { lat: 0.83465517, lon: 0.033180647 },
+        Point { lat: 0.8346504, lon: 0.033224326 },
+        Point { lat: 0.83466476, lon: 0.03319982 },
+        Point { lat: 0.83465517, lon: 0.033180647 },
     ],
     name: Some(
         "R265 LA GREMUSE",

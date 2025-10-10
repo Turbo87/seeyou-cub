@@ -29,7 +29,7 @@ impl PointOp {
     /// Resolve point operations into geographic coordinates
     ///
     /// Processes a sequence of point operations (origin moves and new points) and converts
-    /// them from raw i16 offsets to f64 lat/lon coordinates in radians.
+    /// them from raw i16 offsets to f32 lat/lon coordinates in radians.
     ///
     /// # Arguments
     ///
@@ -61,7 +61,7 @@ impl PointOp {
                     let lon = origin_lon + (*x as f32) * lo_la_scale;
                     let lat = origin_lat + (*y as f32) * lo_la_scale;
 
-                    let point = Point::new(lat as f64, lon as f64);
+                    let point = Point::new(lat, lon);
                     if !point.is_valid() {
                         return Err(crate::error::Error::CoordinateOutOfRange { point });
                     }
@@ -123,17 +123,17 @@ mod tests {
         assert_eq!(points.len(), 2);
 
         // Verify: origin + (offset * scale) in radians
-        let expected_lon_1 = (0.1_f32 + 100.0 * 0.0001) as f64;
-        let expected_lat_1 = (0.2_f32 + 200.0 * 0.0001) as f64;
+        let expected_lon_1 = 0.1_f32 + 100.0 * 0.0001;
+        let expected_lat_1 = 0.2_f32 + 200.0 * 0.0001;
 
-        assert!((points[0].lon - expected_lon_1).abs() < 1e-9);
-        assert!((points[0].lat - expected_lat_1).abs() < 1e-9);
+        assert!((points[0].lon - expected_lon_1).abs() < 1e-6);
+        assert!((points[0].lat - expected_lat_1).abs() < 1e-6);
 
-        let expected_lon_2 = (0.1_f32 + 150.0 * 0.0001) as f64;
-        let expected_lat_2 = (0.2_f32 + 250.0 * 0.0001) as f64;
+        let expected_lon_2 = 0.1_f32 + 150.0 * 0.0001;
+        let expected_lat_2 = 0.2_f32 + 250.0 * 0.0001;
 
-        assert!((points[1].lon - expected_lon_2).abs() < 1e-9);
-        assert!((points[1].lat - expected_lat_2).abs() < 1e-9);
+        assert!((points[1].lon - expected_lon_2).abs() < 1e-6);
+        assert!((points[1].lat - expected_lat_2).abs() < 1e-6);
     }
 
     #[test]
@@ -152,18 +152,18 @@ mod tests {
         assert_eq!(points.len(), 2);
 
         // The first point should be relative to passed-in origin in radians
-        let expected_lon_1 = (100.0_f32 * 0.0001) as f64;
-        let expected_lat_1 = (200.0_f32 * 0.0001) as f64;
+        let expected_lon_1 = 100.0_f32 * 0.0001;
+        let expected_lat_1 = 200.0_f32 * 0.0001;
 
-        assert!((points[0].lon - expected_lon_1).abs() < 1e-9);
-        assert!((points[0].lat - expected_lat_1).abs() < 1e-9);
+        assert!((points[0].lon - expected_lon_1).abs() < 1e-6);
+        assert!((points[0].lat - expected_lat_1).abs() < 1e-6);
 
         // The second point should be relative to the moved origin in radians
-        let expected_lon_2 = (1000.0_f32 * 0.0001 + 50.0 * 0.0001) as f64;
-        let expected_lat_2 = (2000.0_f32 * 0.0001 + 100.0 * 0.0001) as f64;
+        let expected_lon_2 = 1000.0_f32 * 0.0001 + 50.0 * 0.0001;
+        let expected_lat_2 = 2000.0_f32 * 0.0001 + 100.0 * 0.0001;
 
-        assert!((points[1].lon - expected_lon_2).abs() < 1e-9);
-        assert!((points[1].lat - expected_lat_2).abs() < 1e-9);
+        assert!((points[1].lon - expected_lon_2).abs() < 1e-6);
+        assert!((points[1].lat - expected_lat_2).abs() < 1e-6);
     }
 
     #[test]
