@@ -270,4 +270,101 @@ mod tests {
 
         assert_eq!(read_back, original);
     }
+
+    #[test]
+    fn write_header_with_be_byte_order() {
+        // Create header with BE byte order
+        let original = Header {
+            title: ByteString::from(b"BE Test".to_vec()),
+            allowed_serials: [1, 2, 3, 4, 5, 6, 7, 8],
+            pc_byte_order: 1, // BE
+            key: [0xFF; 16],
+            size_of_item: 43,
+            size_of_point: 5,
+            hdr_items: 100,
+            max_pts: 1000,
+            left: -2.5,
+            top: 2.5,
+            right: 2.5,
+            bottom: -2.5,
+            max_width: 5.0,
+            max_height: 5.0,
+            lo_la_scale: 2000.0,
+            header_offset: 210,
+            data_offset: 4510,
+        };
+
+        // Write and read back
+        let mut buf = Vec::new();
+        original.write(&mut buf).expect("Failed to write");
+        let mut cursor = Cursor::new(buf);
+        let read_back = Header::read(&mut cursor).expect("Failed to read");
+
+        assert_eq!(read_back, original);
+    }
+
+    #[test]
+    fn write_header_with_empty_title() {
+        // Create header with empty title
+        let original = Header {
+            title: ByteString::from(vec![]),
+            allowed_serials: [0; 8],
+            pc_byte_order: 0,
+            key: [0; 16],
+            size_of_item: 26,
+            size_of_point: 5,
+            hdr_items: 0,
+            max_pts: 0,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1.0,
+            header_offset: 210,
+            data_offset: 210,
+        };
+
+        // Write and read back
+        let mut buf = Vec::new();
+        original.write(&mut buf).expect("Failed to write");
+        let mut cursor = Cursor::new(buf);
+        let read_back = Header::read(&mut cursor).expect("Failed to read");
+
+        assert_eq!(read_back, original);
+    }
+
+    #[test]
+    fn write_header_with_max_title_length() {
+        // Create header with maximum title length (112 bytes)
+        let long_title = vec![b'X'; 112];
+        let original = Header {
+            title: ByteString::from(long_title.clone()),
+            allowed_serials: [0; 8],
+            pc_byte_order: 0,
+            key: [0; 16],
+            size_of_item: 43,
+            size_of_point: 5,
+            hdr_items: 1,
+            max_pts: 10,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1.0,
+            header_offset: 210,
+            data_offset: 253,
+        };
+
+        // Write and read back
+        let mut buf = Vec::new();
+        original.write(&mut buf).expect("Failed to write");
+        let mut cursor = Cursor::new(buf);
+        let read_back = Header::read(&mut cursor).expect("Failed to read");
+
+        assert_eq!(read_back.title.as_bytes(), &long_title[..]);
+    }
 }

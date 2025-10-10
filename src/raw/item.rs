@@ -410,4 +410,102 @@ mod tests {
 
         assert_eq!(read_back, original);
     }
+
+    #[test]
+    fn write_item_with_be_byte_order() {
+        // Create header with BE byte order
+        let header = Header {
+            title: crate::utils::ByteString::from(vec![]),
+            allowed_serials: [0; 8],
+            pc_byte_order: 1, // BE
+            key: [0; 16],
+            size_of_item: 43,
+            size_of_point: 5,
+            hdr_items: 1,
+            max_pts: 10,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1000.0,
+            header_offset: 210,
+            data_offset: 253,
+        };
+
+        let original = Item {
+            left: -1.0,
+            top: 1.0,
+            right: 1.0,
+            bottom: -1.0,
+            type_byte: 0x12,
+            alt_style_byte: 0x34,
+            min_alt: -100,
+            max_alt: 20000,
+            points_offset: 500,
+            time_out: 7200,
+            extra_data: 0xABCDEF01,
+            active_time: 0x123456789ABCDEF0,
+            extended_type_byte: 99,
+        };
+
+        // Write and read back
+        let mut buf = Vec::new();
+        original.write(&mut buf, &header).expect("Failed to write");
+        let mut cursor = Cursor::new(buf);
+        let read_back = Item::read(&mut cursor, &header).expect("Failed to read");
+
+        assert_eq!(read_back, original);
+    }
+
+    #[test]
+    fn write_item_with_variable_size() {
+        // Test with size_of_item = 50 (larger than 43)
+        let header = Header {
+            title: crate::utils::ByteString::from(vec![]),
+            allowed_serials: [0; 8],
+            pc_byte_order: 0,
+            key: [0; 16],
+            size_of_item: 50,
+            size_of_point: 5,
+            hdr_items: 1,
+            max_pts: 10,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1000.0,
+            header_offset: 210,
+            data_offset: 260,
+        };
+
+        let original = Item {
+            left: 0.5,
+            top: 0.5,
+            right: 0.5,
+            bottom: 0.5,
+            type_byte: 0xFF,
+            alt_style_byte: 0xFF,
+            min_alt: i16::MIN,
+            max_alt: i16::MAX,
+            points_offset: 12345,
+            time_out: 999999,
+            extra_data: u32::MAX,
+            active_time: u64::MAX,
+            extended_type_byte: 255,
+        };
+
+        // Write and read back
+        let mut buf = Vec::new();
+        let written = original.write(&mut buf, &header).expect("Failed to write");
+        assert_eq!(written, 50);
+
+        let mut cursor = Cursor::new(buf);
+        let read_back = Item::read(&mut cursor, &header).expect("Failed to read");
+
+        assert_eq!(read_back, original);
+    }
 }

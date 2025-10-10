@@ -557,4 +557,208 @@ mod tests {
         // Verify all fields match
         assert_eq!(read_back, original);
     }
+
+    #[test]
+    fn write_item_data_with_be_byte_order() {
+        // Create header with BE byte order
+        let header = Header {
+            title: ByteString::from(vec![]),
+            allowed_serials: [0; 8],
+            pc_byte_order: 1, // BE
+            key: [0; 16],
+            size_of_item: 43,
+            size_of_point: 5,
+            hdr_items: 1,
+            max_pts: 10,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1000.0,
+            header_offset: 210,
+            data_offset: 253,
+        };
+
+        let original = ItemData {
+            point_ops: vec![
+                PointOp::MoveOrigin { x: -500, y: 500 },
+                PointOp::NewPoint { x: 100, y: -100 },
+            ],
+            name: Some(ByteString::from(b"BE Test".to_vec())),
+            frequency: Some(118500),
+            frequency_name: Some(ByteString::from(b"ATIS".to_vec())),
+            icao_code: None,
+            secondary_frequency: None,
+            exception_rules: None,
+            notam_remarks: None,
+            notam_id: None,
+            notam_insert_time: None,
+        };
+
+        // Write and read back
+        let mut buf = Vec::new();
+        original.write(&mut buf, &header).expect("Failed to write");
+        let mut cursor = Cursor::new(buf);
+        let read_back = ItemData::read(&mut cursor, &header).expect("Failed to read");
+
+        assert_eq!(read_back, original);
+    }
+
+    #[test]
+    fn write_item_data_with_no_optional_fields() {
+        let header = Header {
+            title: ByteString::from(vec![]),
+            allowed_serials: [0; 8],
+            pc_byte_order: 0,
+            key: [0; 16],
+            size_of_item: 43,
+            size_of_point: 5,
+            hdr_items: 1,
+            max_pts: 10,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1000.0,
+            header_offset: 210,
+            data_offset: 253,
+        };
+
+        // Only point operations, no optional fields
+        let original = ItemData {
+            point_ops: vec![PointOp::NewPoint { x: 10, y: 20 }],
+            name: None,
+            frequency: None,
+            frequency_name: None,
+            icao_code: None,
+            secondary_frequency: None,
+            exception_rules: None,
+            notam_remarks: None,
+            notam_id: None,
+            notam_insert_time: None,
+        };
+
+        // Write and read back
+        let mut buf = Vec::new();
+        original.write(&mut buf, &header).expect("Failed to write");
+        let mut cursor = Cursor::new(buf);
+        let read_back = ItemData::read(&mut cursor, &header).expect("Failed to read");
+
+        assert_eq!(read_back, original);
+    }
+
+    #[test]
+    fn write_item_data_with_max_string_lengths() {
+        let header = Header {
+            title: ByteString::from(vec![]),
+            allowed_serials: [0; 8],
+            pc_byte_order: 0,
+            key: [0; 16],
+            size_of_item: 43,
+            size_of_point: 5,
+            hdr_items: 1,
+            max_pts: 10,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1000.0,
+            header_offset: 210,
+            data_offset: 253,
+        };
+
+        // Create strings at maximum lengths
+        let max_63_bytes = vec![b'A'; 63];
+        let max_255_bytes = vec![b'B'; 255];
+        let max_65535_bytes = vec![b'C'; 65535];
+
+        let original = ItemData {
+            point_ops: vec![PointOp::NewPoint { x: 0, y: 0 }],
+            name: Some(ByteString::from(max_63_bytes.clone())),
+            frequency: Some(123450),
+            frequency_name: Some(ByteString::from(max_63_bytes.clone())),
+            icao_code: Some(ByteString::from(max_255_bytes.clone())),
+            secondary_frequency: Some(0xFFFFFF),
+            exception_rules: Some(ByteString::from(max_65535_bytes.clone())),
+            notam_remarks: Some(ByteString::from(b"Max remarks".to_vec())),
+            notam_id: Some(ByteString::from(max_255_bytes.clone())),
+            notam_insert_time: Some(0xFFFFFFFF),
+        };
+
+        // Write and read back
+        let mut buf = Vec::new();
+        original.write(&mut buf, &header).expect("Failed to write");
+        let mut cursor = Cursor::new(buf);
+        let read_back = ItemData::read(&mut cursor, &header).expect("Failed to read");
+
+        assert_eq!(read_back, original);
+    }
+
+    #[test]
+    fn write_item_data_with_many_point_operations() {
+        let header = Header {
+            title: ByteString::from(vec![]),
+            allowed_serials: [0; 8],
+            pc_byte_order: 0,
+            key: [0; 16],
+            size_of_item: 43,
+            size_of_point: 5,
+            hdr_items: 1,
+            max_pts: 100,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1000.0,
+            header_offset: 210,
+            data_offset: 253,
+        };
+
+        // Create various point operation patterns
+        let mut point_ops = vec![
+            PointOp::MoveOrigin { x: 1000, y: 2000 },
+            PointOp::NewPoint { x: 10, y: 20 },
+            PointOp::NewPoint { x: 30, y: 40 },
+            PointOp::MoveOrigin { x: -500, y: -500 },
+            PointOp::NewPoint { x: 5, y: 5 },
+        ];
+
+        // Add many more points
+        for i in 0..50 {
+            point_ops.push(PointOp::NewPoint {
+                x: i * 10,
+                y: i * 20,
+            });
+        }
+
+        let original = ItemData {
+            point_ops,
+            name: Some(ByteString::from(b"Complex polygon".to_vec())),
+            frequency: None,
+            frequency_name: None,
+            icao_code: None,
+            secondary_frequency: None,
+            exception_rules: None,
+            notam_remarks: None,
+            notam_id: None,
+            notam_insert_time: None,
+        };
+
+        // Write and read back
+        let mut buf = Vec::new();
+        original.write(&mut buf, &header).expect("Failed to write");
+        let mut cursor = Cursor::new(buf);
+        let read_back = ItemData::read(&mut cursor, &header).expect("Failed to read");
+
+        assert_eq!(read_back.point_ops.len(), original.point_ops.len());
+        assert_eq!(read_back, original);
+    }
 }
