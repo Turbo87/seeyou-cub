@@ -55,7 +55,7 @@ impl<R: Read + Seek> CubReader<R> {
     }
 
     /// Get reference to a parsed header
-    pub fn header(&self) -> &Header {
+    pub fn raw_header(&self) -> &Header {
         &self.header
     }
 
@@ -231,7 +231,7 @@ mod tests {
         let reader = CubReader::from_path("tests/fixtures/france_2024.07.02.cub")
             .expect("Failed to open fixture");
 
-        let header = reader.header();
+        let header = reader.raw_header();
         assert_debug_snapshot!(header);
     }
 

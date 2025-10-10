@@ -7,7 +7,7 @@ fn parse_france_fixture() {
     let mut reader = CubReader::from_path("tests/fixtures/france_2024.07.02.cub")
         .expect("Failed to open fixture file");
 
-    let header = reader.header();
+    let header = reader.raw_header();
     assert_debug_snapshot!("header", header);
 
     let airspaces: Vec<_> = reader
