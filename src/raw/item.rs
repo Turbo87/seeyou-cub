@@ -1,11 +1,14 @@
 use crate::error::Result;
 use crate::raw::Header;
-use crate::utils::io::{read_f32_le, read_i16, read_i32, read_u8, read_u32, read_u64};
+use crate::utils::io::{
+    read_f32_le, read_i16, read_i32, read_u8, read_u32, read_u64, write_f32_le, write_i16,
+    write_i32, write_u8, write_u32, write_u64,
+};
 use crate::{
     AltStyle, CubClass, CubStyle, DateTime, DaysActive, ExtendedType, NotamCodes, NotamScope,
     NotamTraffic, NotamType,
 };
-use std::io::{Cursor, Read};
+use std::io::{Cursor, Read, Write};
 
 /// Airspace item (26 bytes minimum, may be larger per `Header::size_of_item`)
 ///
@@ -195,6 +198,59 @@ impl Item {
     pub fn bounding_box(&self) -> (f32, f32, f32, f32) {
         (self.left, self.bottom, self.right, self.top)
     }
+
+    /// Write airspace item to writer
+    ///
+    /// Writes exactly `header.size_of_item` bytes to the writer.
+    ///
+    /// # Arguments
+    ///
+    /// * `writer` - Writer to write to
+    /// * `header` - Header containing byte order and item size
+    ///
+    /// # Returns
+    ///
+    /// Number of bytes written (always `header.size_of_item`) or an error
+    pub fn write<W: Write>(&self, writer: &mut W, header: &Header) -> Result<usize> {
+        let byte_order = header.byte_order();
+        let size_of_item = header.size_of_item as usize;
+
+        // Create a buffer for the full item (up to 43 bytes, or size_of_item if smaller)
+        let mut buf = Vec::with_capacity(size_of_item.max(43));
+
+        // Write bounding box (floats always LE)
+        write_f32_le(&mut buf, self.left)?;
+        write_f32_le(&mut buf, self.top)?;
+        write_f32_le(&mut buf, self.right)?;
+        write_f32_le(&mut buf, self.bottom)?;
+
+        // Write bit-packed fields
+        write_u8(&mut buf, self.type_byte)?;
+        write_u8(&mut buf, self.alt_style_byte)?;
+        write_i16(&mut buf, self.min_alt, byte_order)?;
+        write_i16(&mut buf, self.max_alt, byte_order)?;
+        write_i32(&mut buf, self.points_offset, byte_order)?;
+        write_i32(&mut buf, self.time_out, byte_order)?;
+        write_u32(&mut buf, self.extra_data, byte_order)?;
+        write_u64(&mut buf, self.active_time, byte_order)?;
+        write_u8(&mut buf, self.extended_type_byte)?;
+
+        // Now buf has 43 bytes. Write only size_of_item bytes, or pad if needed
+        if size_of_item < 43 {
+            // Write only the first size_of_item bytes
+            writer.write_all(&buf[..size_of_item])?;
+        } else {
+            // Write all 43 bytes
+            writer.write_all(&buf)?;
+            // Pad with zeros if size_of_item > 43
+            if size_of_item > 43 {
+                let padding = vec![0u8; size_of_item - 43];
+                writer.write_all(&padding)?;
+            }
+        }
+
+        Ok(size_of_item)
+    }
 }
 
 /// Decode NOTAM time from encoded minutes to DateTime
@@ -299,5 +355,59 @@ mod tests {
         // Read item
         let item = Item::read(&mut file, &header).expect("Failed to read item");
         insta::assert_debug_snapshot!(item);
+    }
+
+    #[test]
+    fn write_item_round_trip() {
+        // Create a minimal header for byte order
+        let header = Header {
+            title: crate::utils::ByteString::from(vec![]),
+            allowed_serials: [0; 8],
+            pc_byte_order: 0, // LE
+            key: [0; 16],
+            size_of_item: 43, // Full item size
+            size_of_point: 5,
+            hdr_items: 1,
+            max_pts: 10,
+            left: 0.0,
+            top: 0.0,
+            right: 0.0,
+            bottom: 0.0,
+            max_width: 0.0,
+            max_height: 0.0,
+            lo_la_scale: 1000.0,
+            header_offset: 210,
+            data_offset: 253,
+        };
+
+        // Create an item with known values
+        let original = Item {
+            left: -1.5,
+            top: 1.5,
+            right: 1.5,
+            bottom: -1.5,
+            type_byte: 0b01000100, // Class D + Style DA
+            alt_style_byte: 0x32,  // Max=FL, Min=MSL
+            min_alt: 500,
+            max_alt: 10000,
+            points_offset: 100,
+            time_out: 3600,
+            extra_data: 0x12345678,
+            active_time: 0xFEDCBA9876543210,
+            extended_type_byte: 42,
+        };
+
+        // Write to buffer
+        let mut buf = Vec::new();
+        let written = original
+            .write(&mut buf, &header)
+            .expect("Failed to write item");
+        assert_eq!(written, 43, "Item should match header.size_of_item");
+
+        // Read back
+        let mut cursor = Cursor::new(buf);
+        let read_back = Item::read(&mut cursor, &header).expect("Failed to read item");
+
+        assert_eq!(read_back, original);
     }
 }
