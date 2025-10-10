@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::fmt;
 
 /// Wrapper around `Vec<u8>` that provides human-readable debug output
@@ -22,6 +23,22 @@ impl ByteString {
     /// Convert into the underlying byte vector
     pub fn into_bytes(self) -> Vec<u8> {
         self.0
+    }
+
+    /// Decode raw bytes to string
+    ///
+    /// Attempts UTF-8 decoding first, falling back to Windows-1252 (CP1252) if UTF-8 fails.
+    /// This matches the CUB file format specification which states:
+    /// "String encoding: UTF-8, use Extended ASCII if string contains incorrect utf-8 sequence"
+    ///
+    /// # Returns
+    ///
+    /// Decoded string (always succeeds with some valid string)
+    pub fn decode(&self) -> Cow<'_, str> {
+        match str::from_utf8(&self.0) {
+            Ok(s) => s.into(),
+            Err(_) => encoding_rs::WINDOWS_1252.decode(&self.0).0,
+        }
     }
 }
 
@@ -109,5 +126,37 @@ mod tests {
     fn from_vec() {
         let bs = ByteString::from(b"test".to_vec());
         assert_eq!(bs.as_bytes(), b"test");
+    }
+
+    #[test]
+    fn decode_utf8_string() {
+        let bs = ByteString::new(b"Hello World".to_vec());
+        assert_eq!(bs.decode(), "Hello World");
+    }
+
+    #[test]
+    fn decode_utf8_with_special_chars() {
+        let bs = ByteString::new("Zürich".as_bytes().to_vec());
+        assert_eq!(bs.decode(), "Zürich");
+    }
+
+    #[test]
+    fn decode_cp1252_fallback() {
+        // CP1252 character é (0xE9) - not valid UTF-8 on its own
+        let bs = ByteString::new(vec![0xE9]);
+        assert_eq!(bs.decode(), "é");
+    }
+
+    #[test]
+    fn decode_empty_string() {
+        let bs = ByteString::new(vec![]);
+        assert_eq!(bs.decode(), "");
+    }
+
+    #[test]
+    fn decode_mixed_extended_ascii() {
+        // Mix of ASCII and CP1252 characters
+        let bs = ByteString::new(vec![0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0xE9]); // "Hello é"
+        assert_eq!(bs.decode(), "Hello é");
     }
 }

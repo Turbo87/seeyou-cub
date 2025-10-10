@@ -1,7 +1,6 @@
 //! High-level CUB file reader with iterator-based API
 
 use crate::Airspace;
-use crate::decode::decode_string;
 use crate::error::Result;
 use crate::raw::{Header, Item, ItemData, PointOp};
 use std::borrow::Cow;
@@ -62,7 +61,7 @@ impl<R: Read + Seek> CubReader<R> {
 
     /// Get the CUB file title
     pub fn title(&self) -> Cow<'_, str> {
-        decode_string(self.header.title.as_bytes())
+        self.header.title.decode()
     }
 
     /// Get bounding box covering all airspaces
@@ -152,30 +151,27 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
     )?;
 
     // Decode strings from raw bytes
-    let name = item_data
-        .name
-        .as_ref()
-        .map(|bs| decode_string(bs.as_bytes()).into_owned());
+    let name = item_data.name.as_ref().map(|bs| bs.decode().into_owned());
     let frequency_name = item_data
         .frequency_name
         .as_ref()
-        .map(|bs| decode_string(bs.as_bytes()).into_owned());
+        .map(|bs| bs.decode().into_owned());
     let icao_code = item_data
         .icao_code
         .as_ref()
-        .map(|bs| decode_string(bs.as_bytes()).into_owned());
+        .map(|bs| bs.decode().into_owned());
     let exception_rules = item_data
         .exception_rules
         .as_ref()
-        .map(|bs| decode_string(bs.as_bytes()).into_owned());
+        .map(|bs| bs.decode().into_owned());
     let notam_remarks = item_data
         .notam_remarks
         .as_ref()
-        .map(|bs| decode_string(bs.as_bytes()).into_owned());
+        .map(|bs| bs.decode().into_owned());
     let notam_id = item_data
         .notam_id
         .as_ref()
-        .map(|bs| decode_string(bs.as_bytes()).into_owned());
+        .map(|bs| bs.decode().into_owned());
 
     Ok(Airspace {
         // Bounding box
