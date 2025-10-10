@@ -115,6 +115,11 @@ pub fn write_u64<W: Write>(writer: &mut W, value: u64, order: ByteOrder) -> Resu
     writer.write_all(&buf)
 }
 
+/// Write f32 (always little-endian per spec)
+pub fn write_f32_le<W: Write>(writer: &mut W, value: f32) -> Result<()> {
+    writer.write_all(&value.to_le_bytes())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -225,5 +230,13 @@ mod tests {
         let mut buf = Vec::new();
         write_u64(&mut buf, 0x123456789ABCDEF0, ByteOrder::BE).unwrap();
         assert_eq!(buf, vec![0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0]);
+    }
+
+    #[test]
+    fn test_write_f32_le() {
+        let value = std::f32::consts::PI;
+        let mut buf = Vec::new();
+        write_f32_le(&mut buf, value).unwrap();
+        assert_eq!(buf, value.to_le_bytes());
     }
 }
