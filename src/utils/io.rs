@@ -97,6 +97,15 @@ pub fn write_i32<W: Write>(writer: &mut W, value: i32, order: ByteOrder) -> Resu
     writer.write_all(&buf)
 }
 
+/// Write u32 with specified byte order
+pub fn write_u32<W: Write>(writer: &mut W, value: u32, order: ByteOrder) -> Result<()> {
+    let buf = match order {
+        ByteOrder::LE => value.to_le_bytes(),
+        ByteOrder::BE => value.to_be_bytes(),
+    };
+    writer.write_all(&buf)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -178,6 +187,20 @@ mod tests {
     fn test_write_i32_be() {
         let mut buf = Vec::new();
         write_i32(&mut buf, 0x12345678, ByteOrder::BE).unwrap();
+        assert_eq!(buf, vec![0x12, 0x34, 0x56, 0x78]);
+    }
+
+    #[test]
+    fn test_write_u32_le() {
+        let mut buf = Vec::new();
+        write_u32(&mut buf, 0x12345678, ByteOrder::LE).unwrap();
+        assert_eq!(buf, vec![0x78, 0x56, 0x34, 0x12]);
+    }
+
+    #[test]
+    fn test_write_u32_be() {
+        let mut buf = Vec::new();
+        write_u32(&mut buf, 0x12345678, ByteOrder::BE).unwrap();
         assert_eq!(buf, vec![0x12, 0x34, 0x56, 0x78]);
     }
 }
