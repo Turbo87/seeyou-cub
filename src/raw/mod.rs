@@ -9,7 +9,7 @@ mod item;
 mod item_data;
 mod point_op;
 
-pub use self::header::{HEADER_SIZE, Header};
+pub use self::header::{FILE_IDENTIFIER, HEADER_SIZE, Header};
 pub use self::item::Item;
 pub use self::item_data::ItemData;
 pub use self::point_op::PointOp;

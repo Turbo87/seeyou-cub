@@ -5,6 +5,9 @@ use crate::utils::io::{write_f32_le, write_i32, write_u8, write_u16, write_u32};
 use crate::{BoundingBox, ByteOrder};
 use std::io::{Read, Write};
 
+/// CUB file magic bytes identifier.
+pub const FILE_IDENTIFIER: u32 = 0x425543C2;
+
 /// CUB file header size in bytes (always 210 bytes as defined by the spec).
 pub const HEADER_SIZE: usize = 210;
 
@@ -57,7 +60,7 @@ impl Header {
             u32::from_le_bytes(buf)
         };
 
-        if ident != 0x425543C2 {
+        if ident != FILE_IDENTIFIER {
             return Err(Error::InvalidMagicBytes);
         }
 
@@ -168,7 +171,7 @@ impl Header {
         let byte_order = self.byte_order();
 
         // Write magic bytes (offset 0-3, always LE)
-        writer.write_all(&0x425543C2u32.to_le_bytes())?;
+        writer.write_all(&FILE_IDENTIFIER.to_le_bytes())?;
 
         // Write title (offset 4-115, 112 bytes, null-padded)
         let mut title_buf = [0u8; 112];
