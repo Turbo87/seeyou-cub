@@ -1,12 +1,10 @@
 use crate::error::Result;
+use crate::raw::point_op::{POINT_OP_MOVE_ORIGIN, POINT_OP_NEW_POINT};
 use crate::raw::{Header, PointOp};
 use crate::utils::ByteString;
-use crate::utils::io::{read_i16, read_u8, read_u32, write_i16, write_u8, write_u32};
+use crate::utils::io::{read_i16, read_u8, read_u32, write_u8, write_u32};
 use crate::{CubDataId, Error};
 use std::io::{Read, Write};
-
-const POINT_OP_MOVE_ORIGIN: u8 = 0x81;
-const POINT_OP_NEW_POINT: u8 = 0x01;
 
 const ATTR_NAME_FLAG: u8 = 0x40;
 const ATTR_FREQUENCY_FLAG: u8 = 0xC0;
@@ -128,20 +126,8 @@ impl ItemData {
 
         // Write point operations
         for point_op in &self.point_ops {
-            match point_op {
-                PointOp::MoveOrigin { x, y } => {
-                    write_u8(writer, POINT_OP_MOVE_ORIGIN)?;
-                    write_i16(writer, *x, byte_order)?;
-                    write_i16(writer, *y, byte_order)?;
-                    bytes_written += 5;
-                }
-                PointOp::NewPoint { x, y } => {
-                    write_u8(writer, POINT_OP_NEW_POINT)?;
-                    write_i16(writer, *x, byte_order)?;
-                    write_i16(writer, *y, byte_order)?;
-                    bytes_written += 5;
-                }
-            }
+            point_op.write(writer, byte_order)?;
+            bytes_written += 5;
         }
 
         // Write name attribute if present

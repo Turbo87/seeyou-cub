@@ -1,5 +1,10 @@
-use crate::Point;
 use crate::error::Result;
+use crate::utils::io::{write_i16, write_u8};
+use crate::{ByteOrder, Point};
+use std::io::Write;
+
+pub const POINT_OP_MOVE_ORIGIN: u8 = 0x81;
+pub const POINT_OP_NEW_POINT: u8 = 0x01;
 
 /// Raw point operation with i16 coordinates
 ///
@@ -135,6 +140,21 @@ impl PointOp {
         }
 
         Ok(points)
+    }
+
+    pub fn write<W: Write>(&self, writer: &mut W, byte_order: ByteOrder) -> std::io::Result<()> {
+        match self {
+            PointOp::MoveOrigin { x, y } => {
+                write_u8(writer, POINT_OP_MOVE_ORIGIN)?;
+                write_i16(writer, *x, byte_order)?;
+                write_i16(writer, *y, byte_order)
+            }
+            PointOp::NewPoint { x, y } => {
+                write_u8(writer, POINT_OP_NEW_POINT)?;
+                write_i16(writer, *x, byte_order)?;
+                write_i16(writer, *y, byte_order)
+            }
+        }
     }
 }
 
