@@ -42,8 +42,8 @@ pub struct Airspace {
     pub notam_id: Option<String>,
 
     // Numeric attributes
-    pub frequency: Option<u32>,
-    pub secondary_frequency: Option<u32>,
+    pub frequency: Option<f32>,
+    pub secondary_frequency: Option<f32>,
     pub notam_insert_time: Option<u32>,
 }
 

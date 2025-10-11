@@ -152,7 +152,7 @@ expression: "&airspaces[airspaces.len() - 5..]"
         notam_remarks: None,
         notam_id: None,
         frequency: Some(
-            119200,
+            119.2,
         ),
         secondary_frequency: None,
         notam_insert_time: None,

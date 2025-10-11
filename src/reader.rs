@@ -209,8 +209,8 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
         notam_id,
 
         // Numeric attributes
-        frequency: item_data.frequency,
-        secondary_frequency: item_data.secondary_frequency,
+        frequency: item_data.frequency.map(|f| f as f32 / 1000.),
+        secondary_frequency: item_data.secondary_frequency.map(|f| f as f32 / 1000.),
         notam_insert_time: item_data.notam_insert_time,
     })
 }

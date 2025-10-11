@@ -187,7 +187,7 @@ impl CubWriter {
                     .name
                     .as_ref()
                     .map(|s| ByteString::from(s.as_bytes().to_vec())),
-                frequency: airspace.frequency,
+                frequency: airspace.frequency.map(|f| (f * 1000.) as u32),
                 frequency_name: airspace
                     .frequency_name
                     .as_ref()
@@ -196,7 +196,7 @@ impl CubWriter {
                     .icao_code
                     .as_ref()
                     .map(|s| ByteString::from(s.as_bytes().to_vec())),
-                secondary_frequency: airspace.secondary_frequency,
+                secondary_frequency: airspace.secondary_frequency.map(|f| (f * 1000.) as u32),
                 exception_rules: airspace
                     .exception_rules
                     .as_ref()
@@ -459,7 +459,7 @@ mod tests {
             ],
             name: Some("Danger Area 1".to_string()),
             icao_code: Some("DA1".to_string()),
-            frequency: Some(123450000),
+            frequency: Some(123.450),
             ..Default::default()
         };
 
@@ -500,7 +500,7 @@ mod tests {
         assert_eq!(a1.name, Some("Danger Area 1".to_string()));
         assert_eq!(a1.points.len(), 4);
         assert_eq!(a1.icao_code, Some("DA1".to_string()));
-        assert_eq!(a1.frequency, Some(123450000));
+        assert_eq!(a1.frequency, Some(123.450));
 
         // Verify second airspace
         let a2 = &airspaces[1];
