@@ -3,27 +3,10 @@ source: tests/reader_test.rs
 expression: largest_airspace
 ---
 Airspace {
-    bounding_box: Some(
-        BoundingBox {
-            left: 0.079514295,
-            top: 0.83852905,
-            right: 0.090694055,
-            bottom: 0.8322166,
-        },
+    name: Some(
+        "Parc Champagne Bourgogne",
     ),
-    style: ProhibitedArea,
-    class: Unknown,
-    extended_type: None,
-    min_alt: 0,
-    max_alt: 1006,
-    min_alt_style: AboveGroundLevel,
-    max_alt_style: AboveGroundLevel,
-    start_date: None,
-    end_date: None,
-    extra_data: 0,
-    days_active: DaysActive {
-        bits: 0,
-    },
+    icao_code: None,
     points: [
         Point { lat: 0.83420926, lon: 0.079514295 },
         Point { lat: 0.8340979, lon: 0.07953347 },
@@ -1551,15 +1534,32 @@ Airspace {
         Point { lat: 0.8342673, lon: 0.07956756 },
         Point { lat: 0.83420926, lon: 0.079514295 },
     ],
-    name: Some(
-        "Parc Champagne Bourgogne",
+    bounding_box: Some(
+        BoundingBox {
+            left: 0.079514295,
+            top: 0.83852905,
+            right: 0.090694055,
+            bottom: 0.8322166,
+        },
     ),
-    frequency_name: None,
-    icao_code: None,
-    exception_rules: None,
-    notam_remarks: None,
-    notam_id: None,
+    style: ProhibitedArea,
+    class: Unknown,
+    extended_type: None,
+    min_alt: 0,
+    max_alt: 1006,
+    min_alt_style: AboveGroundLevel,
+    max_alt_style: AboveGroundLevel,
+    start_date: None,
+    end_date: None,
+    days_active: DaysActive {
+        bits: 0,
+    },
     frequency: None,
+    frequency_name: None,
     secondary_frequency: None,
+    exception_rules: None,
+    notam_id: None,
+    notam_remarks: None,
     notam_insert_time: None,
+    extra_data: 0,
 }

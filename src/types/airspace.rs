@@ -7,6 +7,12 @@ use crate::{AltStyle, BoundingBox, CubClass, CubStyle, DateTime, DaysActive, Ext
 /// and coordinates are converted from raw i16 offsets to f32 lat/lon.
 #[derive(Debug, Clone)]
 pub struct Airspace {
+    pub name: Option<String>,
+    pub icao_code: Option<String>,
+
+    // Geometry (converted from raw i16 to f32 lat/lon radians)
+    pub points: Vec<Point>,
+
     // Bounding box in radians (None if not yet calculated)
     pub bounding_box: Option<BoundingBox>,
 
@@ -24,26 +30,18 @@ pub struct Airspace {
     // Time-related fields
     pub start_date: Option<DateTime>,
     pub end_date: Option<DateTime>,
-    pub extra_data: u32,
-
-    // Decoded temporal data
     pub days_active: DaysActive,
 
-    // Geometry (converted from raw i16 to f32 lat/lon radians)
-    pub points: Vec<Point>,
-
-    // Decoded string attributes
-    pub name: Option<String>,
-    pub frequency_name: Option<String>,
-    pub icao_code: Option<String>,
-    pub exception_rules: Option<String>,
-    pub notam_remarks: Option<String>,
-    pub notam_id: Option<String>,
-
-    // Numeric attributes
+    // Optional data attributes
     pub frequency: Option<f32>,
+    pub frequency_name: Option<String>,
     pub secondary_frequency: Option<f32>,
+    pub exception_rules: Option<String>,
+    pub notam_id: Option<String>,
+    pub notam_remarks: Option<String>,
     pub notam_insert_time: Option<u32>,
+
+    pub extra_data: u32,
 }
 
 impl Airspace {

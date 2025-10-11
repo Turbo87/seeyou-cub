@@ -59,6 +59,12 @@ use seeyou_cub::{Airspace, Point, CubStyle, CubClass, AltStyle, DaysActive};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let airspace = Airspace {
+        name: Some("My Airspace".to_string()),
+        points: vec![
+            Point::lat_lon(0.8, 0.4),
+            Point::lat_lon(0.81, 0.41),
+            Point::lat_lon(0.82, 0.42),
+        ],
         style: CubStyle::DangerArea,
         class: CubClass::ClassD,
         min_alt: 0,
@@ -66,12 +72,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         min_alt_style: AltStyle::MeanSeaLevel,
         max_alt_style: AltStyle::MeanSeaLevel,
         days_active: DaysActive::all(),
-        points: vec![
-            Point::lat_lon(0.8, 0.4),
-            Point::lat_lon(0.81, 0.41),
-            Point::lat_lon(0.82, 0.42),
-        ],
-        name: Some("My Airspace".to_string()),
         ..Default::default()
     };
 

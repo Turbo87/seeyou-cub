@@ -4,6 +4,16 @@ expression: "&airspaces[0..5]"
 ---
 [
     Airspace {
+        name: Some(
+            "R265 LA GREMUSE",
+        ),
+        icao_code: None,
+        points: [
+            Point { lat: 0.83465517, lon: 0.033180647 },
+            Point { lat: 0.8346504, lon: 0.033224326 },
+            Point { lat: 0.83466476, lon: 0.03319982 },
+            Point { lat: 0.83465517, lon: 0.033180647 },
+        ],
         bounding_box: Some(
             BoundingBox {
                 left: 0.033180647,
@@ -21,29 +31,30 @@ expression: "&airspaces[0..5]"
         max_alt_style: MeanSeaLevel,
         start_date: None,
         end_date: None,
-        extra_data: 0,
         days_active: DaysActive {
             bits: 0,
         },
-        points: [
-            Point { lat: 0.83465517, lon: 0.033180647 },
-            Point { lat: 0.8346504, lon: 0.033224326 },
-            Point { lat: 0.83466476, lon: 0.03319982 },
-            Point { lat: 0.83465517, lon: 0.033180647 },
-        ],
-        name: Some(
-            "R265 LA GREMUSE",
-        ),
-        frequency_name: None,
-        icao_code: None,
-        exception_rules: None,
-        notam_remarks: None,
-        notam_id: None,
         frequency: None,
+        frequency_name: None,
         secondary_frequency: None,
+        exception_rules: None,
+        notam_id: None,
+        notam_remarks: None,
         notam_insert_time: None,
+        extra_data: 0,
     },
     Airspace {
+        name: Some(
+            "P47 BALARD",
+        ),
+        icao_code: None,
+        points: [
+            Point { lat: 0.85236555, lon: 0.039696384 },
+            Point { lat: 0.8523362, lon: 0.039682 },
+            Point { lat: 0.85232186, lon: 0.039744854 },
+            Point { lat: 0.8523511, lon: 0.039759766 },
+            Point { lat: 0.85236555, lon: 0.039696384 },
+        ],
         bounding_box: Some(
             BoundingBox {
                 left: 0.039682,
@@ -61,51 +72,23 @@ expression: "&airspaces[0..5]"
         max_alt_style: MeanSeaLevel,
         start_date: None,
         end_date: None,
-        extra_data: 0,
         days_active: DaysActive {
             bits: 0,
         },
-        points: [
-            Point { lat: 0.85236555, lon: 0.039696384 },
-            Point { lat: 0.8523362, lon: 0.039682 },
-            Point { lat: 0.85232186, lon: 0.039744854 },
-            Point { lat: 0.8523511, lon: 0.039759766 },
-            Point { lat: 0.85236555, lon: 0.039696384 },
-        ],
-        name: Some(
-            "P47 BALARD",
-        ),
-        frequency_name: None,
-        icao_code: None,
-        exception_rules: None,
-        notam_remarks: None,
-        notam_id: None,
         frequency: None,
+        frequency_name: None,
         secondary_frequency: None,
+        exception_rules: None,
+        notam_id: None,
+        notam_remarks: None,
         notam_insert_time: None,
+        extra_data: 0,
     },
     Airspace {
-        bounding_box: Some(
-            BoundingBox {
-                left: 0.099705316,
-                top: 0.7667715,
-                right: 0.099785745,
-                bottom: 0.76671344,
-            },
+        name: Some(
+            "D595 Laser",
         ),
-        style: ProhibitedArea,
-        class: Unknown,
-        extended_type: None,
-        min_alt: 0,
-        max_alt: 5944,
-        min_alt_style: AboveGroundLevel,
-        max_alt_style: FlightLevel,
-        start_date: None,
-        end_date: None,
-        extra_data: 0,
-        days_active: DaysActive {
-            bits: 0,
-        },
+        icao_code: None,
         points: [
             Point { lat: 0.7667715, lon: 0.09974686 },
             Point { lat: 0.7667715, lon: 0.099745795 },
@@ -290,19 +273,47 @@ expression: "&airspaces[0..5]"
             Point { lat: 0.7667715, lon: 0.09974686 },
             Point { lat: 0.7667715, lon: 0.099745795 },
         ],
-        name: Some(
-            "D595 Laser",
+        bounding_box: Some(
+            BoundingBox {
+                left: 0.099705316,
+                top: 0.7667715,
+                right: 0.099785745,
+                bottom: 0.76671344,
+            },
         ),
-        frequency_name: None,
-        icao_code: None,
-        exception_rules: None,
-        notam_remarks: None,
-        notam_id: None,
+        style: ProhibitedArea,
+        class: Unknown,
+        extended_type: None,
+        min_alt: 0,
+        max_alt: 5944,
+        min_alt_style: AboveGroundLevel,
+        max_alt_style: FlightLevel,
+        start_date: None,
+        end_date: None,
+        days_active: DaysActive {
+            bits: 0,
+        },
         frequency: None,
+        frequency_name: None,
         secondary_frequency: None,
+        exception_rules: None,
+        notam_id: None,
+        notam_remarks: None,
         notam_insert_time: None,
+        extra_data: 0,
     },
     Airspace {
+        name: Some(
+            "LF R 258 AMBERIEU",
+        ),
+        icao_code: None,
+        points: [
+            Point { lat: 0.8027499, lon: 0.09304554 },
+            Point { lat: 0.8026769, lon: 0.093006656 },
+            Point { lat: 0.8026769, lon: 0.09311798 },
+            Point { lat: 0.8027499, lon: 0.09309401 },
+            Point { lat: 0.8027499, lon: 0.09304554 },
+        ],
         bounding_box: Some(
             BoundingBox {
                 left: 0.093006656,
@@ -320,30 +331,30 @@ expression: "&airspaces[0..5]"
         max_alt_style: MeanSeaLevel,
         start_date: None,
         end_date: None,
-        extra_data: 0,
         days_active: DaysActive {
             bits: 0,
         },
-        points: [
-            Point { lat: 0.8027499, lon: 0.09304554 },
-            Point { lat: 0.8026769, lon: 0.093006656 },
-            Point { lat: 0.8026769, lon: 0.09311798 },
-            Point { lat: 0.8027499, lon: 0.09309401 },
-            Point { lat: 0.8027499, lon: 0.09304554 },
-        ],
-        name: Some(
-            "LF R 258 AMBERIEU",
-        ),
-        frequency_name: None,
-        icao_code: None,
-        exception_rules: None,
-        notam_remarks: None,
-        notam_id: None,
         frequency: None,
+        frequency_name: None,
         secondary_frequency: None,
+        exception_rules: None,
+        notam_id: None,
+        notam_remarks: None,
         notam_insert_time: None,
+        extra_data: 0,
     },
     Airspace {
+        name: Some(
+            "LF R 84 B DOMAINE DE VERSAILLES",
+        ),
+        icao_code: None,
+        points: [
+            Point { lat: 0.851842, lon: 0.03662763 },
+            Point { lat: 0.85182226, lon: 0.03648222 },
+            Point { lat: 0.8517546, lon: 0.03643375 },
+            Point { lat: 0.8517642, lon: 0.036579162 },
+            Point { lat: 0.851842, lon: 0.03662763 },
+        ],
         bounding_box: Some(
             BoundingBox {
                 left: 0.03643375,
@@ -361,27 +372,16 @@ expression: "&airspaces[0..5]"
         max_alt_style: MeanSeaLevel,
         start_date: None,
         end_date: None,
-        extra_data: 0,
         days_active: DaysActive {
             bits: 0,
         },
-        points: [
-            Point { lat: 0.851842, lon: 0.03662763 },
-            Point { lat: 0.85182226, lon: 0.03648222 },
-            Point { lat: 0.8517546, lon: 0.03643375 },
-            Point { lat: 0.8517642, lon: 0.036579162 },
-            Point { lat: 0.851842, lon: 0.03662763 },
-        ],
-        name: Some(
-            "LF R 84 B DOMAINE DE VERSAILLES",
-        ),
-        frequency_name: None,
-        icao_code: None,
-        exception_rules: None,
-        notam_remarks: None,
-        notam_id: None,
         frequency: None,
+        frequency_name: None,
         secondary_frequency: None,
+        exception_rules: None,
+        notam_id: None,
+        notam_remarks: None,
         notam_insert_time: None,
+        extra_data: 0,
     },
 ]

@@ -3,27 +3,10 @@ source: tests/reader_test.rs
 expression: last_airspace
 ---
 Airspace {
-    bounding_box: Some(
-        BoundingBox {
-            left: 0.013671746,
-            top: 0.87266463,
-            right: 0.06952207,
-            bottom: 0.83775806,
-        },
+    name: Some(
+        "Paris1",
     ),
-    style: Unknown,
-    class: ClassD,
-    extended_type: None,
-    min_alt: 3505,
-    max_alt: 5944,
-    min_alt_style: FlightLevel,
-    max_alt_style: FlightLevel,
-    start_date: None,
-    end_date: None,
-    extra_data: 0,
-    days_active: DaysActive {
-        bits: 0,
-    },
+    icao_code: None,
     points: [
         Point { lat: 0.8726647, lon: 0.01745355 },
         Point { lat: 0.8464845, lon: 0.01745355 },
@@ -43,15 +26,32 @@ Airspace {
         Point { lat: 0.8726647, lon: 0.054395914 },
         Point { lat: 0.8726647, lon: 0.017453548 },
     ],
-    name: Some(
-        "Paris1",
+    bounding_box: Some(
+        BoundingBox {
+            left: 0.013671746,
+            top: 0.87266463,
+            right: 0.06952207,
+            bottom: 0.83775806,
+        },
     ),
-    frequency_name: None,
-    icao_code: None,
-    exception_rules: None,
-    notam_remarks: None,
-    notam_id: None,
+    style: Unknown,
+    class: ClassD,
+    extended_type: None,
+    min_alt: 3505,
+    max_alt: 5944,
+    min_alt_style: FlightLevel,
+    max_alt_style: FlightLevel,
+    start_date: None,
+    end_date: None,
+    days_active: DaysActive {
+        bits: 0,
+    },
     frequency: None,
+    frequency_name: None,
     secondary_frequency: None,
+    exception_rules: None,
+    notam_id: None,
+    notam_remarks: None,
     notam_insert_time: None,
+    extra_data: 0,
 }

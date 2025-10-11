@@ -3,6 +3,16 @@ source: tests/reader_test.rs
 expression: smallest_airspace
 ---
 Airspace {
+    name: Some(
+        "R265 LA GREMUSE",
+    ),
+    icao_code: None,
+    points: [
+        Point { lat: 0.83465517, lon: 0.033180647 },
+        Point { lat: 0.8346504, lon: 0.033224326 },
+        Point { lat: 0.83466476, lon: 0.03319982 },
+        Point { lat: 0.83465517, lon: 0.033180647 },
+    ],
     bounding_box: Some(
         BoundingBox {
             left: 0.033180647,
@@ -20,25 +30,15 @@ Airspace {
     max_alt_style: MeanSeaLevel,
     start_date: None,
     end_date: None,
-    extra_data: 0,
     days_active: DaysActive {
         bits: 0,
     },
-    points: [
-        Point { lat: 0.83465517, lon: 0.033180647 },
-        Point { lat: 0.8346504, lon: 0.033224326 },
-        Point { lat: 0.83466476, lon: 0.03319982 },
-        Point { lat: 0.83465517, lon: 0.033180647 },
-    ],
-    name: Some(
-        "R265 LA GREMUSE",
-    ),
-    frequency_name: None,
-    icao_code: None,
-    exception_rules: None,
-    notam_remarks: None,
-    notam_id: None,
     frequency: None,
+    frequency_name: None,
     secondary_frequency: None,
+    exception_rules: None,
+    notam_id: None,
+    notam_remarks: None,
     notam_insert_time: None,
+    extra_data: 0,
 }
