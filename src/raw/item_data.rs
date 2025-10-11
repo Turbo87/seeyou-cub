@@ -12,6 +12,8 @@ const ATTR_NAME_FLAG: u8 = 0x40;
 const ATTR_FREQUENCY_FLAG: u8 = 0xC0;
 const ATTR_OPTIONAL_DATA_FLAG: u8 = 0xA0;
 
+const NAME_LENGTH_MASK: u8 = 0x3F;
+
 /// Low-level item data with raw point operations and unprocessed attributes
 ///
 /// This struct represents data as close to the file format as possible:
@@ -275,7 +277,7 @@ fn parse_attributes<R: Read>(
         let mut discard = vec![0u8; skip_count];
         reader.read_exact(&mut discard)?;
 
-        let name_len = (first_flag & 0x3F) as usize;
+        let name_len = (first_flag & NAME_LENGTH_MASK) as usize;
         if name_len > 0 {
             item_data.name = Some(ByteString::read(reader, name_len)?);
         }
@@ -294,7 +296,7 @@ fn parse_attributes<R: Read>(
         match flag {
             flag if (flag & ATTR_FREQUENCY_FLAG) == ATTR_FREQUENCY_FLAG => {
                 // Frequency attribute
-                let freq_name_len = (flag & 0x3F) as usize;
+                let freq_name_len = (flag & NAME_LENGTH_MASK) as usize;
                 item_data.frequency = Some(read_u32(reader, byte_order)?);
 
                 if freq_name_len > 0 {
