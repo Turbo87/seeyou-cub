@@ -10,6 +10,12 @@ use crate::{
 };
 use std::io::{Cursor, Read, Write};
 
+/// Size of the `Item` structure we understand and parse (43 bytes).
+///
+/// The CUB format allows `size_of_item` to be larger for future extensions,
+/// but this constant represents the current structure we support.
+const ITEM_STRUCT_SIZE: usize = 43;
+
 /// Airspace item (26 bytes minimum, may be larger per `Header::size_of_item`)
 ///
 /// Represents a single airspace with its bounding box, altitude limits,
@@ -46,21 +52,21 @@ impl Item {
     ///
     /// The parsed `Item` or an error if reading/parsing fails
     pub fn read<R: Read>(reader: &mut R, header: &Header) -> Result<Self> {
-        // Create 43-byte zero-filled buffer and read `size_of_item` bytes into it
-        // Per spec: remaining bytes should be set to `0` if `size_of_item < 43`
-        let mut item_buffer = [0u8; 43];
-        let bytes_to_read = std::cmp::min(header.size_of_item as usize, 43);
+        // Create `ITEM_STRUCT_SIZE` byte zero-filled buffer and read `size_of_item` bytes into it
+        // Per spec: remaining bytes should be set to `0` if `size_of_item < ITEM_STRUCT_SIZE`
+        let mut item_buffer = [0u8; ITEM_STRUCT_SIZE];
+        let bytes_to_read = std::cmp::min(header.size_of_item as usize, ITEM_STRUCT_SIZE);
 
         reader.read_exact(&mut item_buffer[..bytes_to_read])?;
 
-        // If size_of_item > 43, read and discard the extra bytes
-        if header.size_of_item > 43 {
-            let extra_bytes = (header.size_of_item - 43) as usize;
+        // If `size_of_item > ITEM_STRUCT_SIZE`, read and discard the extra bytes
+        if header.size_of_item > ITEM_STRUCT_SIZE as i32 {
+            let extra_bytes = header.size_of_item as usize - ITEM_STRUCT_SIZE;
             let mut discard = vec![0u8; extra_bytes];
             reader.read_exact(&mut discard)?;
         }
 
-        // Parse from the buffer using a cursor (full 43-byte zero-padded buffer)
+        // Parse from the buffer using a cursor (full `ITEM_STRUCT_SIZE` byte zero-padded buffer)
         let mut cursor = Cursor::new(&item_buffer);
 
         // Read bounding box
@@ -206,8 +212,8 @@ impl Item {
         let byte_order = header.byte_order();
         let size_of_item = header.size_of_item as usize;
 
-        // Create a buffer for the full item (up to 43 bytes, or size_of_item if smaller)
-        let mut buf = Vec::with_capacity(size_of_item.max(43));
+        // Create a buffer for the full item (up to `ITEM_STRUCT_SIZE` bytes, or size_of_item if smaller)
+        let mut buf = Vec::with_capacity(size_of_item.max(ITEM_STRUCT_SIZE));
 
         // Write bounding box (floats always LE)
         self.bounding_box.write(&mut buf)?;
@@ -223,16 +229,16 @@ impl Item {
         write_u64(&mut buf, self.active_time, byte_order)?;
         write_u8(&mut buf, self.extended_type_byte)?;
 
-        // Now buf has 43 bytes. Write only size_of_item bytes, or pad if needed
-        if size_of_item < 43 {
+        // Now buf has `ITEM_STRUCT_SIZE` bytes. Write only size_of_item bytes, or pad if needed
+        if size_of_item < ITEM_STRUCT_SIZE {
             // Write only the first size_of_item bytes
             writer.write_all(&buf[..size_of_item])?;
         } else {
-            // Write all 43 bytes
+            // Write all `ITEM_STRUCT_SIZE` bytes
             writer.write_all(&buf)?;
-            // Pad with zeros if size_of_item > 43
-            if size_of_item > 43 {
-                let padding = vec![0u8; size_of_item - 43];
+            // Pad with zeros if `size_of_item > ITEM_STRUCT_SIZE`
+            if size_of_item > ITEM_STRUCT_SIZE {
+                let padding = vec![0u8; size_of_item - ITEM_STRUCT_SIZE];
                 writer.write_all(&padding)?;
             }
         }
