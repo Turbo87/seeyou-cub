@@ -5,6 +5,9 @@ use crate::utils::io::{read_i16, read_u8, read_u32, write_i16, write_u8, write_u
 use crate::{CubDataId, Error};
 use std::io::{Read, Write};
 
+const POINT_OP_MOVE_ORIGIN: u8 = 0x81;
+const POINT_OP_NEW_POINT: u8 = 0x01;
+
 /// Low-level item data with raw point operations and unprocessed attributes
 ///
 /// This struct represents data as close to the file format as possible:
@@ -75,14 +78,14 @@ impl ItemData {
             };
 
             match flag {
-                0x81 => {
+                POINT_OP_MOVE_ORIGIN => {
                     // Origin update
                     let x = read_i16(reader, byte_order)?;
                     let y = read_i16(reader, byte_order)?;
                     item_data.point_ops.push(PointOp::MoveOrigin { x, y });
                 }
 
-                0x01 => {
+                POINT_OP_NEW_POINT => {
                     // Geometry point
                     let x = read_i16(reader, byte_order)?;
                     let y = read_i16(reader, byte_order)?;
@@ -121,13 +124,13 @@ impl ItemData {
         for point_op in &self.point_ops {
             match point_op {
                 PointOp::MoveOrigin { x, y } => {
-                    write_u8(writer, 0x81)?;
+                    write_u8(writer, POINT_OP_MOVE_ORIGIN)?;
                     write_i16(writer, *x, byte_order)?;
                     write_i16(writer, *y, byte_order)?;
                     bytes_written += 5;
                 }
                 PointOp::NewPoint { x, y } => {
-                    write_u8(writer, 0x01)?;
+                    write_u8(writer, POINT_OP_NEW_POINT)?;
                     write_i16(writer, *x, byte_order)?;
                     write_i16(writer, *y, byte_order)?;
                     bytes_written += 5;
@@ -415,15 +418,15 @@ mod tests {
         let mut data = Vec::new();
 
         // Add point operations (each is 5 bytes: flag + x + y)
-        data.push(0x81); // Set origin
+        data.push(POINT_OP_MOVE_ORIGIN); // Set origin
         data.extend_from_slice(&100i16.to_le_bytes()); // x
         data.extend_from_slice(&200i16.to_le_bytes()); // y
 
-        data.push(0x01); // New point
+        data.push(POINT_OP_NEW_POINT); // New point
         data.extend_from_slice(&10i16.to_le_bytes()); // x
         data.extend_from_slice(&20i16.to_le_bytes()); // y
 
-        data.push(0x01); // Another point
+        data.push(POINT_OP_NEW_POINT); // Another point
         data.extend_from_slice(&30i16.to_le_bytes()); // x
         data.extend_from_slice(&40i16.to_le_bytes()); // y
 
