@@ -1,6 +1,6 @@
 [package]
 name = "seeyou-cub"
-version = "0.2.0"
+version = "0.3.0"
 description = "A Rust library for reading and writing the SeeYou CUB binary file format, which stores airspace data for flight navigation software"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/Turbo87/seeyou-cub"
