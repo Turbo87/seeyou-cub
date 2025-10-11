@@ -8,6 +8,10 @@ use std::io::{Read, Write};
 const POINT_OP_MOVE_ORIGIN: u8 = 0x81;
 const POINT_OP_NEW_POINT: u8 = 0x01;
 
+const ATTR_NAME_FLAG: u8 = 0x40;
+const ATTR_FREQUENCY_FLAG: u8 = 0xC0;
+const ATTR_OPTIONAL_DATA_FLAG: u8 = 0xA0;
+
 /// Low-level item data with raw point operations and unprocessed attributes
 ///
 /// This struct represents data as close to the file format as possible:
@@ -92,7 +96,7 @@ impl ItemData {
                     item_data.point_ops.push(PointOp::NewPoint { x, y });
                 }
 
-                flag if (flag & 0x40) != 0 => {
+                flag if (flag & ATTR_NAME_FLAG) != 0 => {
                     // Attributes section - parse and return
                     return parse_attributes(reader, header, flag, item_data);
                 }
@@ -141,7 +145,7 @@ impl ItemData {
         // Write name attribute if present
         if let Some(ref name) = self.name {
             let name_len = name.as_bytes().len().min(63); // Max 6 bits
-            let flag = 0x40 | (name_len as u8);
+            let flag = ATTR_NAME_FLAG | (name_len as u8);
             write_u8(writer, flag)?;
             bytes_written += 1;
 
@@ -165,7 +169,7 @@ impl ItemData {
                 .as_ref()
                 .map(|n| n.as_bytes().len().min(63))
                 .unwrap_or(0);
-            let flag = 0xC0 | (freq_name_len as u8);
+            let flag = ATTR_FREQUENCY_FLAG | (freq_name_len as u8);
             write_u8(writer, flag)?;
             bytes_written += 1;
 
@@ -185,7 +189,7 @@ impl ItemData {
         // ICAO Code
         if let Some(ref icao_code) = self.icao_code {
             let len = icao_code.as_bytes().len().min(255) as u8;
-            write_u8(writer, 0xA0)?;
+            write_u8(writer, ATTR_OPTIONAL_DATA_FLAG)?;
             write_u8(writer, CubDataId::IcaoCode.as_byte())?;
             write_u8(writer, 0)?; // b1 (unused)
             write_u8(writer, 0)?; // b2 (unused)
@@ -196,7 +200,7 @@ impl ItemData {
 
         // Secondary Frequency
         if let Some(freq) = self.secondary_frequency {
-            write_u8(writer, 0xA0)?;
+            write_u8(writer, ATTR_OPTIONAL_DATA_FLAG)?;
             write_u8(writer, CubDataId::SecondaryFrequency.as_byte())?;
             write_u8(writer, ((freq >> 16) & 0xFF) as u8)?; // b1
             write_u8(writer, ((freq >> 8) & 0xFF) as u8)?; // b2
@@ -207,7 +211,7 @@ impl ItemData {
         // Exception Rules
         if let Some(ref rules) = self.exception_rules {
             let len = rules.as_bytes().len().min(65535) as u16;
-            write_u8(writer, 0xA0)?;
+            write_u8(writer, ATTR_OPTIONAL_DATA_FLAG)?;
             write_u8(writer, CubDataId::ExceptionRules.as_byte())?;
             write_u8(writer, 0)?; // b1 (unused)
             write_u8(writer, ((len >> 8) & 0xFF) as u8)?; // b2
@@ -219,7 +223,7 @@ impl ItemData {
         // NOTAM Remarks
         if let Some(ref remarks) = self.notam_remarks {
             let len = remarks.as_bytes().len().min(65535) as u16;
-            write_u8(writer, 0xA0)?;
+            write_u8(writer, ATTR_OPTIONAL_DATA_FLAG)?;
             write_u8(writer, CubDataId::NotamRemarks.as_byte())?;
             write_u8(writer, 0)?; // b1 (unused)
             write_u8(writer, ((len >> 8) & 0xFF) as u8)?; // b2
@@ -231,7 +235,7 @@ impl ItemData {
         // NOTAM ID
         if let Some(ref notam_id) = self.notam_id {
             let len = notam_id.as_bytes().len().min(255) as u8;
-            write_u8(writer, 0xA0)?;
+            write_u8(writer, ATTR_OPTIONAL_DATA_FLAG)?;
             write_u8(writer, CubDataId::NotamId.as_byte())?;
             write_u8(writer, 0)?; // b1 (unused)
             write_u8(writer, 0)?; // b2 (unused)
@@ -242,7 +246,7 @@ impl ItemData {
 
         // NOTAM Insert Time
         if let Some(time) = self.notam_insert_time {
-            write_u8(writer, 0xA0)?;
+            write_u8(writer, ATTR_OPTIONAL_DATA_FLAG)?;
             write_u8(writer, CubDataId::NotamInsertTime.as_byte())?;
             write_u8(writer, ((time >> 24) & 0xFF) as u8)?; // b1
             write_u8(writer, ((time >> 16) & 0xFF) as u8)?; // b2
@@ -265,7 +269,7 @@ fn parse_attributes<R: Read>(
     let byte_order = header.byte_order();
 
     // First attribute: name
-    if (first_flag & 0x40) != 0 {
+    if (first_flag & ATTR_NAME_FLAG) != 0 {
         // Skip remaining bytes of point structure
         let skip_count = (header.size_of_point - 1) as usize;
         let mut discard = vec![0u8; skip_count];
@@ -288,7 +292,7 @@ fn parse_attributes<R: Read>(
         };
 
         match flag {
-            flag if (flag & 0xC0) == 0xC0 => {
+            flag if (flag & ATTR_FREQUENCY_FLAG) == ATTR_FREQUENCY_FLAG => {
                 // Frequency attribute
                 let freq_name_len = (flag & 0x3F) as usize;
                 item_data.frequency = Some(read_u32(reader, byte_order)?);
@@ -298,7 +302,7 @@ fn parse_attributes<R: Read>(
                 }
             }
 
-            0xA0 => {
+            ATTR_OPTIONAL_DATA_FLAG => {
                 parse_optional_data_record(reader, &mut item_data)?;
             }
 
@@ -432,20 +436,20 @@ mod tests {
 
         // Name attribute (flag & 0x40 != 0)
         let name = b"Test Airspace";
-        data.push(0x40 | (name.len() as u8)); // Name flag + length
+        data.push(ATTR_NAME_FLAG | (name.len() as u8)); // Name flag + length
         data.extend_from_slice(&[0u8; 4]); // Remaining bytes of point structure
         data.extend_from_slice(name);
 
         // Frequency attribute (flag & 0xC0 == 0xC0)
         let freq_name = b"Tower";
-        data.push(0xC0 | (freq_name.len() as u8)); // Frequency flag + freq name length
+        data.push(ATTR_FREQUENCY_FLAG | (freq_name.len() as u8)); // Frequency flag + freq name length
         data.extend_from_slice(&123450u32.to_le_bytes()); // Frequency in Hz
         data.extend_from_slice(freq_name);
 
         // Optional data records (all with flag 0xA0)
 
         // ICAO Code (CubDataId = 0)
-        data.push(0xA0);
+        data.push(ATTR_OPTIONAL_DATA_FLAG);
         data.push(0);
         data.push(0); // b1 (unused)
         data.push(0); // b2 (unused)
@@ -454,7 +458,7 @@ mod tests {
         data.extend_from_slice(icao);
 
         // Secondary Frequency (CubDataId = 1)
-        data.push(0xA0);
+        data.push(ATTR_OPTIONAL_DATA_FLAG);
         data.push(1);
         let sec_freq = 128500u32;
         data.push(((sec_freq >> 16) & 0xFF) as u8);
@@ -462,7 +466,7 @@ mod tests {
         data.push((sec_freq & 0xFF) as u8);
 
         // Exception Rules (CubDataId = 2)
-        data.push(0xA0);
+        data.push(ATTR_OPTIONAL_DATA_FLAG);
         data.push(2);
         let exc_rules = b"Class D when tower active";
         let exc_len = exc_rules.len() as u16;
@@ -472,7 +476,7 @@ mod tests {
         data.extend_from_slice(exc_rules);
 
         // NOTAM Remarks (CubDataId = 3)
-        data.push(0xA0);
+        data.push(ATTR_OPTIONAL_DATA_FLAG);
         data.push(3);
         let notam_remarks = b"Active during airshow";
         let notam_len = notam_remarks.len() as u16;
@@ -482,7 +486,7 @@ mod tests {
         data.extend_from_slice(notam_remarks);
 
         // NOTAM ID (CubDataId = 4)
-        data.push(0xA0);
+        data.push(ATTR_OPTIONAL_DATA_FLAG);
         data.push(4);
         data.push(0); // b1 (unused)
         data.push(0); // b2 (unused)
@@ -491,7 +495,7 @@ mod tests {
         data.extend_from_slice(notam_id);
 
         // NOTAM Insert Time (CubDataId = 5)
-        data.push(0xA0);
+        data.push(ATTR_OPTIONAL_DATA_FLAG);
         data.push(5);
         let insert_time = 0x12345678u32;
         data.push(((insert_time >> 24) & 0xFF) as u8); // b1
