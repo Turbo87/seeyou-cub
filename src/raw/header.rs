@@ -14,6 +14,9 @@ pub const HEADER_SIZE: usize = 210;
 /// Size of the title field in the header.
 const HEADER_TITLE_SIZE: usize = 112;
 
+/// Size of the encryption key field in the header.
+const ENCRYPTION_KEY_SIZE: usize = 16;
+
 /// Minimum accepted `size_of_item`. Anything below that would not include the
 /// `points_offset` field, which is a hard requirement.
 const MIN_SIZE_OF_ITEM: i32 = 26;
@@ -31,7 +34,7 @@ pub struct Header {
     pub title: ByteString,
     pub allowed_serials: [u16; 8],
     pub pc_byte_order: u8,
-    pub key: [u8; 16],
+    pub key: [u8; ENCRYPTION_KEY_SIZE],
     pub size_of_item: i32,
     pub size_of_point: i32,
     pub hdr_items: i32,
@@ -100,7 +103,7 @@ impl Header {
 
         // Read Key (offset 138-153, 16 bytes)
         let key = {
-            let mut buf = [0u8; 16];
+            let mut buf = [0u8; ENCRYPTION_KEY_SIZE];
             reader.read_exact(&mut buf)?;
             buf
         };
