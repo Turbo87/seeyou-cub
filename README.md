@@ -59,18 +59,12 @@ use seeyou_cub::{Airspace, Point, CubStyle, CubClass, AltStyle, DaysActive};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let airspace = Airspace {
-        bounding_box: None,  // Calculated automatically
         style: CubStyle::DangerArea,
         class: CubClass::ClassD,
-        extended_type: None,
         min_alt: 0,
         max_alt: 5000,
         min_alt_style: AltStyle::MeanSeaLevel,
         max_alt_style: AltStyle::MeanSeaLevel,
-        time_out: 0,
-        start_date: None,
-        end_date: None,
-        extra_data: 0,
         days_active: DaysActive::all(),
         points: vec![
             Point::new(0.8, 0.4),
@@ -78,14 +72,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             Point::new(0.82, 0.42),
         ],
         name: Some("My Airspace".to_string()),
-        frequency_name: None,
-        icao_code: None,
-        exception_rules: None,
-        notam_remarks: None,
-        notam_id: None,
-        frequency: None,
-        secondary_frequency: None,
-        notam_insert_time: None,
+        ..Default::default()
     };
 
     CubWriter::new("My Airspace Data")

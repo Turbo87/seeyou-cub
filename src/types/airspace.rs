@@ -58,3 +58,33 @@ impl Airspace {
         self.bounding_box.as_ref()
     }
 }
+
+impl Default for Airspace {
+    fn default() -> Self {
+        Self {
+            bounding_box: None,
+            style: CubStyle::Unknown,
+            class: CubClass::Unknown,
+            extended_type: None,
+            min_alt: 0,
+            max_alt: 0,
+            min_alt_style: AltStyle::Unknown,
+            max_alt_style: AltStyle::Unknown,
+            time_out: 0,
+            start_date: None,
+            end_date: None,
+            extra_data: 0,
+            days_active: DaysActive::from_bits(0),
+            points: vec![],
+            name: None,
+            frequency_name: None,
+            icao_code: None,
+            exception_rules: None,
+            notam_remarks: None,
+            notam_id: None,
+            frequency: None,
+            secondary_frequency: None,
+            notam_insert_time: None,
+        }
+    }
+}

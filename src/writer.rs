@@ -14,18 +14,12 @@
 //! use seeyou_cub::{Airspace, Point, CubStyle, CubClass, AltStyle, DaysActive};
 //!
 //! let airspace = Airspace {
-//!     bounding_box: None,  // Calculated automatically
 //!     style: CubStyle::DangerArea,
 //!     class: CubClass::ClassD,
-//!     extended_type: None,
 //!     min_alt: 0,
 //!     max_alt: 5000,
 //!     min_alt_style: AltStyle::MeanSeaLevel,
 //!     max_alt_style: AltStyle::MeanSeaLevel,
-//!     time_out: 0,
-//!     start_date: None,
-//!     end_date: None,
-//!     extra_data: 0,
 //!     days_active: DaysActive::all(),
 //!     points: vec![
 //!         Point::new(0.8, 0.4),
@@ -33,14 +27,7 @@
 //!         Point::new(0.82, 0.42),
 //!     ],
 //!     name: Some("My Airspace".to_string()),
-//!     frequency_name: None,
-//!     icao_code: None,
-//!     exception_rules: None,
-//!     notam_remarks: None,
-//!     notam_id: None,
-//!     frequency: None,
-//!     secondary_frequency: None,
-//!     notam_insert_time: None,
+//!     ..Default::default()
 //! };
 //!
 //! CubWriter::new("My Airspace Data")
@@ -412,18 +399,11 @@ mod tests {
 
         // Create simple airspace with a few points
         let airspace = Airspace {
-            bounding_box: None, // Should be calculated automatically
-            style: CubStyle::Unknown,
             class: CubClass::ClassE,
-            extended_type: None,
             min_alt: 0,
             max_alt: 5000,
             min_alt_style: AltStyle::MeanSeaLevel,
             max_alt_style: AltStyle::MeanSeaLevel,
-            time_out: 0,
-            start_date: None,
-            end_date: None,
-            extra_data: 0,
             days_active: DaysActive::all(),
             points: vec![
                 Point::new(0.8, 0.4),
@@ -431,14 +411,7 @@ mod tests {
                 Point::new(0.82, 0.42),
             ],
             name: Some("Test Airspace".to_string()),
-            frequency_name: None,
-            icao_code: None,
-            exception_rules: None,
-            notam_remarks: None,
-            notam_id: None,
-            frequency: None,
-            secondary_frequency: None,
-            notam_insert_time: None,
+            ..Default::default()
         };
 
         writer.add_airspace(airspace);
@@ -471,18 +444,12 @@ mod tests {
 
         // Create first airspace
         let airspace1 = Airspace {
-            bounding_box: None,
             style: CubStyle::DangerArea,
             class: CubClass::ClassD,
-            extended_type: None,
             min_alt: 0,
             max_alt: 3000,
             min_alt_style: AltStyle::MeanSeaLevel,
             max_alt_style: AltStyle::MeanSeaLevel,
-            time_out: 0,
-            start_date: None,
-            end_date: None,
-            extra_data: 0,
             days_active: DaysActive::all(),
             points: vec![
                 Point::new(0.5, 0.2),
@@ -491,41 +458,23 @@ mod tests {
                 Point::new(0.53, 0.23),
             ],
             name: Some("Danger Area 1".to_string()),
-            frequency_name: None,
             icao_code: Some("DA1".to_string()),
-            exception_rules: None,
-            notam_remarks: None,
-            notam_id: None,
             frequency: Some(123450000),
-            secondary_frequency: None,
-            notam_insert_time: None,
+            ..Default::default()
         };
 
         // Create second airspace
         let airspace2 = Airspace {
-            bounding_box: None,
             style: CubStyle::RestrictedArea,
             class: CubClass::ClassC,
-            extended_type: None,
             min_alt: 1000,
             max_alt: 5000,
             min_alt_style: AltStyle::AboveGroundLevel,
             max_alt_style: AltStyle::FlightLevel,
-            time_out: 0,
-            start_date: None,
-            end_date: None,
-            extra_data: 0,
             days_active: DaysActive::all(),
             points: vec![Point::new(0.6, 0.3), Point::new(0.61, 0.31)],
             name: Some("Restricted 2".to_string()),
-            frequency_name: None,
-            icao_code: None,
-            exception_rules: None,
-            notam_remarks: None,
-            notam_id: None,
-            frequency: None,
-            secondary_frequency: None,
-            notam_insert_time: None,
+            ..Default::default()
         };
 
         writer.add_airspace(airspace1);
@@ -562,29 +511,15 @@ mod tests {
     #[test]
     fn write_to_path() {
         let airspace = Airspace {
-            bounding_box: None,
-            style: CubStyle::Unknown,
             class: CubClass::ClassE,
-            extended_type: None,
             min_alt: 0,
             max_alt: 5000,
             min_alt_style: AltStyle::MeanSeaLevel,
             max_alt_style: AltStyle::MeanSeaLevel,
-            time_out: 0,
-            start_date: None,
-            end_date: None,
-            extra_data: 0,
             days_active: DaysActive::all(),
             points: vec![Point::new(0.5, 0.5), Point::new(0.51, 0.51)],
             name: Some("Path Test Airspace".to_string()),
-            frequency_name: None,
-            icao_code: None,
-            exception_rules: None,
-            notam_remarks: None,
-            notam_id: None,
-            frequency: None,
-            secondary_frequency: None,
-            notam_insert_time: None,
+            ..Default::default()
         };
 
         // Write to temporary file
