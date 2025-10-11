@@ -161,6 +161,7 @@ impl PointOp {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use claims::assert_lt;
     use insta::{assert_compact_debug_snapshot, assert_debug_snapshot};
 
     #[test]
@@ -209,14 +210,14 @@ mod tests {
         let expected_lon_1 = 0.1_f32 + 100.0 * 0.0001;
         let expected_lat_1 = 0.2_f32 + 200.0 * 0.0001;
 
-        assert!((points[0].lon - expected_lon_1).abs() < 1e-6);
-        assert!((points[0].lat - expected_lat_1).abs() < 1e-6);
+        assert_lt!((points[0].lon - expected_lon_1).abs(), 1e-6);
+        assert_lt!((points[0].lat - expected_lat_1).abs(), 1e-6);
 
         let expected_lon_2 = 0.1_f32 + 150.0 * 0.0001;
         let expected_lat_2 = 0.2_f32 + 250.0 * 0.0001;
 
-        assert!((points[1].lon - expected_lon_2).abs() < 1e-6);
-        assert!((points[1].lat - expected_lat_2).abs() < 1e-6);
+        assert_lt!((points[1].lon - expected_lon_2).abs(), 1e-6);
+        assert_lt!((points[1].lat - expected_lat_2).abs(), 1e-6);
     }
 
     #[test]
@@ -238,15 +239,15 @@ mod tests {
         let expected_lon_1 = 100.0_f32 * 0.0001;
         let expected_lat_1 = 200.0_f32 * 0.0001;
 
-        assert!((points[0].lon - expected_lon_1).abs() < 1e-6);
-        assert!((points[0].lat - expected_lat_1).abs() < 1e-6);
+        assert_lt!((points[0].lon - expected_lon_1).abs(), 1e-6);
+        assert_lt!((points[0].lat - expected_lat_1).abs(), 1e-6);
 
         // The second point should be relative to the moved origin in radians
         let expected_lon_2 = 1000.0_f32 * 0.0001 + 50.0 * 0.0001;
         let expected_lat_2 = 2000.0_f32 * 0.0001 + 100.0 * 0.0001;
 
-        assert!((points[1].lon - expected_lon_2).abs() < 1e-6);
-        assert!((points[1].lat - expected_lat_2).abs() < 1e-6);
+        assert_lt!((points[1].lon - expected_lon_2).abs(), 1e-6);
+        assert_lt!((points[1].lat - expected_lat_2).abs(), 1e-6);
     }
 
     #[test]
@@ -373,18 +374,8 @@ mod tests {
         // Compare (allow small floating point error)
         assert_eq!(reconstructed.len(), original.len());
         for (orig, recon) in original.iter().zip(reconstructed.iter()) {
-            assert!(
-                (orig.lat - recon.lat).abs() < 1e-5,
-                "Lat mismatch: {} vs {}",
-                orig.lat,
-                recon.lat
-            );
-            assert!(
-                (orig.lon - recon.lon).abs() < 1e-5,
-                "Lon mismatch: {} vs {}",
-                orig.lon,
-                recon.lon
-            );
+            assert_lt!((orig.lat - recon.lat).abs(), 1e-5,);
+            assert_lt!((orig.lon - recon.lon).abs(), 1e-5,);
         }
     }
 
@@ -409,24 +400,14 @@ mod tests {
             .iter()
             .filter(|op| matches!(op, PointOp::MoveOrigin { .. }))
             .count();
-        assert!(num_moves > 0, "Expected MoveOrigin operations");
+        assert_eq!(num_moves, 1);
 
         let reconstructed = PointOp::resolve(&ops, scale, origin_lon, origin_lat).unwrap();
 
         assert_eq!(reconstructed.len(), original.len());
         for (orig, recon) in original.iter().zip(reconstructed.iter()) {
-            assert!(
-                (orig.lat - recon.lat).abs() < 1e-4,
-                "Lat mismatch: {} vs {}",
-                orig.lat,
-                recon.lat
-            );
-            assert!(
-                (orig.lon - recon.lon).abs() < 1e-4,
-                "Lon mismatch: {} vs {}",
-                orig.lon,
-                recon.lon
-            );
+            assert_lt!((orig.lat - recon.lat).abs(), 1e-4);
+            assert_lt!((orig.lon - recon.lon).abs(), 1e-4);
         }
     }
 
@@ -443,20 +424,8 @@ mod tests {
 
             assert_eq!(reconstructed.len(), original.len());
             for (orig, recon) in original.iter().zip(reconstructed.iter()) {
-                assert!(
-                    (orig.lat - recon.lat).abs() < scale * 0.6,
-                    "Scale {}: lat mismatch {} vs {}",
-                    scale,
-                    orig.lat,
-                    recon.lat
-                );
-                assert!(
-                    (orig.lon - recon.lon).abs() < scale * 0.6,
-                    "Scale {}: lon mismatch {} vs {}",
-                    scale,
-                    orig.lon,
-                    recon.lon
-                );
+                assert_lt!((orig.lat - recon.lat).abs(), scale * 0.6);
+                assert_lt!((orig.lon - recon.lon).abs(), scale * 0.6);
             }
         }
     }

@@ -123,6 +123,7 @@ pub fn write_f32_le<W: Write>(writer: &mut W, value: f32) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use claims::assert_lt;
     use std::io::Cursor;
 
     #[test]
@@ -152,7 +153,7 @@ mod tests {
         let bytes = value.to_le_bytes();
         let mut cursor = Cursor::new(bytes);
         let result = read_f32_le(&mut cursor).unwrap();
-        assert!((result - value).abs() < 0.0001);
+        assert_lt!((result - value).abs(), 0.0001);
     }
 
     #[test]

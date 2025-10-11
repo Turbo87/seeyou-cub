@@ -109,6 +109,7 @@ impl From<Point> for BoundingBox {
 mod tests {
     use super::*;
     use crate::types::Point;
+    use claims::assert_none;
     use std::io::Cursor;
 
     #[test]
@@ -130,7 +131,7 @@ mod tests {
     fn test_from_points_empty() {
         let points: Vec<Point> = vec![];
         let bbox = BoundingBox::from_points(&points);
-        assert!(bbox.is_none());
+        assert_none!(bbox);
     }
 
     #[test]

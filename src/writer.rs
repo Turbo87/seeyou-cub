@@ -324,6 +324,7 @@ fn encode_active_time(
 mod tests {
     use super::*;
     use crate::{AltStyle, CubClass, CubReader, CubStyle, DaysActive, Point};
+    use claims::{assert_lt, assert_some};
     use insta::assert_debug_snapshot;
     use std::io::Cursor;
 
@@ -406,7 +407,7 @@ mod tests {
         assert_eq!(airspace.points.len(), 3);
 
         // Verify bounding box was calculated
-        assert!(airspace.bounding_box.is_some());
+        assert_some!(airspace.bounding_box);
     }
 
     #[test]
@@ -558,23 +559,9 @@ mod tests {
             );
 
             // Compare points with small floating-point tolerance
-            for (j, (orig_point, read_point)) in original
-                .points
-                .iter()
-                .zip(read_back.points.iter())
-                .enumerate()
-            {
-                let lat_diff = (orig_point.lat - read_point.lat).abs();
-                let lon_diff = (orig_point.lon - read_point.lon).abs();
-
-                assert!(
-                    lat_diff < 0.00001,
-                    "Airspace {i} point {j} latitude differs by {lat_diff}",
-                );
-                assert!(
-                    lon_diff < 0.00001,
-                    "Airspace {i} point {j} longitude differs by {lon_diff}",
-                );
+            for (orig_point, read_point) in original.points.iter().zip(read_back.points.iter()) {
+                assert_lt!((orig_point.lat - read_point.lat).abs(), 0.00001);
+                assert_lt!((orig_point.lon - read_point.lon).abs(), 0.00001);
             }
         }
     }

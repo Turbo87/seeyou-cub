@@ -353,6 +353,7 @@ fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut ItemData)
 mod tests {
     use super::*;
     use crate::raw::{HEADER_SIZE, Item};
+    use claims::{assert_gt, assert_some};
     use std::fs::File;
     use std::io::{Cursor, Seek, SeekFrom};
 
@@ -376,9 +377,8 @@ mod tests {
         insta::assert_debug_snapshot!(item_data);
 
         // Verify name field is raw bytes and can be decoded
-        assert!(item_data.name.is_some());
-        let name_bytes = item_data.name.as_ref().unwrap().as_bytes();
-        let name_str = String::from_utf8_lossy(name_bytes);
+        let name_bytes = assert_some!(item_data.name);
+        let name_str = String::from_utf8_lossy(name_bytes.as_bytes());
         assert_eq!(name_str, "R265 LA GREMUSE");
     }
 
@@ -544,7 +544,7 @@ mod tests {
         let written = original
             .write(&mut buf, &header)
             .expect("Failed to write item data");
-        assert!(written > 0);
+        assert_gt!(written, 0);
 
         // Read back
         let mut cursor = Cursor::new(buf);
