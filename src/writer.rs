@@ -120,6 +120,8 @@ impl CubWriter {
     ///
     /// Ok(()) on success or an error if writing fails
     pub fn write<W: std::io::Write + std::io::Seek>(&mut self, mut writer: W) -> Result<()> {
+        let max_pts = self.airspaces.iter().map(|a| a.points.len()).max();
+
         // Create header with known values (will update counts and offsets later)
         let mut header = Header {
             title: ByteString::from(self.title.as_bytes().to_vec()),
@@ -128,15 +130,15 @@ impl CubWriter {
             key: [0; 16],
             size_of_item: 43,
             size_of_point: 5,
-            hdr_items: 0, // Will be updated later
-            max_pts: 0,   // Will be updated later
+            hdr_items: self.airspaces.len() as i32,
+            max_pts: max_pts.unwrap_or(0) as i32,
             bounding_box: BoundingBox {
                 left: 0.0,
                 top: 0.0,
                 right: 0.0,
                 bottom: 0.0,
             }, // Will be updated later
-            max_width: 0.0, // Will be updated later
+            max_width: 0.0,  // Will be updated later
             max_height: 0.0, // Will be updated later
             lo_la_scale: self.lo_la_scale,
             data_offset: 0, // Will be updated later
@@ -146,7 +148,7 @@ impl CubWriter {
         let mut items_buffer = Cursor::new(Vec::new());
         let mut item_data_buffer = Cursor::new(Vec::new());
 
-        for airspace in &self.airspaces {
+        for airspace in self.airspaces.drain(..) {
             // Calculate bbox if missing
             let bbox = airspace
                 .bounding_box
@@ -170,34 +172,19 @@ impl CubWriter {
             let name = if airspace.name.is_empty() {
                 None
             } else {
-                Some(ByteString::from(airspace.name.as_bytes().to_vec()))
+                Some(ByteString::from(airspace.name))
             };
 
             let item_data = ItemData {
                 point_ops,
                 name,
                 frequency: airspace.frequency.map(|f| (f * 1000.) as u32),
-                frequency_name: airspace
-                    .frequency_name
-                    .as_ref()
-                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
-                icao_code: airspace
-                    .icao_code
-                    .as_ref()
-                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
+                frequency_name: airspace.frequency_name.map(ByteString::from),
+                icao_code: airspace.icao_code.map(ByteString::from),
                 secondary_frequency: airspace.secondary_frequency.map(|f| (f * 1000.) as u32),
-                exception_rules: airspace
-                    .exception_rules
-                    .as_ref()
-                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
-                notam_remarks: airspace
-                    .notam_remarks
-                    .as_ref()
-                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
-                notam_id: airspace
-                    .notam_id
-                    .as_ref()
-                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
+                exception_rules: airspace.exception_rules.map(ByteString::from),
+                notam_remarks: airspace.notam_remarks.map(ByteString::from),
+                notam_id: airspace.notam_id.map(ByteString::from),
                 notam_insert_time: airspace.notam_insert_time,
             };
             item_data.write(&mut item_data_buffer, &header)?;
@@ -227,10 +214,6 @@ impl CubWriter {
         // Update header with calculated values
         let items_size = items_buffer.position() as i32;
         header.data_offset = crate::raw::HEADER_SIZE as i32 + items_size;
-        header.hdr_items = self.airspaces.len() as i32;
-
-        let max_pts = self.airspaces.iter().map(|a| a.points.len()).max();
-        header.max_pts = max_pts.unwrap_or(0) as i32;
 
         if let Some(bbox) = global_bbox {
             header.bounding_box = bbox;

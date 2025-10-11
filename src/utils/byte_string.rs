@@ -62,6 +62,12 @@ impl From<Vec<u8>> for ByteString {
     }
 }
 
+impl From<String> for ByteString {
+    fn from(str: String) -> Self {
+        Self(str.into_bytes())
+    }
+}
+
 impl AsRef<[u8]> for ByteString {
     fn as_ref(&self) -> &[u8] {
         &self.0
