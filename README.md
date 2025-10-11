@@ -1,6 +1,6 @@
 # seeyou-cub
 
-A Rust parser for the [SeeYou CUB binary file format](docs/CUB_file_format.md),
+A Rust library for reading and writing the [SeeYou CUB binary file format](docs/CUB_file_format.md),
 which stores airspace data for flight navigation software.
 
 ## Features
