@@ -30,6 +30,7 @@ use std::path::Path;
 pub struct CubReader<R: Read + Seek> {
     reader: BufReader<R>,
     header: Header,
+    items: Vec<Item>,
 }
 
 impl CubReader<File> {
@@ -46,11 +47,20 @@ impl<R: Read + Seek> CubReader<R> {
     /// Create a reader from any `Read + Seek` source
     ///
     /// Reads the header immediately to validate the format and store metadata.
-    pub fn new(mut reader: R) -> Result<Self> {
+    pub fn new(reader: R) -> Result<Self> {
+        let mut reader = BufReader::new(reader);
+
         let header = Header::read(&mut reader)?;
+
+        let mut items = Vec::with_capacity(header.hdr_items as usize);
+        for _ in 0..header.hdr_items {
+            items.push(Item::read(&mut reader, &header)?);
+        }
+
         Ok(Self {
-            reader: BufReader::new(reader),
+            reader,
             header,
+            items,
         })
     }
 
@@ -83,7 +93,7 @@ impl<R: Read + Seek> CubReader<R> {
         AirspaceIterator {
             reader: &mut self.reader,
             header: &self.header,
-            current_index: 0,
+            items_iter: self.items.iter(),
         }
     }
 }
@@ -95,24 +105,18 @@ impl<R: Read + Seek> CubReader<R> {
 pub struct AirspaceIterator<'a, R: Read + Seek> {
     reader: &'a mut BufReader<R>,
     header: &'a Header,
-    current_index: i32,
+    items_iter: std::slice::Iter<'a, Item>,
 }
 
 impl<R: Read + Seek> AirspaceIterator<'_, R> {
-    fn read_airspace(&mut self, index: usize) -> Result<Airspace> {
-        let item_offset =
-            crate::raw::HEADER_SIZE as u64 + (index as u64 * self.header.size_of_item as u64);
-
-        self.reader.seek(SeekFrom::Start(item_offset))?;
-        let item = Item::read(self.reader, self.header)?;
-
+    fn read_airspace(&mut self, item: &Item) -> Result<Airspace> {
         let data_offset = self.header.data_offset as u64 + item.points_offset as u64;
         self.reader.seek(SeekFrom::Start(data_offset))?;
 
         let raw_data = ItemData::read(self.reader, self.header)?;
 
         // Convert to high-level Airspace
-        convert_to_airspace(self.header, &item, raw_data)
+        convert_to_airspace(self.header, item, raw_data)
     }
 }
 
@@ -120,21 +124,13 @@ impl<'a, R: Read + Seek> Iterator for AirspaceIterator<'a, R> {
     type Item = Result<Airspace>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.current_index >= self.header.hdr_items {
-            return None;
-        }
+        let item = self.items_iter.next()?;
 
-        let airspace = match self.read_airspace(self.current_index as usize) {
-            Ok(airspace) => airspace,
-            Err(err) => return Some(Err(err)),
-        };
-        self.current_index += 1;
-        Some(Ok(airspace))
+        Some(self.read_airspace(item))
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        let remaining = (self.header.hdr_items - self.current_index) as usize;
-        (remaining, Some(remaining))
+        self.items_iter.size_hint()
     }
 }
 
