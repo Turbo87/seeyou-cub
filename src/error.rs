@@ -14,6 +14,9 @@ pub enum Error {
     #[error("Encrypted CUB files not supported (encryption format undocumented)")]
     EncryptedFile,
 
+    #[error("Invalid header offset: {found}")]
+    InvalidHeaderOffset { found: i32 },
+
     #[error("Unexpected point flag: 0x{0:02X}")]
     UnexpectedPointFlag(u8),
 

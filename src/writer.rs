@@ -166,7 +166,6 @@ impl CubWriter {
             max_width: 0.0, // Will be updated later
             max_height: 0.0, // Will be updated later
             lo_la_scale: self.lo_la_scale,
-            header_offset: 210,
             data_offset: 0, // Will be updated later
         };
 
@@ -252,7 +251,7 @@ impl CubWriter {
 
         // Update header with calculated values
         let items_size = items_buffer.position() as i32;
-        header.data_offset = header.header_offset + items_size;
+        header.data_offset = crate::raw::HEADER_SIZE as i32 + items_size;
         header.hdr_items = self.airspaces.len() as i32;
 
         let max_pts = self.airspaces.iter().map(|a| a.points.len()).max();

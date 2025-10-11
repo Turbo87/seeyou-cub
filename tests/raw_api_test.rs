@@ -1,5 +1,5 @@
 use insta::assert_debug_snapshot;
-use seeyou_cub::raw::{Header, Item, ItemData};
+use seeyou_cub::raw::{HEADER_SIZE, Header, Item, ItemData};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{Seek, SeekFrom};
@@ -14,7 +14,7 @@ fn raw_api_read_all_items() {
     // Read all items to verify we can parse the entire file
     let mut count = 0;
     for i in 0..header.hdr_items {
-        let offset = header.header_offset as u64 + (i as u64 * header.size_of_item as u64);
+        let offset = HEADER_SIZE as u64 + (i as u64 * header.size_of_item as u64);
         file.seek(SeekFrom::Start(offset)).unwrap();
 
         let item =
@@ -44,7 +44,7 @@ fn parse_france_fixture_raw_api() {
     // Read all items
     let mut items = Vec::new();
     for i in 0..header.hdr_items {
-        let offset = header.header_offset as u64 + (i as u64 * header.size_of_item as u64);
+        let offset = HEADER_SIZE as u64 + (i as u64 * header.size_of_item as u64);
         file.seek(SeekFrom::Start(offset)).unwrap();
 
         let item =

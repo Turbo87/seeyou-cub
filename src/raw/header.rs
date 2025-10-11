@@ -5,6 +5,9 @@ use crate::utils::io::{write_f32_le, write_i32, write_u8, write_u16, write_u32};
 use crate::{BoundingBox, ByteOrder};
 use std::io::{Read, Write};
 
+/// CUB file header size in bytes (always 210 bytes as defined by the spec).
+pub const HEADER_SIZE: usize = 210;
+
 /// Minimum accepted `size_of_item`. Anything below that would not include the
 /// `points_offset` field, which is a hard requirement.
 const MIN_SIZE_OF_ITEM: i32 = 26;
@@ -31,7 +34,6 @@ pub struct Header {
     pub max_width: f32,
     pub max_height: f32,
     pub lo_la_scale: f32,
-    pub header_offset: i32,
     pub data_offset: i32,
 }
 
@@ -109,6 +111,12 @@ impl Header {
         let lo_la_scale = read_f32_le(reader)?;
 
         let header_offset = read_i32(reader, byte_order)?;
+        if header_offset != HEADER_SIZE as i32 {
+            return Err(Error::InvalidHeaderOffset {
+                found: header_offset,
+            });
+        }
+
         let data_offset = read_i32(reader, byte_order)?;
         let _alignment = read_i32(reader, byte_order)?;
 
@@ -133,7 +141,6 @@ impl Header {
             max_width,
             max_height,
             lo_la_scale,
-            header_offset,
             data_offset,
         };
 
@@ -199,13 +206,13 @@ impl Header {
         write_f32_le(writer, self.max_height)?;
         write_f32_le(writer, self.lo_la_scale)?;
 
-        write_i32(writer, self.header_offset, byte_order)?;
+        write_i32(writer, HEADER_SIZE as i32, byte_order)?;
         write_i32(writer, self.data_offset, byte_order)?;
 
         // Write alignment (offset 206-209)
         write_i32(writer, 0, byte_order)?; // Alignment field (ignored)
 
-        Ok(210)
+        Ok(HEADER_SIZE)
     }
 }
 
@@ -245,7 +252,6 @@ mod tests {
             max_width: 2.0,
             max_height: 2.0,
             lo_la_scale: 1000.0,
-            header_offset: 210,
             data_offset: 630,
         };
 
@@ -282,7 +288,6 @@ mod tests {
             max_width: 5.0,
             max_height: 5.0,
             lo_la_scale: 2000.0,
-            header_offset: 210,
             data_offset: 4510,
         };
 
@@ -316,7 +321,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1.0,
-            header_offset: 210,
             data_offset: 210,
         };
 
@@ -351,7 +355,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1.0,
-            header_offset: 210,
             data_offset: 253,
         };
 

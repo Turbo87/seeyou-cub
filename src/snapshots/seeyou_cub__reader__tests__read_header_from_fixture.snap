@@ -46,6 +46,5 @@ Header {
     max_width: 0.06355881,
     max_height: 0.040743887,
     lo_la_scale: 5.3264847e-7,
-    header_offset: 210,
     data_offset: 41250,
 }

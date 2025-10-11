@@ -101,7 +101,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 The low-level API provides direct access to raw file data with minimal transformation:
 
 ```rust,no_run
-use seeyou_cub::raw::{Header, Item, ItemData};
+use seeyou_cub::raw::{Header, Item, ItemData, HEADER_SIZE};
 use std::fs::File;
 use std::io::{Seek, SeekFrom};
 
@@ -114,7 +114,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Read items (airspace metadata)
     for i in 0..header.hdr_items {
-        let offset = header.header_offset as u64 + (i as u64 * header.size_of_item as u64);
+        let offset = HEADER_SIZE as u64 + (i as u64 * header.size_of_item as u64);
         file.seek(SeekFrom::Start(offset))?;
 
         let item = Item::read(&mut file, &header)?;

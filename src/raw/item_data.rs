@@ -357,7 +357,7 @@ fn parse_optional_data_record<R: Read>(reader: &mut R, item_data: &mut ItemData)
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::raw::Item;
+    use crate::raw::{HEADER_SIZE, Item};
     use std::fs::File;
     use std::io::{Cursor, Seek, SeekFrom};
 
@@ -369,8 +369,7 @@ mod tests {
         // Read header and first item
         let header = Header::read(&mut file).unwrap();
 
-        file.seek(SeekFrom::Start(header.header_offset as u64))
-            .unwrap();
+        file.seek(SeekFrom::Start(HEADER_SIZE as u64)).unwrap();
         let item = Item::read(&mut file, &header).unwrap();
 
         // Seek to item data
@@ -409,7 +408,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 0.0001,
-            header_offset: 0,
             data_offset: 0,
         };
 
@@ -525,7 +523,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1000.0,
-            header_offset: 210,
             data_offset: 253,
         };
 
@@ -583,7 +580,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1000.0,
-            header_offset: 210,
             data_offset: 253,
         };
 
@@ -632,7 +628,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1000.0,
-            header_offset: 210,
             data_offset: 253,
         };
 
@@ -679,7 +674,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1000.0,
-            header_offset: 210,
             data_offset: 253,
         };
 
@@ -730,7 +724,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1000.0,
-            header_offset: 210,
             data_offset: 253,
         };
 

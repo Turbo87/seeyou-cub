@@ -101,7 +101,7 @@ pub struct AirspaceIterator<'a, R: Read + Seek> {
 impl<R: Read + Seek> AirspaceIterator<'_, R> {
     fn read_airspace(&mut self, index: usize) -> Result<Airspace> {
         let item_offset =
-            self.header.header_offset as u64 + (index as u64 * self.header.size_of_item as u64);
+            crate::raw::HEADER_SIZE as u64 + (index as u64 * self.header.size_of_item as u64);
 
         self.reader.seek(SeekFrom::Start(item_offset))?;
         let item = Item::read(self.reader, self.header)?;

@@ -266,6 +266,7 @@ pub fn decode_notam_time(encoded: u32) -> DateTime {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::raw::HEADER_SIZE;
     use std::fs::File;
     use std::io::{Seek, SeekFrom};
 
@@ -341,8 +342,7 @@ mod tests {
         let header = Header::read(&mut file).unwrap();
 
         // Seek to first item
-        file.seek(SeekFrom::Start(header.header_offset as u64))
-            .unwrap();
+        file.seek(SeekFrom::Start(HEADER_SIZE as u64)).unwrap();
 
         // Read item
         let item = Item::read(&mut file, &header).expect("Failed to read item");
@@ -370,7 +370,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1000.0,
-            header_offset: 210,
             data_offset: 253,
         };
 
@@ -428,7 +427,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1000.0,
-            header_offset: 210,
             data_offset: 253,
         };
 
@@ -480,7 +478,6 @@ mod tests {
             max_width: 0.0,
             max_height: 0.0,
             lo_la_scale: 1000.0,
-            header_offset: 210,
             data_offset: 260,
         };
 
