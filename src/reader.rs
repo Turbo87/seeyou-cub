@@ -189,7 +189,6 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
         max_alt_style: item.max_alt_style(),
 
         // Time-related fields
-        time_out: item.time_out,
         start_date: item.start_date(),
         end_date: item.end_date(),
         extra_data: item.extra_data,

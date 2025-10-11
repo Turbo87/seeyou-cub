@@ -32,7 +32,6 @@ pub struct Item {
     pub min_alt: i16,
     pub max_alt: i16,
     pub points_offset: i32,
-    pub time_out: i32,
     pub extra_data: u32,
     pub active_time: u64,
     pub extended_type_byte: u8,
@@ -79,7 +78,7 @@ impl Item {
         let min_alt = read_i16(&mut cursor, byte_order)?;
         let max_alt = read_i16(&mut cursor, byte_order)?;
         let points_offset = read_i32(&mut cursor, byte_order)?;
-        let time_out = read_i32(&mut cursor, byte_order)?;
+        let _time_out = read_i32(&mut cursor, byte_order)?;
         let extra_data = read_u32(&mut cursor, byte_order)?;
 
         let mut active_time = read_u64(&mut cursor, byte_order)?;
@@ -96,7 +95,6 @@ impl Item {
             min_alt,
             max_alt,
             points_offset,
-            time_out,
             extra_data,
             active_time,
             extended_type_byte,
@@ -224,7 +222,7 @@ impl Item {
         write_i16(&mut buf, self.min_alt, byte_order)?;
         write_i16(&mut buf, self.max_alt, byte_order)?;
         write_i32(&mut buf, self.points_offset, byte_order)?;
-        write_i32(&mut buf, self.time_out, byte_order)?;
+        write_i32(&mut buf, 0, byte_order)?;
         write_u32(&mut buf, self.extra_data, byte_order)?;
         write_u64(&mut buf, self.active_time, byte_order)?;
         write_u8(&mut buf, self.extended_type_byte)?;
@@ -291,7 +289,6 @@ mod tests {
             min_alt: 0,
             max_alt: 0,
             points_offset: 0,
-            time_out: 0,
             extra_data: 0,
             active_time: 0,
             extended_type_byte: 0,
@@ -316,7 +313,6 @@ mod tests {
             min_alt: 0,
             max_alt: 0,
             points_offset: 0,
-            time_out: 0,
             extra_data: 0,
             active_time: 0,
             extended_type_byte: 0,
@@ -392,7 +388,6 @@ mod tests {
             min_alt: 500,
             max_alt: 10000,
             points_offset: 100,
-            time_out: 3600,
             extra_data: 0x12345678,
             active_time: 0xFEDCBA9876543210,
             extended_type_byte: 42,
@@ -448,7 +443,6 @@ mod tests {
             min_alt: -100,
             max_alt: 20000,
             points_offset: 500,
-            time_out: 7200,
             extra_data: 0xABCDEF01,
             active_time: 0x123456789ABCDEF0,
             extended_type_byte: 99,
@@ -499,7 +493,6 @@ mod tests {
             min_alt: i16::MIN,
             max_alt: i16::MAX,
             points_offset: 12345,
-            time_out: 999999,
             extra_data: u32::MAX,
             active_time: u64::MAX,
             extended_type_byte: 255,

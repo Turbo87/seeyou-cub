@@ -22,7 +22,6 @@ pub struct Airspace {
     pub max_alt_style: AltStyle,
 
     // Time-related fields
-    pub time_out: i32,
     pub start_date: Option<DateTime>,
     pub end_date: Option<DateTime>,
     pub extra_data: u32,
@@ -70,7 +69,6 @@ impl Default for Airspace {
             max_alt: 0,
             min_alt_style: AltStyle::Unknown,
             max_alt_style: AltStyle::Unknown,
-            time_out: 0,
             start_date: None,
             end_date: None,
             extra_data: 0,

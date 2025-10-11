@@ -18,7 +18,6 @@ Airspace {
     max_alt: 5944,
     min_alt_style: FlightLevel,
     max_alt_style: FlightLevel,
-    time_out: 0,
     start_date: None,
     end_date: None,
     extra_data: 0,

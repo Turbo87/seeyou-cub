@@ -224,7 +224,6 @@ impl CubWriter {
                 min_alt: airspace.min_alt,
                 max_alt: airspace.max_alt,
                 points_offset: data_offset,
-                time_out: airspace.time_out,
                 extra_data: airspace.extra_data,
                 active_time: encode_active_time(
                     airspace.start_date.as_ref(),
