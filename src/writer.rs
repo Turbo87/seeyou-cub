@@ -14,6 +14,7 @@
 //! use seeyou_cub::{Airspace, Point, CubStyle, CubClass, AltStyle, DaysActive};
 //!
 //! let airspace = Airspace {
+//!     name: "My Airspace".to_string(),
 //!     style: CubStyle::DangerArea,
 //!     class: CubClass::ClassD,
 //!     min_alt: 0,
@@ -26,7 +27,6 @@
 //!         Point::lat_lon(0.81, 0.41),
 //!         Point::lat_lon(0.82, 0.42),
 //!     ],
-//!     name: Some("My Airspace".to_string()),
 //!     ..Default::default()
 //! };
 //!
@@ -181,12 +181,15 @@ impl CubWriter {
             let data_offset = item_data_buffer.position() as i32;
 
             // Create `ItemData` and write to data buffer
+            let name = if airspace.name.is_empty() {
+                None
+            } else {
+                Some(ByteString::from(airspace.name.as_bytes().to_vec()))
+            };
+
             let item_data = ItemData {
                 point_ops,
-                name: airspace
-                    .name
-                    .as_ref()
-                    .map(|s| ByteString::from(s.as_bytes().to_vec())),
+                name,
                 frequency: airspace.frequency.map(|f| (f * 1000.) as u32),
                 frequency_name: airspace
                     .frequency_name
@@ -409,7 +412,7 @@ mod tests {
                 Point::lat_lon(0.81, 0.41),
                 Point::lat_lon(0.82, 0.42),
             ],
-            name: Some("Test Airspace".to_string()),
+            name: "Test Airspace".to_string(),
             ..Default::default()
         };
 
@@ -430,7 +433,7 @@ mod tests {
 
         assert_eq!(airspaces.len(), 1);
         let airspace = &airspaces[0];
-        assert_eq!(airspace.name, Some("Test Airspace".to_string()));
+        assert_eq!(airspace.name, "Test Airspace");
         assert_eq!(airspace.points.len(), 3);
 
         // Verify bounding box was calculated
@@ -456,7 +459,7 @@ mod tests {
                 Point::lat_lon(0.52, 0.22),
                 Point::lat_lon(0.53, 0.23),
             ],
-            name: Some("Danger Area 1".to_string()),
+            name: "Danger Area 1".to_string(),
             icao_code: Some("DA1".to_string()),
             frequency: Some(123.450),
             ..Default::default()
@@ -472,7 +475,7 @@ mod tests {
             max_alt_style: AltStyle::FlightLevel,
             days_active: DaysActive::all(),
             points: vec![Point::lat_lon(0.6, 0.3), Point::lat_lon(0.61, 0.31)],
-            name: Some("Restricted 2".to_string()),
+            name: "Restricted 2".to_string(),
             ..Default::default()
         };
 
@@ -496,14 +499,14 @@ mod tests {
 
         // Verify first airspace
         let a1 = &airspaces[0];
-        assert_eq!(a1.name, Some("Danger Area 1".to_string()));
+        assert_eq!(a1.name, "Danger Area 1");
         assert_eq!(a1.points.len(), 4);
         assert_eq!(a1.icao_code, Some("DA1".to_string()));
         assert_eq!(a1.frequency, Some(123.450));
 
         // Verify second airspace
         let a2 = &airspaces[1];
-        assert_eq!(a2.name, Some("Restricted 2".to_string()));
+        assert_eq!(a2.name, "Restricted 2");
         assert_eq!(a2.points.len(), 2);
     }
 
@@ -517,7 +520,7 @@ mod tests {
             max_alt_style: AltStyle::MeanSeaLevel,
             days_active: DaysActive::all(),
             points: vec![Point::lat_lon(0.5, 0.5), Point::lat_lon(0.51, 0.51)],
-            name: Some("Path Test Airspace".to_string()),
+            name: "Path Test Airspace".to_string(),
             ..Default::default()
         };
 
@@ -537,7 +540,7 @@ mod tests {
             .expect("Failed to read airspaces");
 
         assert_eq!(airspaces.len(), 1);
-        assert_eq!(airspaces[0].name, Some("Path Test Airspace".to_string()));
+        assert_eq!(airspaces[0].name, "Path Test Airspace");
     }
 
     #[test]

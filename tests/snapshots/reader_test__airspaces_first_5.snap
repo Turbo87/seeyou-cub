@@ -4,9 +4,7 @@ expression: "&airspaces[0..5]"
 ---
 [
     Airspace {
-        name: Some(
-            "R265 LA GREMUSE",
-        ),
+        name: "R265 LA GREMUSE",
         icao_code: None,
         points: [
             Point { lat: 0.83465517, lon: 0.033180647 },
@@ -44,9 +42,7 @@ expression: "&airspaces[0..5]"
         extra_data: 0,
     },
     Airspace {
-        name: Some(
-            "P47 BALARD",
-        ),
+        name: "P47 BALARD",
         icao_code: None,
         points: [
             Point { lat: 0.85236555, lon: 0.039696384 },
@@ -85,9 +81,7 @@ expression: "&airspaces[0..5]"
         extra_data: 0,
     },
     Airspace {
-        name: Some(
-            "D595 Laser",
-        ),
+        name: "D595 Laser",
         icao_code: None,
         points: [
             Point { lat: 0.7667715, lon: 0.09974686 },
@@ -303,9 +297,7 @@ expression: "&airspaces[0..5]"
         extra_data: 0,
     },
     Airspace {
-        name: Some(
-            "LF R 258 AMBERIEU",
-        ),
+        name: "LF R 258 AMBERIEU",
         icao_code: None,
         points: [
             Point { lat: 0.8027499, lon: 0.09304554 },
@@ -344,9 +336,7 @@ expression: "&airspaces[0..5]"
         extra_data: 0,
     },
     Airspace {
-        name: Some(
-            "LF R 84 B DOMAINE DE VERSAILLES",
-        ),
+        name: "LF R 84 B DOMAINE DE VERSAILLES",
         icao_code: None,
         points: [
             Point { lat: 0.851842, lon: 0.03662763 },

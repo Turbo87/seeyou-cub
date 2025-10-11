@@ -38,11 +38,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let airspace = result?;
 
         // All fields are decoded and ready to use
-        if let Some(name) = &airspace.name {
-            println!("{}: {:?} {:?}", name, airspace.style, airspace.class);
-            println!("  Altitude: {} - {} meters", airspace.min_alt, airspace.max_alt);
-            println!("  Points: {}", airspace.points.len());
-        }
+        println!("{}: {:?} {:?}", airspace.name, airspace.style, airspace.class);
+        println!("  Altitude: {} - {} meters", airspace.min_alt, airspace.max_alt);
+        println!("  Points: {}", airspace.points.len());
     }
 
     Ok(())
@@ -59,7 +57,7 @@ use seeyou_cub::{Airspace, Point, CubStyle, CubClass, AltStyle, DaysActive};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let airspace = Airspace {
-        name: Some("My Airspace".to_string()),
+        name: "My Airspace".to_string(),
         points: vec![
             Point::lat_lon(0.8, 0.4),
             Point::lat_lon(0.81, 0.41),

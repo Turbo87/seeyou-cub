@@ -7,7 +7,7 @@ use crate::{AltStyle, BoundingBox, CubClass, CubStyle, DateTime, DaysActive, Ext
 /// and coordinates are converted from raw i16 offsets to f32 lat/lon.
 #[derive(Debug, Clone)]
 pub struct Airspace {
-    pub name: Option<String>,
+    pub name: String,
     pub icao_code: Option<String>,
 
     // Geometry (converted from raw i16 to f32 lat/lon radians)
@@ -72,7 +72,7 @@ impl Default for Airspace {
             extra_data: 0,
             days_active: DaysActive::from_bits(0),
             points: vec![],
-            name: None,
+            name: "".to_string(),
             frequency_name: None,
             icao_code: None,
             exception_rules: None,

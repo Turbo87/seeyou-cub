@@ -3,9 +3,7 @@ source: tests/reader_test.rs
 expression: smallest_airspace
 ---
 Airspace {
-    name: Some(
-        "R265 LA GREMUSE",
-    ),
+    name: "R265 LA GREMUSE",
     icao_code: None,
     points: [
         Point { lat: 0.83465517, lon: 0.033180647 },

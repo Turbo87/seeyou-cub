@@ -3,9 +3,7 @@ source: tests/reader_test.rs
 expression: last_airspace
 ---
 Airspace {
-    name: Some(
-        "Paris1",
-    ),
+    name: "Paris1",
     icao_code: None,
     points: [
         Point { lat: 0.8726647, lon: 0.01745355 },

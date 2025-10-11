@@ -151,7 +151,11 @@ fn convert_to_airspace(header: &Header, item: &Item, item_data: ItemData) -> Res
     )?;
 
     // Decode strings from raw bytes
-    let name = item_data.name.as_ref().map(|bs| bs.decode().into_owned());
+    let name = item_data
+        .name
+        .as_ref()
+        .map(|bs| bs.decode().into_owned())
+        .unwrap_or_default();
     let frequency_name = item_data
         .frequency_name
         .as_ref()
@@ -272,7 +276,7 @@ mod tests {
         let mut names: Vec<_> = reader
             .read_airspaces()
             .filter_map(|r| r.ok())
-            .map(|a| a.name.unwrap_or_default())
+            .map(|a| a.name)
             .collect();
 
         names.sort();

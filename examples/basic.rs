@@ -36,8 +36,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         println!("   Points: {}", airspace.points.len());
 
-        if let Some(name) = &airspace.name {
-            println!("   Name: {}", name);
+        if !airspace.name.is_empty() {
+            println!("   Name: {}", airspace.name);
         }
         if let Some(freq) = airspace.frequency {
             println!("   Frequency: {} Hz", freq);

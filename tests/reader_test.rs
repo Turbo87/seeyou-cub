@@ -51,8 +51,7 @@ fn parse_france_fixture() {
     let mut max_points_airspace: (usize, usize) = (0, 0);
 
     for (i, airspace) in airspaces.iter().enumerate() {
-        let name = airspace.name.as_deref().unwrap_or("");
-        all_names.push(name.to_string());
+        all_names.push(airspace.name.clone());
 
         // Track min/max by point count
         let point_count = airspace.points.len();

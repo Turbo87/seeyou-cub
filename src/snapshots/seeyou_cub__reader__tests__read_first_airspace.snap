@@ -3,9 +3,7 @@ source: src/reader.rs
 expression: airspace
 ---
 Airspace {
-    name: Some(
-        "R265 LA GREMUSE",
-    ),
+    name: "R265 LA GREMUSE",
     icao_code: None,
     points: [
         Point { lat: 0.83465517, lon: 0.033180647 },

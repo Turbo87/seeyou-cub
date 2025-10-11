@@ -4,9 +4,7 @@ expression: "&airspaces[airspaces.len() - 5..]"
 ---
 [
     Airspace {
-        name: Some(
-            "Paris7",
-        ),
+        name: "Paris7",
         icao_code: None,
         points: [
             Point { lat: 0.8683015, lon: 0.024434458 },
@@ -86,9 +84,7 @@ expression: "&airspaces[airspaces.len() - 5..]"
         extra_data: 0,
     },
     Airspace {
-        name: Some(
-            "CTA Limoges 119.200",
-        ),
+        name: "CTA Limoges 119.200",
         icao_code: None,
         points: [
             Point { lat: 0.82174003, lon: 0.037854258 },
@@ -156,9 +152,7 @@ expression: "&airspaces[airspaces.len() - 5..]"
         extra_data: 0,
     },
     Airspace {
-        name: Some(
-            "Paris9",
-        ),
+        name: "Paris9",
         icao_code: None,
         points: [
             Point { lat: 0.8698093, lon: 0.024502661 },
@@ -242,9 +236,7 @@ expression: "&airspaces[airspaces.len() - 5..]"
         extra_data: 0,
     },
     Airspace {
-        name: Some(
-            "Paris1",
-        ),
+        name: "Paris1",
         icao_code: None,
         points: [
             Point { lat: 0.8726647, lon: 0.01745355 },
@@ -295,9 +287,7 @@ expression: "&airspaces[airspaces.len() - 5..]"
         extra_data: 0,
     },
     Airspace {
-        name: Some(
-            "Paris1",
-        ),
+        name: "Paris1",
         icao_code: None,
         points: [
             Point { lat: 0.8726647, lon: 0.01745355 },

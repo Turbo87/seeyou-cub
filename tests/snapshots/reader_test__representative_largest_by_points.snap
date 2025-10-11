@@ -3,9 +3,7 @@ source: tests/reader_test.rs
 expression: largest_airspace
 ---
 Airspace {
-    name: Some(
-        "Parc Champagne Bourgogne",
-    ),
+    name: "Parc Champagne Bourgogne",
     icao_code: None,
     points: [
         Point { lat: 0.83420926, lon: 0.079514295 },
