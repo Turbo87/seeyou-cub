@@ -11,6 +11,9 @@ pub const FILE_IDENTIFIER: u32 = 0x425543C2;
 /// CUB file header size in bytes (always 210 bytes as defined by the spec).
 pub const HEADER_SIZE: usize = 210;
 
+/// Size of the title field in the header.
+const HEADER_TITLE_SIZE: usize = 112;
+
 /// Minimum accepted `size_of_item`. Anything below that would not include the
 /// `points_offset` field, which is a hard requirement.
 const MIN_SIZE_OF_ITEM: i32 = 26;
@@ -65,7 +68,7 @@ impl Header {
         }
 
         // Read title (offset 4-115, 112 bytes)
-        let mut title_buf = [0u8; 112];
+        let mut title_buf = [0u8; HEADER_TITLE_SIZE];
         reader.read_exact(&mut title_buf)?;
         // Trim null padding and convert to Vec only for non-null bytes
         let title = if let Some(pos) = title_buf.iter().rposition(|&b| b != 0) {
@@ -174,9 +177,9 @@ impl Header {
         writer.write_all(&FILE_IDENTIFIER.to_le_bytes())?;
 
         // Write title (offset 4-115, 112 bytes, null-padded)
-        let mut title_buf = [0u8; 112];
+        let mut title_buf = [0u8; HEADER_TITLE_SIZE];
         let title_bytes = self.title.as_bytes();
-        let copy_len = title_bytes.len().min(112);
+        let copy_len = title_bytes.len().min(title_buf.len());
         title_buf[..copy_len].copy_from_slice(&title_bytes[..copy_len]);
         writer.write_all(&title_buf)?;
 
@@ -339,7 +342,7 @@ mod tests {
     #[test]
     fn write_header_with_max_title_length() {
         // Create header with maximum title length (112 bytes)
-        let long_title = vec![b'X'; 112];
+        let long_title = vec![b'X'; HEADER_TITLE_SIZE];
         let original = Header {
             title: ByteString::from(long_title.clone()),
             allowed_serials: [0; 8],
