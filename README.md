@@ -67,9 +67,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         max_alt_style: AltStyle::MeanSeaLevel,
         days_active: DaysActive::all(),
         points: vec![
-            Point::new(0.8, 0.4),
-            Point::new(0.81, 0.41),
-            Point::new(0.82, 0.42),
+            Point::lat_lon(0.8, 0.4),
+            Point::lat_lon(0.81, 0.41),
+            Point::lat_lon(0.82, 0.42),
         ],
         name: Some("My Airspace".to_string()),
         ..Default::default()

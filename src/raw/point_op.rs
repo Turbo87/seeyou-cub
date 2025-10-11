@@ -124,7 +124,7 @@ impl PointOp {
                     let lon = origin_lon + (*x as f32) * lo_la_scale;
                     let lat = origin_lat + (*y as f32) * lo_la_scale;
 
-                    let point = Point::new(lat, lon);
+                    let point = Point::lat_lon(lat, lon);
                     if !point.is_valid() {
                         return Err(crate::error::Error::CoordinateOutOfRange { point });
                     }
@@ -259,8 +259,8 @@ mod tests {
     #[test]
     fn from_points_simple() {
         let points = vec![
-            Point::new(0.22, 0.11), // lat, lon in radians
-            Point::new(0.24, 0.13),
+            Point::lat_lon(0.22, 0.11), // lat, lon in radians
+            Point::lat_lon(0.24, 0.13),
         ];
         let scale = 0.0001;
         let origin_lon = 0.1;
@@ -278,9 +278,9 @@ mod tests {
     #[test]
     fn from_points_requires_move_origin() {
         let points = vec![
-            Point::new(0.2, 0.1),
+            Point::lat_lon(0.2, 0.1),
             // Large jump that exceeds i16::MAX when scaled
-            Point::new(0.2 + 40000.0 * 0.0001, 0.1 + 50000.0 * 0.0001),
+            Point::lat_lon(0.2 + 40000.0 * 0.0001, 0.1 + 50000.0 * 0.0001),
         ];
         let scale = 0.0001;
         let origin_lon = 0.1;
@@ -304,8 +304,8 @@ mod tests {
         // With scale=0.00001, i16::MAX covers only 0.32767 radians
         // So a jump of 3.0 radians requires ~9 MoveOrigin operations
         let points = vec![
-            Point::new(0.0, 0.0),
-            Point::new(0.0, 3.0), // 3.0 radians = 300,000 units at scale=0.00001
+            Point::lat_lon(0.0, 0.0),
+            Point::lat_lon(0.0, 3.0), // 3.0 radians = 300,000 units at scale=0.00001
         ];
         let scale = 0.00001;
         let origin_lon = 0.0;
@@ -335,9 +335,9 @@ mod tests {
     fn from_points_round_trip() {
         // Original points
         let original = vec![
-            Point::new(0.8, 0.4),
-            Point::new(0.85, 0.45),
-            Point::new(0.9, 0.5),
+            Point::lat_lon(0.8, 0.4),
+            Point::lat_lon(0.85, 0.45),
+            Point::lat_lon(0.9, 0.5),
         ];
 
         let scale = 0.0001;
@@ -375,8 +375,8 @@ mod tests {
         // So we need jumps larger than that. Use scale=0.00005 instead.
         // Max valid lat: ±π/2 = ±1.5708, max valid lon: ±π = ±3.14159
         let original = vec![
-            Point::new(0.1, 0.2),
-            Point::new(1.5, 3.0), // Jump of 2.8 lon requires MoveOrigin with smaller scale
+            Point::lat_lon(0.1, 0.2),
+            Point::lat_lon(1.5, 3.0), // Jump of 2.8 lon requires MoveOrigin with smaller scale
         ];
 
         let scale = 0.00005; // i16::MAX * 0.00005 = 1.638 radians coverage
@@ -412,7 +412,7 @@ mod tests {
 
     #[test]
     fn from_points_round_trip_various_scales() {
-        let original = vec![Point::new(0.5, 0.3), Point::new(0.52, 0.32)];
+        let original = vec![Point::lat_lon(0.5, 0.3), Point::lat_lon(0.52, 0.32)];
 
         let origin_lon = 0.2;
         let origin_lat = 0.4;

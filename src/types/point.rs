@@ -12,7 +12,7 @@ pub struct Point {
 
 impl Point {
     /// Create a new point with given lat/lon in radians
-    pub fn new(lat: f32, lon: f32) -> Self {
+    pub fn lat_lon(lat: f32, lon: f32) -> Self {
         Self { lat, lon }
     }
 
@@ -38,7 +38,7 @@ mod tests {
     #[test]
     fn point_creation() {
         // Paris: 48.8566°N, 2.3522°E in radians
-        let point = Point::new(0.852_941_4, 0.041_037_06);
+        let point = Point::lat_lon(0.852_941_4, 0.041_037_06);
         assert_eq!(point.lat, 0.852_941_4);
         assert_eq!(point.lon, 0.041_037_06);
     }
@@ -46,14 +46,14 @@ mod tests {
     #[test]
     fn point_is_valid() {
         // Paris: 48.8566°N, 2.3522°E in radians
-        assert!(Point::new(0.852_941_4, 0.041_037_06).is_valid());
-        assert!(Point::new(0.0, 0.0).is_valid()); // Null Island
-        assert!(Point::new(std::f32::consts::FRAC_PI_2, std::f32::consts::PI).is_valid()); // Edge cases
-        assert!(Point::new(-std::f32::consts::FRAC_PI_2, -std::f32::consts::PI).is_valid()); // Edge cases
+        assert!(Point::lat_lon(0.852_941_4, 0.041_037_06).is_valid());
+        assert!(Point::lat_lon(0.0, 0.0).is_valid()); // Null Island
+        assert!(Point::lat_lon(std::f32::consts::FRAC_PI_2, std::f32::consts::PI).is_valid()); // Edge cases
+        assert!(Point::lat_lon(-std::f32::consts::FRAC_PI_2, -std::f32::consts::PI).is_valid()); // Edge cases
 
-        assert!(!Point::new(std::f32::consts::FRAC_PI_2 + 0.1, 0.0).is_valid()); // Invalid lat
-        assert!(!Point::new(-std::f32::consts::FRAC_PI_2 - 0.1, 0.0).is_valid()); // Invalid lat
-        assert!(!Point::new(0.0, std::f32::consts::PI + 0.1).is_valid()); // Invalid lon
-        assert!(!Point::new(0.0, -std::f32::consts::PI - 0.1).is_valid()); // Invalid lon
+        assert!(!Point::lat_lon(std::f32::consts::FRAC_PI_2 + 0.1, 0.0).is_valid()); // Invalid lat
+        assert!(!Point::lat_lon(-std::f32::consts::FRAC_PI_2 - 0.1, 0.0).is_valid()); // Invalid lat
+        assert!(!Point::lat_lon(0.0, std::f32::consts::PI + 0.1).is_valid()); // Invalid lon
+        assert!(!Point::lat_lon(0.0, -std::f32::consts::PI - 0.1).is_valid()); // Invalid lon
     }
 }

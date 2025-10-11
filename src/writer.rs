@@ -22,9 +22,9 @@
 //!     max_alt_style: AltStyle::MeanSeaLevel,
 //!     days_active: DaysActive::all(),
 //!     points: vec![
-//!         Point::new(0.8, 0.4),
-//!         Point::new(0.81, 0.41),
-//!         Point::new(0.82, 0.42),
+//!         Point::lat_lon(0.8, 0.4),
+//!         Point::lat_lon(0.81, 0.41),
+//!         Point::lat_lon(0.82, 0.42),
 //!     ],
 //!     name: Some("My Airspace".to_string()),
 //!     ..Default::default()
@@ -165,7 +165,7 @@ impl CubWriter {
             let bbox = airspace
                 .bounding_box
                 .or_else(|| BoundingBox::from_points(&airspace.points))
-                .unwrap_or_else(|| BoundingBox::from(Point::new(0., 0.)));
+                .unwrap_or_else(|| BoundingBox::from(Point::lat_lon(0., 0.)));
 
             // Accumulate into global bbox
             match global_bbox {
@@ -406,9 +406,9 @@ mod tests {
             max_alt_style: AltStyle::MeanSeaLevel,
             days_active: DaysActive::all(),
             points: vec![
-                Point::new(0.8, 0.4),
-                Point::new(0.81, 0.41),
-                Point::new(0.82, 0.42),
+                Point::lat_lon(0.8, 0.4),
+                Point::lat_lon(0.81, 0.41),
+                Point::lat_lon(0.82, 0.42),
             ],
             name: Some("Test Airspace".to_string()),
             ..Default::default()
@@ -452,10 +452,10 @@ mod tests {
             max_alt_style: AltStyle::MeanSeaLevel,
             days_active: DaysActive::all(),
             points: vec![
-                Point::new(0.5, 0.2),
-                Point::new(0.51, 0.21),
-                Point::new(0.52, 0.22),
-                Point::new(0.53, 0.23),
+                Point::lat_lon(0.5, 0.2),
+                Point::lat_lon(0.51, 0.21),
+                Point::lat_lon(0.52, 0.22),
+                Point::lat_lon(0.53, 0.23),
             ],
             name: Some("Danger Area 1".to_string()),
             icao_code: Some("DA1".to_string()),
@@ -472,7 +472,7 @@ mod tests {
             min_alt_style: AltStyle::AboveGroundLevel,
             max_alt_style: AltStyle::FlightLevel,
             days_active: DaysActive::all(),
-            points: vec![Point::new(0.6, 0.3), Point::new(0.61, 0.31)],
+            points: vec![Point::lat_lon(0.6, 0.3), Point::lat_lon(0.61, 0.31)],
             name: Some("Restricted 2".to_string()),
             ..Default::default()
         };
@@ -517,7 +517,7 @@ mod tests {
             min_alt_style: AltStyle::MeanSeaLevel,
             max_alt_style: AltStyle::MeanSeaLevel,
             days_active: DaysActive::all(),
-            points: vec![Point::new(0.5, 0.5), Point::new(0.51, 0.51)],
+            points: vec![Point::lat_lon(0.5, 0.5), Point::lat_lon(0.51, 0.51)],
             name: Some("Path Test Airspace".to_string()),
             ..Default::default()
         };

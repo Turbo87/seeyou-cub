@@ -114,7 +114,7 @@ mod tests {
     #[test]
     fn test_from_point() {
         // Create a point (Paris: 48.8566°N, 2.3522°E in radians)
-        let point = Point::new(0.852_941_4, 0.041_037_06);
+        let point = Point::lat_lon(0.852_941_4, 0.041_037_06);
 
         // Create bounding box from single point
         let bbox = BoundingBox::from(point);
@@ -135,7 +135,7 @@ mod tests {
 
     #[test]
     fn test_from_points_single() {
-        let points = vec![Point::new(0.5, 0.5)];
+        let points = vec![Point::lat_lon(0.5, 0.5)];
         let bbox = BoundingBox::from_points(&points).unwrap();
 
         assert_eq!(bbox.left, 0.5);
@@ -147,10 +147,10 @@ mod tests {
     #[test]
     fn test_from_points_multiple() {
         let points = vec![
-            Point::new(0.5, 0.5), // Center (lat, lon)
-            Point::new(0.8, 0.2), // North + West
-            Point::new(0.2, 0.9), // South + East
-            Point::new(0.9, 0.1), // North + West
+            Point::lat_lon(0.5, 0.5), // Center (lat, lon)
+            Point::lat_lon(0.8, 0.2), // North + West
+            Point::lat_lon(0.2, 0.9), // South + East
+            Point::lat_lon(0.9, 0.1), // North + West
         ];
         let bbox = BoundingBox::from_points(&points).unwrap();
 
@@ -163,10 +163,10 @@ mod tests {
     #[test]
     fn test_extend_north() {
         // Start with a bbox from single point
-        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+        let mut bbox = BoundingBox::from(Point::lat_lon(0.5, 0.5));
 
         // Extend north (higher latitude)
-        let north_point = Point::new(0.8, 0.5);
+        let north_point = Point::lat_lon(0.8, 0.5);
         bbox.extend(north_point);
 
         assert_eq!(bbox.left, 0.5);
@@ -178,10 +178,10 @@ mod tests {
     #[test]
     fn test_extend_south() {
         // Start with a bbox from single point
-        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+        let mut bbox = BoundingBox::from(Point::lat_lon(0.5, 0.5));
 
         // Extend south (lower latitude)
-        let south_point = Point::new(0.2, 0.5);
+        let south_point = Point::lat_lon(0.2, 0.5);
         bbox.extend(south_point);
 
         assert_eq!(bbox.left, 0.5);
@@ -193,10 +193,10 @@ mod tests {
     #[test]
     fn test_extend_east() {
         // Start with a bbox from single point
-        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+        let mut bbox = BoundingBox::from(Point::lat_lon(0.5, 0.5));
 
         // Extend east (higher longitude)
-        let east_point = Point::new(0.5, 0.8);
+        let east_point = Point::lat_lon(0.5, 0.8);
         bbox.extend(east_point);
 
         assert_eq!(bbox.left, 0.5);
@@ -208,10 +208,10 @@ mod tests {
     #[test]
     fn test_extend_west() {
         // Start with a bbox from single point
-        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+        let mut bbox = BoundingBox::from(Point::lat_lon(0.5, 0.5));
 
         // Extend west (lower longitude)
-        let west_point = Point::new(0.5, 0.2);
+        let west_point = Point::lat_lon(0.5, 0.2);
         bbox.extend(west_point);
 
         assert_eq!(bbox.left, 0.2); // Extended west
@@ -223,12 +223,12 @@ mod tests {
     #[test]
     fn test_extend_multiple_directions() {
         // Start with a bbox from single point
-        let mut bbox = BoundingBox::from(Point::new(0.5, 0.5));
+        let mut bbox = BoundingBox::from(Point::lat_lon(0.5, 0.5));
 
         // Extend in multiple directions
-        bbox.extend(Point::new(0.8, 0.8)); // NE
-        bbox.extend(Point::new(0.2, 0.2)); // SW
-        bbox.extend(Point::new(0.9, 0.1)); // SE
+        bbox.extend(Point::lat_lon(0.8, 0.8)); // NE
+        bbox.extend(Point::lat_lon(0.2, 0.2)); // SW
+        bbox.extend(Point::lat_lon(0.9, 0.1)); // SE
 
         assert_eq!(bbox.left, 0.1); // Westmost
         assert_eq!(bbox.top, 0.9); // Northmost
@@ -247,7 +247,7 @@ mod tests {
         };
 
         // Extend with point inside - should not change bounds
-        bbox.extend(Point::new(0.5, 0.5));
+        bbox.extend(Point::lat_lon(0.5, 0.5));
 
         assert_eq!(bbox.left, 0.0);
         assert_eq!(bbox.top, 1.0);
@@ -361,7 +361,7 @@ mod tests {
     #[test]
     fn test_merge_from_point() {
         // Merge a point-based bbox with another bbox
-        let mut bbox1 = BoundingBox::from(Point::new(0.5, 0.5));
+        let mut bbox1 = BoundingBox::from(Point::lat_lon(0.5, 0.5));
 
         let bbox2 = BoundingBox {
             left: 0.0,
