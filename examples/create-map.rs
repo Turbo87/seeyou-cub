@@ -6,6 +6,122 @@ use std::env;
 use std::fs;
 use std::io;
 
+const HTML_TEMPLATE: &str = r#"<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CUB Airspace Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src='https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js'></script>
+    <link href='https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        .maplibregl-popup-content {
+            padding: 10px;
+            max-width: 300px;
+        }
+        .maplibregl-popup-content h3 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+        }
+        .maplibregl-popup-content p {
+            margin: 3px 0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        const geojsonData = {GEOJSON};
+        const bounds = {BOUNDS};
+
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: {
+                version: 8,
+                sources: {
+                    'osm': {
+                        type: 'raster',
+                        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }
+                },
+                layers: [{
+                    id: 'osm',
+                    type: 'raster',
+                    source: 'osm',
+                    minzoom: 0,
+                    maxzoom: 19
+                }]
+            },
+            bounds: bounds,
+            fitBoundsOptions: { padding: 50 }
+        });
+
+        map.on('load', () => {
+            // Add airspace data source
+            map.addSource('airspaces', {
+                type: 'geojson',
+                data: geojsonData
+            });
+
+            // Add fill layer for airspace polygons
+            map.addLayer({
+                id: 'airspaces-fill',
+                type: 'fill',
+                source: 'airspaces',
+                paint: {
+                    'fill-color': ['get', 'color'],
+                    'fill-opacity': 0.35
+                }
+            });
+
+            // Add line layer for airspace borders
+            map.addLayer({
+                id: 'airspaces-line',
+                type: 'line',
+                source: 'airspaces',
+                paint: {
+                    'line-color': ['get', 'color'],
+                    'line-width': 2,
+                    'line-opacity': 0.8
+                }
+            });
+
+            // Change cursor on hover
+            map.on('mouseenter', 'airspaces-fill', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            map.on('mouseleave', 'airspaces-fill', () => {
+                map.getCanvas().style.cursor = '';
+            });
+
+            // Show popup on click
+            map.on('click', 'airspaces-fill', (e) => {
+                const props = e.features[0].properties;
+
+                const popupContent = `
+                    <h3>${props.name}</h3>
+                    <p><strong>Type:</strong> ${props.style}</p>
+                    <p><strong>Class:</strong> ${props.class}</p>
+                    <p><strong>Altitude:</strong> ${props.min_alt} ${props.min_alt_style} - ${props.max_alt} ${props.max_alt_style}</p>
+                `;
+
+                new maplibregl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML(popupContent)
+                    .addTo(map);
+            });
+        });
+    </script>
+</body>
+</html>
+"#;
+
 /// Maps airspace style to hex color following aviation conventions
 fn style_to_color(style: &CubStyle) -> &'static str {
     match style {
@@ -59,6 +175,19 @@ fn airspace_to_geojson_feature(airspace: &Airspace) -> serde_json::Value {
     })
 }
 
+/// Generates HTML with embedded GeoJSON data and bounding box
+#[cfg_attr(not(test), allow(dead_code))]
+fn generate_html(geojson: &str, bounds: [[f32; 2]; 2]) -> String {
+    let bounds_json = format!(
+        "[[{}, {}], [{}, {}]]",
+        bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]
+    );
+
+    HTML_TEMPLATE
+        .replace("{GEOJSON}", geojson)
+        .replace("{BOUNDS}", &bounds_json)
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Parse command-line arguments
     let args: Vec<String> = env::args().collect();
@@ -110,5 +239,18 @@ mod tests {
 
         let feature = airspace_to_geojson_feature(&airspace);
         assert_debug_snapshot!(feature);
+    }
+
+    #[test]
+    fn test_generate_html() {
+        let geojson = r#"{"type": "FeatureCollection", "features": []}"#;
+        let bounds = [[-122.5, 37.5], [-122.0, 38.0]];
+
+        let html = generate_html(geojson, bounds);
+
+        assert!(html.contains("<!DOCTYPE html>"));
+        assert!(html.contains("maplibre-gl"));
+        assert!(html.contains(geojson));
+        assert!(html.contains("[[-122.5, 37.5], [-122, 38]]"));
     }
 }
