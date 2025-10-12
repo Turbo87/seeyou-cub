@@ -412,6 +412,7 @@ dependencies = [
  "criterion",
  "encoding_rs",
  "insta",
+ "serde_json",
  "thiserror",
 ]
 

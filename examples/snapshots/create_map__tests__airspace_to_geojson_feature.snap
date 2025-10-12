@@ -1,0 +1,40 @@
+---
+source: examples/create-map.rs
+expression: feature
+---
+Object {
+    "geometry": Object {
+        "coordinates": Array [
+            Array [
+                Array [
+                    Number(22.918312072753906),
+                    Number(28.647890090942383),
+                ],
+                Array [
+                    Number(28.647890090942383),
+                    Number(34.37746810913086),
+                ],
+                Array [
+                    Number(34.37746810913086),
+                    Number(28.647890090942383),
+                ],
+                Array [
+                    Number(22.918312072753906),
+                    Number(28.647890090942383),
+                ],
+            ],
+        ],
+        "type": String("Polygon"),
+    },
+    "properties": Object {
+        "class": String("ClassD"),
+        "color": String("#4169E1"),
+        "max_alt": Number(5000),
+        "max_alt_style": String("MeanSeaLevel"),
+        "min_alt": Number(0),
+        "min_alt_style": String("MeanSeaLevel"),
+        "name": String("Test Zone"),
+        "style": String("ControlZone"),
+    },
+    "type": String("Feature"),
+}
