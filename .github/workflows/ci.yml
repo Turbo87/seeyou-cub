@@ -43,8 +43,10 @@ jobs:
         env:
           RUSTDOCFLAGS: "-D warnings"
 
+      - run: cargo test --doc
+
       - id: run_tests
-        run: cargo insta test --require-full-match --unreferenced=reject
+        run: cargo insta test --require-full-match --unreferenced=reject --all-targets
         env:
           INSTA_UPDATE: new
 
