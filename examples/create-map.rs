@@ -196,9 +196,60 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::process::exit(1);
     }
 
-    let _cub_path = &args[1];
+    let cub_path = &args[1];
 
-    // TODO: Implementation goes here
+    // Open CUB file
+    let mut reader = CubReader::from_path(cub_path)
+        .map_err(|e| format!("Error: Cannot open CUB file: {}", e))?;
+
+    // Extract bounding box from header (for initial map view)
+    let bbox = reader.bounding_box();
+    let bounds = [
+        [bbox.left.to_degrees(), bbox.bottom.to_degrees()],
+        [bbox.right.to_degrees(), bbox.top.to_degrees()],
+    ];
+
+    // Read all airspaces, collecting valid ones
+    let features: Vec<_> = reader
+        .read_airspaces()
+        .filter_map(|result| {
+            result
+                .inspect_err(|err| eprintln!("Warning: Failed to parse airspace: {err}"))
+                .ok()
+        })
+        // Skip invalid polygons (need at least 3 points)
+        .filter_map(|airspace| {
+            if airspace.points.len() < 3 {
+                eprintln!(
+                    "Warning: Skipping airspace '{}' with only {} points",
+                    airspace.name,
+                    airspace.points.len()
+                );
+                None
+            } else {
+                Some(airspace)
+            }
+        })
+        .map(|airspace| airspace_to_geojson_feature(&airspace))
+        .collect();
+
+    // Build GeoJSON FeatureCollection
+    let geojson = serde_json::json!({
+        "type": "FeatureCollection",
+        "features": features
+    });
+
+    let geojson_string = serde_json::to_string(&geojson)?;
+
+    // Generate HTML
+    let html = generate_html(&geojson_string, bounds);
+
+    // Write to map.html
+    fs::write("map.html", html).map_err(|e| format!("Error: Cannot write to map.html: {}", e))?;
+
+    // Print success message with absolute path
+    let absolute_path = fs::canonicalize("map.html")?;
+    println!("Map generated: {}", absolute_path.display());
 
     Ok(())
 }
